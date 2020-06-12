@@ -1,0 +1,11 @@
+.GroceryItem{
+    display: block;
+    border: 1px solid;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.GroceryItem-info{
+    display:inline;
+    padding: 10px;
+}

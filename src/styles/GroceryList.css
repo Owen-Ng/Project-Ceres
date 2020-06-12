@@ -1,0 +1,19 @@
+.GroceryList{
+
+    display: inline-block;
+}
+
+
+
+.GroceryList-currentList{
+    border: 2px solid black;
+    padding: 10px;
+    width: 400px;
+    
+}
+
+.GroceryList-lists{
+    border: 2px solid black;
+    height: 900px;
+    width: 900px;
+}
