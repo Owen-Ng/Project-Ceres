@@ -34,7 +34,7 @@ class GroceryListForm extends Component {
         return (
             <div className="GroceryListForm-order">
                 <form onSubmit={this.sendItem}>
-                    <label htmlFor="item"></label>
+                    <label htmlFor="item">Item Name</label>
                     <input
                     className="GroceryListForm-item-input"
                     name="newItem"
@@ -42,7 +42,7 @@ class GroceryListForm extends Component {
                     value={this.state.newItem}
                     onChange={this.onInputChange}
                     />
-                    <label htmlFor="quantity"></label>
+                    <label htmlFor="quantity">Quantity</label>
                     <input
                     className="GroceryListForm-quantity-input"
                     name="newItemQuantity"

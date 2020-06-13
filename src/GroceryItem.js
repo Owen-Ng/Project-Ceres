@@ -12,9 +12,10 @@ class GroceryItem extends Component{
     }
     render() {
         return (
-            <div className="GroceryItem">
-                    <p className="GroceryItem-info">{this.props.name}</p>
-                    <p className="GroceryItem-info">{this.props.quantity}</p>
+            <div className="GroceryItem container">
+
+                <p className="GroceryItem-info">{this.props.name}</p>
+                <p className="GroceryItem-info">{this.props.quantity}</p>
             </div>
         )
     }
