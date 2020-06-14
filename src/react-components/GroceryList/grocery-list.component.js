@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import "./grocery-list.css"
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component"
 import GroceryItem from "./GroceryItem/grocery-item.component"
+
+import { v4 as uuidv4 } from 'uuid';
+
 export default class GroceryList extends Component{
     constructor(props) {
         super(props)
@@ -9,23 +12,45 @@ export default class GroceryList extends Component{
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
-            currentList: "List 1" 
+            currentList: "List 1",
+            alphabeticallyOrdered: false
         }
         this.addItem = this.addItem.bind(this)
         this.renderCurrentList = this.renderCurrentList.bind(this)
         this.renderLists = this.renderLists.bind(this)
         this.makeList = this.makeList.bind(this)
         this.selectList = this.selectList.bind(this)
+        this.editItem = this.editItem.bind(this)
+        this.changeAlphabeticalOrdering = this.changeAlphabeticalOrdering.bind(this)
+        this.deleteItem = this.deleteItem.bind(this)
     }
 
+    editItem(item) {
+        const currentList = this.state.currentList
+        let updatedList = this.state.familyLists
+  
+        delete updatedList[currentList][item.prevItemName]
+        updatedList[currentList][item.name] = item.quantity
+        this.setState((state) =>  updatedList)
+   
+    }
+    
+    deleteItem(itemName){
+        const currentList = this.state.currentList
+        let updatedList = this.state.familyLists
+        
+        delete updatedList[currentList][itemName]
+        this.setState({ familyLists: updatedList})
+        
+    }
     /*
         Recieves items from the GroceryListForm and is passed down as a prop. Once the new item object is recieved
         the appropriate list is appended the new item.
     */
-    addItem(state){
+    addItem(newItem){
         const currentList = this.state.currentList
         let updatedList = this.state.familyLists
-        updatedList[currentList][state.newItem] = state.newItemQuantity
+        updatedList[currentList][newItem.newItem] = newItem.newItemQuantity
         this.setState({familyLists: updatedList})
     }
     /*
@@ -34,14 +59,19 @@ export default class GroceryList extends Component{
     */
     renderCurrentList(){
         const currentList = this.state.currentList
-        const familyList = this.state.familyLists[currentList]
-        const keys = Object.keys(familyList)
+        const listObject = this.state.familyLists[currentList]
+        const order = this.state.alphabeticallyOrdered
+        const listKeys = !order ? Object.keys(listObject).sort(): Object.keys(listObject).sort().reverse()
 
-    return keys.map(key =>
+    return listKeys.map(key =>
         
         <GroceryItem 
+            key={uuidv4()}
             name={key}
-            quantity={familyList[key]}
+            editable={true}
+            quantity={listObject[key]}
+            editItem={this.editItem}
+            deleteItem={this.deleteItem}
         />
         
         )
@@ -72,12 +102,19 @@ export default class GroceryList extends Component{
         we map each item and its quantity to a <li> and a GroceryItem component so that it can be returned to renderLists.
     */
     makeList(listObject){
-        const listKeys = Object.keys(listObject)
+        
+        const order = this.state.alphabeticallyOrdered
+        const listKeys = !order ? Object.keys(listObject).sort(): Object.keys(listObject).sort().reverse()
+        const editable = listKeys === Object.keys(this.state.familyLists[this.state.currentList]).sort()
         return listKeys.map(key => 
             <li>
                  <GroceryItem 
+                    key={uuidv4()}
+                    editable= {editable}
                     name={key}
                     quantity={listObject[key]}
+                    editItem={this.editItem}
+                    deleteItem={this.deleteItem}
                 />
             </li>
 
@@ -93,6 +130,11 @@ export default class GroceryList extends Component{
         })
     }
 
+    changeAlphabeticalOrdering(e){
+        e.checked === true ? e.checked = false : e.checked = true
+        this.setState({alphabeticallyOrdered: !this.state.alphabeticallyOrdered})
+        console.log(e.target)
+    }
 
     render() {
         return (
@@ -103,6 +145,8 @@ export default class GroceryList extends Component{
                         <h3>{this.state.currentList}</h3>
                         {this.renderCurrentList()}
                         <GroceryListForm addItem={this.addItem}/>
+                        <br></br>
+                        Reverse Order <input type="checkbox" onClick={this.changeAlphabeticalOrdering} ></input>
                     </div>
                     <div className="GroceryList-lists col-sm">
                         {this.renderLists()}

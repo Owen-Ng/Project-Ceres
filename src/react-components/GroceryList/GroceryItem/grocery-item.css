@@ -11,4 +11,27 @@
 .GroceryItem-info{
     display:inline;
     padding: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.GroceryItem-buttons {
+    margin: 5px;
+    font-size: 10px;
+    display: inline-block;
+
+}
+
+.GroceryItem-buttons-container{
+
+    display: inline-block;
+    
+}
+
+.GroceryItem-input{
+    width: 100px;
+    margin: 10px;
+    display: inline-block;
+    
 }
