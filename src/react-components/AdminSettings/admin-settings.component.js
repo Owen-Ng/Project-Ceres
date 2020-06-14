@@ -19,4 +19,3 @@ render() {
     )
 }
 }
-export default AdminSettings
