@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "./grocery-item.css"
 
-class GroceryItem extends Component{
+export default class GroceryItem extends Component{
 
     constructor(props) {
         super(props)
@@ -21,5 +21,3 @@ class GroceryItem extends Component{
     }
 
 }
-
-export default GroceryItem

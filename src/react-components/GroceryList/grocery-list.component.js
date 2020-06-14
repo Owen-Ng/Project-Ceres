@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import "./grocery-list.css"
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component"
 import GroceryItem from "./GroceryItem/grocery-item.component"
-class GroceryList extends Component{
+export default class GroceryList extends Component{
     constructor(props) {
         super(props)
     
@@ -73,7 +73,6 @@ class GroceryList extends Component{
     */
     makeList(listObject){
         const listKeys = Object.keys(listObject)
-        console.log(listObject)
         return listKeys.map(key => 
             <li>
                  <GroceryItem 
@@ -84,10 +83,11 @@ class GroceryList extends Component{
 
             )
     }
-
+    /* 
+        The function that allows the buttons on the list view panel to switch the current working list.
+    */
     selectList(e){
         e.preventDefault()
-        console.log(e.target.name)
         this.setState({
             currentList:  e.target.name
         })
@@ -115,4 +115,3 @@ class GroceryList extends Component{
     
 }
 
-export default GroceryList;
