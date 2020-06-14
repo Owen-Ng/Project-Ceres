@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import "./styles/GroceryList.css"
-import GroceryListForm from "./GroceryListForm"
-import GroceryItem from "./GroceryItem"
+import "./grocery-list.css"
+import GroceryListForm from "./GroceryListForm/grocery-list-form.component"
+import GroceryItem from "./GroceryItem/grocery-item.component"
 class GroceryList extends Component{
     constructor(props) {
         super(props)

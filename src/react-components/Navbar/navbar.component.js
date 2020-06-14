@@ -16,7 +16,7 @@ export default class Navbar extends Component {
               <Link to="/tribe" className="nav-link">Tribe</Link>
             </li>
             <li className="navbar-item">
-              <Link to="/lists" className="nav-link">Your Lists</Link>
+              <Link to="/grocerylists" className="nav-link">Grocery Lists</Link>
             </li>
           </ul>
           <ul className="navbar-nav ml-auto">

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./styles/GroceryListForm.css"
+import "./grocery-list-form.css"
 
 class GroceryListForm extends Component {
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./styles/GroceryItem.css"
+import "./grocery-item.css"
 
 class GroceryItem extends Component{
 
