@@ -1,0 +1,28 @@
+.mapborderbottom{
+ 
+    border-bottom: 1px solid black;
+   
+}
+.infor p{
+    margin: 10px;
+    padding: 10px;
+}
+.bottomtext{
+    margin-top: 100px;
+    text-align: center;
+}
+.b1{
+    position: absolute;
+    bottom:400px;
+    left: 150px;
+}
+.b2{
+    position: absolute;
+    bottom:400px;
+    left:500px;
+}
+.b3{
+    position: absolute;
+    bottom:200px;
+    left:250px;
+}
