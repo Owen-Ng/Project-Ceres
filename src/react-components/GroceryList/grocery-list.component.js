@@ -140,7 +140,7 @@ export default class GroceryList extends Component{
         return (
             <div className="GroceryList container" >
                 <div className="row">
-                    <div className="GroceryList-currentList col-lg-">
+                    <div className="GroceryList-currentList col-lg">
 
                         <h3>{this.state.currentList}</h3>
                         {this.renderCurrentList()}

@@ -1,0 +1,26 @@
+.FamilyTribe{
+    width: 100%;
+}
+
+.Family-list{
+    border: 2px solid black;
+    border-radius: 30px;
+    padding: 10px;
+    width: 50%;
+    display: inline-block;
+    margin: 10px;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    background-color: antiquewhite;
+    
+}
+
+.col-sm{
+    border: 2px solid black;
+    border-radius: 30px;
+    width: 30%;
+    display: inline-block;
+    margin: 10px; 
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    padding: 15px;
+    background-color: antiquewhite;
+}
