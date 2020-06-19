@@ -74,7 +74,7 @@ export default class GroceryItem extends Component{
                 {(!this.state.editable || this.state.editMode) ? "" : 
                 <div className="GroceryItem-buttons-container">
                     <button className="GroceryItem-buttons btn btn-secondary" onClick={this.changeEditMode}>Edit</button>
-                    <button type="button" class="GroceryItem-buttons btn btn-danger" onClick={this.handleDelete}>Delete</button>
+                    <button type="button" className="GroceryItem-buttons btn btn-danger" onClick={this.handleDelete}>Delete</button>
                 </div>
             }
                 

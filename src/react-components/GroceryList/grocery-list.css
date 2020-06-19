@@ -13,7 +13,12 @@
     background-color: antiquewhite;
     
 }
-
+.GroceryList-list-btn{
+	display: inline-block;
+}
+.GroceryList-list-title{
+	display: inline-block;
+}
 .col-sm{
     border: 2px solid black;
     border-radius: 30px;
