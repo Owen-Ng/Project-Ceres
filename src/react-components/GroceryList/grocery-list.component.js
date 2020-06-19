@@ -57,9 +57,14 @@ export default class GroceryList extends Component{
     */
     addItem(newItem){
         const currentList = this.state.currentList
-        let updatedList = this.state.familyLists
-        updatedList[currentList][newItem.newItem] = newItem.newItemQuantity
-        this.setState({familyLists: updatedList})
+        if(currentList !== "No list selected"){
+            let updatedList = this.state.familyLists
+            updatedList[currentList][newItem.newItem] = newItem.newItemQuantity
+            this.setState({familyLists: updatedList})
+        }
+        else{
+            alert("Please make/select a list before inserting an item.")
+        }
     }
     /*
         Calls the GroceryItem component to generate a tab with all the information given for each item on 
@@ -114,13 +119,13 @@ export default class GroceryList extends Component{
     }
 
     render() {
-    
+        const listDeleteButton = <button className="GroceryList-list-btn btn btn-danger" onClick={this.deleteList}>Delete</button>
         return (
             <div className="GroceryList container" >
                 <div className="row">
                     <div className="GroceryList-currentList col-lg-">
-                        <h3 className="GroceryList-list-title">{this.state.currentList}</h3>
-                        <button className="GroceryList-list-btn" onClick={this.deleteList}>Delete</button>
+                        <h4 className="GroceryList-list-title">{this.state.currentList}</h4>
+                        {this.state.currentList === "No list selected" ? "" : listDeleteButton}
                         {this.state.currentList !== "No list selected" ? this.renderCurrentList() : ""}
                         <GroceryListForm addItem={this.addItem}/>
                         <br></br>

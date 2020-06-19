@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import GroceryItem from '../GroceryItem/grocery-item.component'
+import "./grocery-list-tab.css"
 import { v4 as uuidv4 } from 'uuid';
 
 export default class GroceryListTab extends Component{
@@ -39,6 +40,9 @@ export default class GroceryListTab extends Component{
         if(updatedList[listInputBar] !== undefined)
         {
             alert("A list with that name is already available, please select another.")
+        }
+        else if(listInputBar === ""){
+            alert("Please enter a name")
         }
         else{
             updatedList[listInputBar] = {}
@@ -100,18 +104,19 @@ export default class GroceryListTab extends Component{
     }
     render() {
         return (
-            <div className="GroceryList-lists col-sm">
+            <div className="GroceryListTab col-sm">
                         {this.state.currentList !== "No list selected" ? this.renderLists() : ""}
-                        <form onSubmit={this.addList} className="">
+                        <form onSubmit={this.addList} >
                             New List 
                             <input
+                                className="GroceryListTab-item-input"
                                 name="listInputBar"
                                 type="text"
                                 value={this.state.listInputBar}
                                 placeholder="New list name"
                                 onChange={this.onInputChange}
                                  />
-                            <button>+</button>
+                            <button className="GroceryListTab-btn btn btn-primary">+</button>
                         </form>
                     </div>
         )
