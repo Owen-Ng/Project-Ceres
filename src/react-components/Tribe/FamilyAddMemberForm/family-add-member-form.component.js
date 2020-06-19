@@ -31,12 +31,12 @@ export default class FamilyAddMemberForm extends Component {
     return (
       <div className="FamilyMemberAddForm-order">
         <form onSubmit={this.sendMember}>
-          <label htmlFor="member">Family Member Username</label>
+          <label htmlFor="member">Add Family Member</label>
           <input
           className="FamilyMemberAddForm-member-input"
           name="newMemberID"
           type="text"
-          defaultValue={this.state.newMemberID}
+          value={this.state.newMemberID}
           onChange={this.onInputChange}
           required
           />
