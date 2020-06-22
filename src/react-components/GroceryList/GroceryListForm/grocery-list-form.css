@@ -4,6 +4,7 @@
 	padding: 5px;
 	width: 235px;
 	display: inline-block;
+	border-color: black;
 }
 
 .GroceryListForm-quantity-input{
@@ -11,6 +12,7 @@
     border-radius: 50px;
 	width: 100px;
 	display: inline-block;
+	border-color: black;
 }
 
 .GroceryListForm-add {
