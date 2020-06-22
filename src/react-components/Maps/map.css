@@ -3,12 +3,20 @@
     border-bottom: 1px solid black;
    
 }
+.infor{
+    height: 300px;
+}
+.infor strong{
+    text-align: end;
+}
 .infor p{
+    
     margin: 10px;
     padding: 10px;
+ 
 }
 .bottomtext{
-    margin-top: 100px;
+    
     text-align: center;
 }
 .b1{
@@ -26,3 +34,6 @@
     bottom:200px;
     left:250px;
 }
+.header_map{
+    text-align: center;
+  }
