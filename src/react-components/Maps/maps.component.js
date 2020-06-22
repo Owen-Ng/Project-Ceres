@@ -63,7 +63,12 @@ export default class Maps extends Component {
           console.log(this.state)
           }
           else{
-            alert("Does not exist")
+            this.setState({citystate: "City does not exist"});
+            setTimeout(function(){
+              this.setState({citystate:""})
+            }.bind(this),1000)
+            //alert("Does not exist")
+          }
           
         }
    
@@ -71,7 +76,7 @@ export default class Maps extends Component {
   }
     
 
-  }
+  
   
   render() {
     return (
@@ -79,6 +84,7 @@ export default class Maps extends Component {
         <div class="row">
           <div class="col-lg-9 border border-dark" style={{height:500}}>
             <Map name = {this.state.currentcity}  city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
+            
             {/* <IconButton class ="b1"color='black' onClick={()=>this.change("List 1")}  >♥</IconButton>
             <IconButton class ="b2"color='black' onClick={()=>this.change("List 2")}>♥</IconButton>
             <IconButton class ="b3"color='black' onClick={()=>this.change("List 3")}>♥</IconButton> */}
@@ -94,7 +100,9 @@ export default class Maps extends Component {
               type="text" 
               class="m-2 border-dark" placeholder="Enter City" 
               style={{width:"94%",textAlign: "center"}}/>
+             
             </div>
+            
          
             <div class= "infor">
             <p>Store Info: <strong>{this.state.currentstate.Store}</strong> </p>
