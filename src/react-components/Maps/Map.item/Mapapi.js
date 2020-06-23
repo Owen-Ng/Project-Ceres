@@ -3,7 +3,7 @@ import { Map, Marker, Popup, TileLayer ,withLeaflet} from "react-leaflet";
 import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
-import * as parkdata from '../data/groceries.json'
+import * as groceries from '../data/groceries.json'
 const someicon = new Icon ({iconUrl: "/cart.svg", iconSize:15}); 
 const active = new Icon({iconUrl:"/basket", iconSize: 20})
 export default class PublicMap extends Component {
@@ -15,13 +15,13 @@ export default class PublicMap extends Component {
   //coor = this.props.city;
   data(map){
     
-    this.props.senddata(map.properties.NAME, map.properties.ADDRESS, map.properties.OPEN, map.properties.NOTES)
+    this.props.senddata(map.properties.NAME, map.properties.ADDRESS, map.properties.OPEN, map.properties.WAIT)
   }
-  selected(park){
+  selected(map){
     return(
-    <Marker key = {park.properties.PARK_ID} position={[
-      park.geometry.coordinates[1], 
-      park.geometry.coordinates[0]
+    <Marker key = {map.properties.SHOP_ID} position={[
+      map.geometry.coordinates[1], 
+      map.geometry.coordinates[0]
      
     ]}
     icon= {active}
@@ -57,13 +57,13 @@ export default class PublicMap extends Component {
          
         />
          
-        {parkdata.features.map(park =>(
-          <Marker key = {park.properties.PARK_ID} position={[
-            park.geometry.coordinates[1], 
-            park.geometry.coordinates[0]
+        {groceries.features.map(map =>(
+          <Marker key = {map.properties.SHOP_ID} position={[
+            map.geometry.coordinates[1], 
+            map.geometry.coordinates[0]
            
           ]}
-          onClick={()=>{this.setState(park); this.data(park);this.selected(park);
+          onClick={()=>{this.setState(map); this.data(map);this.selected(map);
 
             
           }}
