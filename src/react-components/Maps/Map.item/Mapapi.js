@@ -4,15 +4,11 @@ import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
 import * as groceries from '../data/groceries.json'
-const someicon = new Icon ({iconUrl: "/cart.svg", iconSize:15}); 
+const someicon = new Icon ({iconUrl: "/cart.svg", iconSize:25}); 
 const active = new Icon({iconUrl:"/basket", iconSize: 20})
 export default class PublicMap extends Component {
-  constructor(props) {
-    super(props)
-  }
   
   state=null
-  //coor = this.props.city;
   data(map){
     
     this.props.senddata(map.properties.NAME, map.properties.ADDRESS, map.properties.OPEN, map.properties.WAIT)
@@ -33,80 +29,60 @@ export default class PublicMap extends Component {
     const SearchComponent = withLeaflet(Search);
       return(
         <div>
-        <Map center={[this.props.city[0], this.props.city[1]]} zoom={12}>
-               <TileLayer
-            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          <Map center={[this.props.city[0], this.props.city[1]]} zoom={12}>
+                <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            />
+            <SearchComponent className="search"
+            position="topright"
+            inputPlaceholder="Enter Address here"
+            search={[33.100745405144245, 46.48315429687501]}
+            showMarker={false}
+            zoom={5}
+            showPopup={false}
+            openSearchOnLoad={true}
+            searchBounds={[
+              [33.100745405144245, 46.48315429687501],
+              [44.55916341529184, 24.510498046875]
+            ]}
           />
-          <SearchComponent className="search"
-          customProvider={this.provider}
-          position="topright"
-          inputPlaceholder="Enter Address here"
-          search={[33.100745405144245, 46.48315429687501]}
-          showMarker={false}
-          zoom={5}
-          showPopup={false}
-          popUp={this.customPopup}
-          closeResultsOnClick={true}
-          openSearchOnLoad={true}
-          searchBounds={[
-            [33.100745405144245, 46.48315429687501],
-            [44.55916341529184, 24.510498046875]
-          ]}
-         
-         
-        />
-         
-        {groceries.features.map(map =>(
-          <Marker key = {map.properties.SHOP_ID} position={[
-            map.geometry.coordinates[1], 
-            map.geometry.coordinates[0]
-           
-          ]}
-          onClick={()=>{this.setState(map); this.data(map);this.selected(map);
-
+          
+          {groceries.features.map(map =>(
+            <Marker key = {map.properties.SHOP_ID} position={[
+              map.geometry.coordinates[1], 
+              map.geometry.coordinates[0]
             
-          }}
-          icon = {someicon}/>
-         
-        )
-        )
-      }
-      {/* {this.state!='null'  && (
-        <Popup
-        
-        position={[
-          this.state.geometry.coordinates[1],
-          this.state.geometry.coordinates[0]
-        ]}
-        onClose={()=>{this.setState(null)}}
-        >
-          <div>
-            <h2>{this.state.properties.NAME}</h2>
-      <p>{this.state.properties.ADDRESS}</p>
-      <p>{this.state.properties.OPEN}</p>
-      <p>{this.state.properties.NOTES}</p>
-          </div>
-        </Popup>
-      )}
-       */}
-       {this.state && (
-       <Marker key = {this.state.properties.PARK_ID} position={[
-            this.state.geometry.coordinates[1], 
-            this.state.geometry.coordinates[0]
-           
-          ]}
-          icon = {active}/>)}
-        
-      </Map>
-{/* 
-     <button onClick={()=>console.log(this.props.name)}>♥</button>
-   <button onClick={()=>console.log(this.state)}>♥</button> */}
-   </div>
+            ]}
+            onClick={()=>{this.setState(map); this.data(map);this.selected(map);
+            }}
+            icon = {someicon}/>
+            )
+            )
+          }
+          {this.state && (
+            <Popup
+            key = {this.state.properties.SHOP_ID}
+              position={[
+                this.state.geometry.coordinates[1],
+                this.state.geometry.coordinates[0]
+              ]}
+              onClose={() => {
+                this.setState(null);
+              }}
+            >
+            <div>
+              <h6>You are here</h6>
+            </div>
+          </Popup>
+        )}
+        </Map>
+
+      </div>
   
   )  
   }
- }
+}
 
 
 

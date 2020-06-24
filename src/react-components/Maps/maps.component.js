@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./map.css";
 import Map from './Map.item/Mapapi'
-import {IconButton} from "@material-ui/core";
 export default class Maps extends Component {
   constructor(props) {
     super(props)
@@ -84,15 +83,9 @@ export default class Maps extends Component {
         <div class="row">
           <div class="col-lg-9 border border-dark" style={{height:500}}>
             <Map name = {this.state.currentcity}  city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
-            
-            {/* <IconButton class ="b1"color='black' onClick={()=>this.change("List 1")}  >♥</IconButton>
-            <IconButton class ="b2"color='black' onClick={()=>this.change("List 2")}>♥</IconButton>
-            <IconButton class ="b3"color='black' onClick={()=>this.change("List 3")}>♥</IconButton> */}
           </div>
           <div class="p-0 m-0 col-3 border border-dark" >
             <div class="mapborderbottom" >
-              {/* <h2 class="header_map">Ceres</h2> */}
-              
               <input name = "currentcity" 
               value = {this.state.citystate} 
               onChange={this.changecity} 
@@ -102,8 +95,6 @@ export default class Maps extends Component {
               style={{width:"94%",textAlign: "center"}}/>
              
             </div>
-            
-         
             <div class= "infor">
             <p>Store Info: <strong>{this.state.currentstate.Store}</strong> </p>
             <p>Address: <strong>{this.state.currentstate.Address}</strong> </p>
@@ -114,13 +105,8 @@ export default class Maps extends Component {
               <span> Report how long your visit took</span>
               <input id= "report" type= "text" style={{width:"90%", height:100, fontSize:50, textAlign:"center"}}></input>
             </div>
-            
-            
           </div>
-   
-            
           </div>
-        
         </div>
     )
   }
