@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer ,withLeaflet} from "react-leaflet";
+import { Map, Marker, Popup, TileLayer ,withLeaflet, Tooltip} from "react-leaflet";
 import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
@@ -29,11 +29,14 @@ export default class PublicMap extends Component {
     const SearchComponent = withLeaflet(Search);
       return(
         <div>
+          {/* Map api from react leaflet https://react-leaflet.js.org/ */}
           <Map center={[this.props.city[0], this.props.city[1]]} zoom={12}>
                 <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
+
+            {/* react-leaflet-search api https://www.npmjs.com/package/react-leaflet-search */}
             <SearchComponent className="search"
             position="topright"
             inputPlaceholder="Enter Address here"
@@ -42,11 +45,9 @@ export default class PublicMap extends Component {
             zoom={5}
             showPopup={false}
             openSearchOnLoad={true}
-            searchBounds={[
-              [33.100745405144245, 46.48315429687501],
-              [44.55916341529184, 24.510498046875]
-            ]}
+            
           />
+
           
           {groceries.features.map(map =>(
             <Marker key = {map.properties.SHOP_ID} position={[
@@ -54,9 +55,16 @@ export default class PublicMap extends Component {
               map.geometry.coordinates[0]
             
             ]}
+            
+       
             onClick={()=>{this.setState(map); this.data(map);this.selected(map);
             }}
-            icon = {someicon}/>
+            icon = {someicon}>
+
+            <Tooltip className='tooltip' direction='center' offset={[-35, 0]} opacity={1} permanent>
+              <span>{map.properties.WAIT}</span>
+            </Tooltip>
+          </Marker>
             )
             )
           }
@@ -67,6 +75,8 @@ export default class PublicMap extends Component {
                 this.state.geometry.coordinates[1],
                 this.state.geometry.coordinates[0]
               ]}
+              closeButton ={false}
+              offset={[1,0]}
               onClose={() => {
                 this.setState(null);
               }}
@@ -75,6 +85,7 @@ export default class PublicMap extends Component {
               <h6>You are here</h6>
             </div>
           </Popup>
+          
         )}
         </Map>
 
