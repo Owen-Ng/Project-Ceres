@@ -12,4 +12,3 @@ Owen Ng
 
 Omar Shabana
 
-Carlos Yu
