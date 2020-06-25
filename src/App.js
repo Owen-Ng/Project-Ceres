@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Navbar from "./react-components/Navbar/navbar.component"
-import Home from "./react-components/Home/home.component"
-import Login from "./react-components/Login/Login.component"
+//import Home from "./react-components/Home/home.component"
+import Login from "./react-components/Login/login.component"
 import Maps from "./react-components/Maps/maps.component"
 import Tribe from "./react-components/Tribe/tribe.component"
 import GroceryList from "./react-components/GroceryList/grocery-list.component"
@@ -16,7 +16,7 @@ export default class App extends Component {
     super(props)
   
     this.state = {
-       permissions: "user",
+       isAdmin: true,
        loggedIn: false
     }
     this.setPermissions = this.setPermissions.bind(this)
@@ -24,20 +24,24 @@ export default class App extends Component {
   
   setPermissions(permissionString){
     if(permissionString === "user"){
-      this.setState({ permissions: "user", loggedIn: true})
+      this.setState({ isAdmin: false, loggedIn: true})
+      return <Redirect to="/map"/>
       
     }
     else if (permissionString === "admin"){
-      this.setState({ permissions: "admin", loggedIn: true})
+      this.setState({ isAdmin: true, loggedIn: true})
+      return <Redirect to="/map"/>
     }
     else{
       alert("Unable to establish permissions")
     }
   }
+
   render(){
     return (
       <Router>
-        <Navbar permissions={this.state.permissions} loggedIn={this.state.loggedIn}/>
+        {this.state.loggedIn ? <Redirect to="/map"/> : ""}
+        <Navbar isAdmin={this.state.isAdmin} loggedIn={this.state.loggedIn}/>
         <br/>
         <Route path="/" exact component={Maps} />
         <Route path="/login" exact render={() => <Login 
@@ -51,6 +55,7 @@ export default class App extends Component {
         
         <Route path="/admin" exact component={AdminSettings}/>
         <Route path="/profile" exact component={Profile} />
+        
       </Router>
     );
   }

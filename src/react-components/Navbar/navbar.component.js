@@ -29,22 +29,22 @@ export default class Navbar extends Component {
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
-              {(this.props.permissions === "admin" ? adminLink: "")}
+              {(this.props.isAdmin ? adminLink: "")}
               <li className="navbar-item">
                 <Link to="/profile" className="nav-link">Profile</Link>
               </li>
             </ul>
           </div>
         </nav>
-        const loginNav = <nav>
-            <ul>
+        const loginNav = <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
+            <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
                 <Link to="/login" className="nav-link">Login</Link>
               </li>
             </ul>
           </nav>
     return (
-      <p>{this.props.login ? navBar : loginNav }</p>
+      <div>{this.props.loggedIn ? navBar : loginNav }</div>
      
     );
   }
