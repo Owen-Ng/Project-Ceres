@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -11,22 +11,50 @@ import GroceryList from "./react-components/GroceryList/grocery-list.component"
 import AdminSettings from "./react-components/AdminSettings/admin-settings.component"
 import Profile from "./react-components/Profile/profile.component"
 
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <br/>
-      <Route path="/" exact component={Maps} />
-      <Route path="/login" exact component={Login} />
+export default class App extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       permissions: "user",
+       loggedIn: false
+    }
+    this.setPermissions = this.setPermissions.bind(this)
+  }
+  
+  setPermissions(permissionString){
+    if(permissionString === "user"){
+      this.setState({ permissions: "user", loggedIn: true})
       
-      <Route path="/map" component={Maps} />
-      <Route path="/tribe" component={Tribe} />
-      <Route path="/grocerylists" component={GroceryList} />
-      
-      <Route path="/admin" component={AdminSettings} />
-      <Route path="/profile" component={Profile} />
-    </Router>
-  );
+    }
+    else if (permissionString === "admin"){
+      this.setState({ permissions: "admin", loggedIn: true})
+    }
+    else{
+      alert("Unable to establish permissions")
+    }
+  }
+  render(){
+    return (
+      <Router>
+        <Navbar permissions={this.state.permissions} loggedIn={this.state.loggedIn}/>
+        <br/>
+        <Route path="/" exact component={Maps} />
+        <Route path="/login" exact render={() => <Login 
+                                                  setPermissions={this.setPermissions}
+                                                  loggedIn={this.state.loggedIn}
+                                                  />} />
+        
+        <Route path="/map" exact component={Maps} />
+        <Route path="/tribe" exact component={Tribe} />
+        <Route path="/grocerylists" exact component={GroceryList} />
+        
+        <Route path="/admin" exact component={AdminSettings}/>
+        <Route path="/profile" exact component={Profile} />
+      </Router>
+    );
+  }
+  
 }
 
-export default App;
+

@@ -14,11 +14,23 @@ export default class Login extends Component {
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleSubmit(event) {
-        const { username, password } = this.state;
+    handleSubmit(e){
+        e.preventDefault();
+        const {username, password} = this.state
+        if(username === "user" && password === "user"){
+            this.props.setPermissions("user")
+        }
+        else if (username === "admin" && password === "admin"){
+            this.props.setPermissions("admin")
+        }
     }
+    handleChange(e){
+        this.setState({[e.target.name]: e.target.value});
+    }
+   
 
     render(){
         return (
@@ -29,6 +41,7 @@ export default class Login extends Component {
                 name = "username"
                 placeholder = "Username"
                 value = {this.state.username}
+                onChange={this.handleChange}
                 required
                 />
             
@@ -37,10 +50,11 @@ export default class Login extends Component {
                 name = "password"
                 placeholder = "Password"
                 value = {this.state.password}
+                onChange={this.handleChange}
                 required 
                 /> 
 
-                <button type = "submit">Login Now</button> 
+                <button type = "submit">Login</button> 
                 
             </form>
 
