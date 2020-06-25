@@ -21,6 +21,9 @@ export default class Navbar extends Component {
           </ul>
           <ul className="navbar-nav ml-auto">
             <li className="navbar-item">
+              <Link to="/login" className="nav-link">Login</Link>
+            </li>
+            <li className="navbar-item">
               <Link to="/admin" className="nav-link">Admin Settings</Link>
             </li>
             <li className="navbar-item">

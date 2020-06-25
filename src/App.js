@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Navbar from "./react-components/Navbar/navbar.component"
 import Home from "./react-components/Home/home.component"
+import Login from "./react-components/Login/Login.component"
 import Maps from "./react-components/Maps/maps.component"
 import Tribe from "./react-components/Tribe/tribe.component"
 import GroceryList from "./react-components/GroceryList/grocery-list.component"
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <br/>
       <Route path="/" exact component={Maps} />
+      <Route path="/login" exact component={Login} />
       
       <Route path="/map" component={Maps} />
       <Route path="/tribe" component={Tribe} />
