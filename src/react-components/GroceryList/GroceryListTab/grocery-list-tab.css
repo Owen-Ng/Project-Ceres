@@ -16,3 +16,7 @@
     display: inline-block;
     border-color: black;
 }
+
+.GroceryListTab-list{
+    list-style-type: none;
+}

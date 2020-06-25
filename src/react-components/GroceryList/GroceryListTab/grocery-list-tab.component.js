@@ -66,7 +66,7 @@ export default class GroceryListTab extends Component{
             onClick={this.selectList} 
             className="GroceryList-list-change-btn">{list}</button>
 
-            <ul>
+            <ul className="GroceryListTab-list">
                 {this.makeList(familyLists[list])}
             </ul>
         </div>
