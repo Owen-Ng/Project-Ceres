@@ -15,12 +15,12 @@ function App() {
     <Router>
       <Navbar />
       <br/>
-      <Route path="/" exact component={Home} />
-      <br/>
+      <Route path="/" exact component={Maps} />
+      
       <Route path="/map" component={Maps} />
       <Route path="/tribe" component={Tribe} />
       <Route path="/grocerylists" component={GroceryList} />
-      <br/>
+      
       <Route path="/admin" component={AdminSettings} />
       <Route path="/profile" component={Profile} />
     </Router>
