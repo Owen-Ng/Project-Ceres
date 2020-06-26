@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class Navbar extends Component {
-  constructor(props) {
-    super(props)
-  
-    this.state = {
-       
-    }
-  }
+ 
   
   render() {
     const adminLink = <li className="navbar-item">
@@ -33,13 +27,16 @@ export default class Navbar extends Component {
               <li className="navbar-item">
                 <Link to="/profile" className="nav-link">Profile</Link>
               </li>
+              <li className="navbar-item">
+                <Link className="btn btn-danger nav-link" to="/map" onClick={this.props.logout}>Logout</Link>
+              </li>
             </ul>
           </div>
         </nav>
         const loginNav = <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
             <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
-                <Link to="/login" className="nav-link">Login</Link>
+                <Link className="btn btn-primary nav-link" to="/login">Login</Link>
               </li>
             </ul>
           </nav>

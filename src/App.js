@@ -17,19 +17,21 @@ export default class App extends Component {
   
     this.state = {
        isAdmin: true,
-       loggedIn: false
+       loggedIn: false,
+       username: ""
     }
     this.setPermissions = this.setPermissions.bind(this)
+    this.logout = this.logout.bind(this)
   }
   
   setPermissions(permissionString){
     if(permissionString === "user"){
-      this.setState({ isAdmin: false, loggedIn: true})
+      this.setState({ isAdmin: false, loggedIn: true, username: "user"})
       return <Redirect to="/map"/>
       
     }
     else if (permissionString === "admin"){
-      this.setState({ isAdmin: true, loggedIn: true})
+      this.setState({ isAdmin: true, loggedIn: true, username: "admin"})
       return <Redirect to="/map"/>
     }
     else{
@@ -37,11 +39,18 @@ export default class App extends Component {
     }
   }
 
+
+  logout(){
+    this.setState({ isAdmin: false, loggedIn: false, username: ""})
+    //window.location.reload()
+    return <Redirect to="/map"/>
+  } 
+
   render(){
     return (
       <Router>
         {this.state.loggedIn ? <Redirect to="/map"/> : ""}
-        <Navbar isAdmin={this.state.isAdmin} loggedIn={this.state.loggedIn}/>
+        <Navbar isAdmin={this.state.isAdmin} loggedIn={this.state.loggedIn} logout={this.logout}/>
         <br/>
         <Route path="/" exact component={Maps} />
         <Route path="/login" exact render={() => <Login 
