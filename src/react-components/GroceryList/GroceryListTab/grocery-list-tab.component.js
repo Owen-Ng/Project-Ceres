@@ -59,7 +59,7 @@ export default class GroceryListTab extends Component{
     const familyLists = this.state.familyLists
     const lists = Object.keys(familyLists)
     return lists.map(list => 
-        <div>
+        <div key={uuidv4()}>
             <button 
             name={list} 
             key={uuidv4()}
@@ -85,7 +85,7 @@ export default class GroceryListTab extends Component{
         const listKeys = !order ? Object.keys(listObject).sort(): Object.keys(listObject).sort().reverse()
         
         return listKeys.map(key => 
-            <li>
+            <li key={uuidv4()}>
                 <GroceryItem 
                     key={uuidv4()}
                     editable= {false}
