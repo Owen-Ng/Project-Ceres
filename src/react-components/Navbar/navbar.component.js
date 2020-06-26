@@ -16,7 +16,14 @@ export default class Navbar extends Component {
                       </li>
     const navBar =  <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
           <Link to="/" className="navbar-brand">Project Ceres</Link>
-          <div className="collpase navbar-collapse">
+          <button className="navbar-toggler" 
+                  type="button" 
+                  data-toggle="collapse" 
+                  data-target=".navbar-collapse" 
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
                 <Link to="/map" className="nav-link">Map</Link>
