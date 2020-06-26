@@ -21,8 +21,8 @@ export default class Tribe extends Component {
                     "Tribe 3" : ["Family 4", "Family 5"]},
       unassigned: ["Jake", "Betty", "Alice"],
       currentFamily: "Family 1",
-      currentUserLevel: "user"
     }
+
     this.addMember = this.addMember.bind(this);
     this.renderLists = this.renderLists.bind(this)
     this.renderCurrentList = this.renderCurrentList.bind(this)
@@ -132,20 +132,10 @@ export default class Tribe extends Component {
     this.setState({currentFamily : lists[i]})
   }
 
-  setUser(e) {
-    this.setState({currentUserLevel: e.target.value})
-  }
-
   render() {
     return (
       <div className="FamilyTribe container">
-        <div onChange={this.setUser.bind(this)}>
-          <input type="radio" value="user" name="userType" /> User
-          <br />
-          <input type="radio" value="familyAdmin" name="userType" /> Family Admin
-          <br />
-          <input type="radio" value="tribeAdmin" name="userType" /> Tribe Admin
-        </div>
+        
         <button className="btn btn-primary" onClick={this.changeFamily}>Change Family</button>
         <div className="row">
           <div className="Family-list col-lg">
