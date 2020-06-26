@@ -79,29 +79,29 @@ export default class Maps extends Component {
   
   render() {
     return (
-      <div class='container-xl' style={{ alignContent: 'center', justifyContent: 'center', }}>
-        <div class="row">
-          <div class="col-lg-9 border border-dark" style={{height:500}}>
+      <div className='container-xl' style={{ alignContent: 'center', justifyContent: 'center', }}>
+        <div className="row">
+          <div className="col-lg-9 border border-dark" style={{height:500}}>
             <Map name = {this.state.currentcity}  city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
           </div>
-          <div class="p-0 m-0 col-3 border border-dark" >
-            <div class="mapborderbottom" >
+          <div className="p-0 m-0 col-3 border border-dark" >
+            <div className="mapborderbottom" >
               <input name = "currentcity" 
               value = {this.state.citystate} 
               onChange={this.changecity} 
               onKeyUp={this.Keypress} 
               type="text" 
-              class="m-2 border-dark" placeholder="Enter City" 
+              className="m-2 border-dark" placeholder="Enter City" 
               style={{width:"94%",textAlign: "center"}}/>
              
             </div>
-            <div class= "infor">
+            <div className= "infor">
             <p>Store Info: <strong>{this.state.currentstate.Store}</strong> </p>
             <p>Address: <strong>{this.state.currentstate.Address}</strong> </p>
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time}</strong> </p>
             </div>
-            <div class="bottomtext">
+            <div className="bottomtext">
               <span> Report how long your visit took</span>
               <input id= "report" type= "text" style={{width:"90%", height:100, fontSize:50, textAlign:"center"}}></input>
             </div>

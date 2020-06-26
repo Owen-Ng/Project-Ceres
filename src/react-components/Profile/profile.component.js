@@ -3,7 +3,7 @@ import "./profile.css"
 export default class Profile extends Component {
   render() {
     return (
-      <div class = "box">
+      <div className = "box">
        <input type= "text" placeholder="Change Email" style={{  textAlign:"left"}}></input>
        <br></br>
        <input type= "text" placeholder="Change Password" style={{  textAlign:"left"}}></input>
