@@ -1,0 +1,22 @@
+.GroceryListTab{
+
+}
+
+.GroceryListTab-btn{
+    margin: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.GroceryListTab-item-input{
+    margin: 10px;
+	border-radius: 50px;
+	padding: 5px;
+	width: 235px;
+    display: inline-block;
+    border-color: black;
+}
+
+.GroceryListTab-list{
+    list-style-type: none;
+}

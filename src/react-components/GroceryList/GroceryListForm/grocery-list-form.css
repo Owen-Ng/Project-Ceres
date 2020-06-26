@@ -4,6 +4,7 @@
 	padding: 5px;
 	width: 235px;
 	display: inline-block;
+	border-color: black;
 }
 
 .GroceryListForm-quantity-input{
@@ -11,9 +12,10 @@
     border-radius: 50px;
 	width: 100px;
 	display: inline-block;
+	border-color: black;
 }
 
-.GroceryListForm-add {
+.GroceryListForm-add { /* src: https://www.bestcssbuttongenerator.com/#/28 */
 	box-shadow:inset 0px 1px 0px 0px #fce2c1;
 	background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
 	background-color:#ffc477;
