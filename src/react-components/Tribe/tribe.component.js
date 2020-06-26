@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import "./tribe.css";
-import FamilyAddMemberForm from "./FamilyAddMemberForm/family-add-member-form.component";
 import FamilyMember from "./FamilyMember/family-member.component"
 
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +9,7 @@ export default class Tribe extends Component {
     super(props);
 
     this.state = {
-      membersLists: {   "Family 1" : ["Bob", "Karen" ],
+      membersLists: {   "Family 1" : ["Anna", "Bob" ],
                         "Family 2" : ["James", "Debbie"],
                         "Family 3" : ["Scott", "Barry"], 
                         "Family 4" : ["Doug"],
@@ -23,30 +22,10 @@ export default class Tribe extends Component {
       currentFamily: "Family 1",
     }
 
-    this.addMember = this.addMember.bind(this);
-    this.renderLists = this.renderLists.bind(this)
-    this.renderCurrentList = this.renderCurrentList.bind(this)
-    this.changeFamily = this.changeFamily.bind(this)
-  }
-
-  addMember(newMember) {
-    const currentFamily = this.state.currentFamily
-    const unassigned = this.state.unassigned
-    const unassignedLength = unassigned.length
-    let familyList = this.state.membersLists[currentFamily]
-
-    for (let i = 0; i < unassigned.length; i++) {
-      if (newMember.newMemberID === unassigned[i]) {
-        familyList.push(newMember.newMemberID)
-        unassigned.splice(i, 1)
-        this.setState({memberLists : familyList,
-                        unassigned : unassigned })
-      }
-    }
-
-    if (this.state.unassigned.length === unassignedLength) {
-      console.log("member not found")
-    }
+    this.renderLists = this.renderLists.bind(this);
+    this.renderCurrentList = this.renderCurrentList.bind(this);
+    this.changeFamily = this.changeFamily.bind(this);
+    this.selectList = this.selectList.bind(this);
   }
 
   renderCurrentList() {
@@ -86,7 +65,7 @@ export default class Tribe extends Component {
     }
 
     return newLists.map(list =>
-      <div>
+      <div key={uuidv4()}>
         <button
         name={list}
         onClick={this.selectList}
@@ -97,10 +76,14 @@ export default class Tribe extends Component {
       </div>)
   }
 
+  selectList() {
+    this.props.history.push(`/grocerylists`)
+  }
+
   makeList(listObject) {
     const listKeys = Object.keys(listObject).sort()
     return listKeys.map(key => 
-      <li>
+      <li key={uuidv4()}>
         <FamilyMember 
           key={uuidv4()}
           name={listObject[key]}
@@ -140,9 +123,8 @@ export default class Tribe extends Component {
         <div className="row">
           <div className="Family-list col-lg">
 
-            <h3>Family</h3>
+            <h3>{this.state.currentFamily}</h3>
             {this.renderCurrentList()}
-            <FamilyAddMemberForm addMember={this.addMember}/>
           </div>
           <div  className="Tribe-list col-sm">
             <h3>Tribe</h3>
