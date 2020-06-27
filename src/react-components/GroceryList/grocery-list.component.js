@@ -13,6 +13,7 @@ export default class GroceryList extends Component{
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
             currentList: "No list selected",
+            currentTribe: "Tribe 1",
             alphabeticallyOrdered: false,
             listEditMode: false
         }
@@ -26,8 +27,9 @@ export default class GroceryList extends Component{
         
     }
     componentDidMount(){
+        const { currentTribe } = this.props.location
         const intialList = Object.keys(this.state.familyLists)
-        this.setState({currentList: intialList[0]})
+        this.setState({currentList: intialList[0], currentTribe: currentTribe})
     }
 
     updateState(updateObj){
