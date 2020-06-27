@@ -14,12 +14,15 @@ export default class Tribe extends Component {
                         "Family 3" : ["Scott", "Barry"], 
                         "Family 4" : ["Doug"],
                         "Family 5" : ["Christine", "Valerie"], 
-                        "Family 6" : ["Stephen", "Joanne", "Kia"]},
+                        "Family 6" : ["Stephen", "Joanne", "Kia"],
+                        "Family 7" : ["TribeAdmin", "Admin", "User"]},
       tribeList: {  "Tribe 1" : ["Family 1", "Family 2", "Family 5"],
                     "Tribe 2" : ["Family 2", "Family 3"],
-                    "Tribe 3" : ["Family 4", "Family 5"]},
+                    "Tribe 3" : ["Family 4", "Family 5"],
+                    "Tribe 4" : ["Family 4", "Family 7"]},
       unassigned: ["Jake", "Betty", "Alice"],
-      currentFamily: "Family 1",
+      currentFamily: "Family 7",
+      currentTribe: "",
     }
 
     this.renderLists = this.renderLists.bind(this);
@@ -68,7 +71,7 @@ export default class Tribe extends Component {
       <div key={uuidv4()}>
         <button
         name={list}
-        onClick={this.selectList}
+        onClick={() => this.selectList(list)}
         className="TribeList-list-change-btn">{list}</button>
         <ul>
           {this.makeList(tribeList[list])}
@@ -76,8 +79,8 @@ export default class Tribe extends Component {
       </div>)
   }
 
-  selectList() {
-    this.props.history.push(`/grocerylists`)
+  selectList(tribe) {
+    this.props.history.push({pathname: `/grocerylists`, currentTribe: tribe})
   }
 
   makeList(listObject) {

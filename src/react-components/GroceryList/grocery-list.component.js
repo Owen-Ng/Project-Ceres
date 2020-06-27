@@ -12,7 +12,18 @@ export default class GroceryList extends Component{
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
+
+            tribeLists:{ "Tribe 1" : {"List 1" : {"carrot": 10, "apple": 32}, 
+                                    "List 2": {"dog food" : 1, "cat food": 12 }},
+                           "Tribe 2" : {"List 3" : {"pear": 10, "grapes": 32}, 
+                                    "List 4": {"fish food" : 1, "bird food": 12 }},
+                           "Tribe 3" : {"List 5" : {"potato": 10, "soup": 32}, 
+                                    "List 6": {"carrot" : 1, "lettuce": 12 }},
+                           "Tribe 4" : {"List 7" : {"gin": 10, "run": 32}, 
+                                    "List 8": {"pop" : 1, "beer": 12 }},},
+                           
             currentList: "No list selected",
+            currentTribe: "Tribe 4",
             alphabeticallyOrdered: false,
             listEditMode: false
         }
@@ -25,9 +36,21 @@ export default class GroceryList extends Component{
         this.deleteList = this.deleteList.bind(this)
         
     }
+
+    componentWillMount() {
+        let { currentTribe } = this.props.location
+        if (currentTribe === undefined) {
+            currentTribe = "Tribe 4"
+        }
+        const tribeLists = this.state.tribeLists[currentTribe]
+        const intialList = Object.keys(this.state.tribeLists[currentTribe])
+        this.setState({familyLists: tribeLists, currentList: intialList[0], currentTribe: currentTribe})
+    }
+
     componentDidMount(){
+        const { currentTribe } = this.props.location
         const intialList = Object.keys(this.state.familyLists)
-        this.setState({currentList: intialList[0]})
+        this.setState({currentList: intialList[0], currentTribe: currentTribe})
     }
 
     updateState(updateObj){
