@@ -13,11 +13,21 @@ import { v4 as uuidv4 } from 'uuid';
 export default class GroceryList extends Component{
     constructor(props) {
         super(props)
-        /* Our lists will come from a database later on at time of mounting*/
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
+
+            tribeLists:{ "Tribe 1" : {"List 1" : {"carrot": 10, "apple": 32}, 
+                                    "List 2": {"dog food" : 1, "cat food": 12 }},
+                           "Tribe 2" : {"List 3" : {"pear": 10, "grapes": 32}, 
+                                    "List 4": {"fish food" : 1, "bird food": 12 }},
+                           "Tribe 3" : {"List 5" : {"potato": 10, "soup": 32}, 
+                                    "List 6": {"carrot" : 1, "lettuce": 12 }},
+                           "Tribe 4" : {"List 7" : {"gin": 10, "rum": 32}, 
+                                    "List 8": {"pop" : 1, "beer": 12 }},},
+                           
             currentList: "No list selected",
+            currentTribe: "Tribe 4",
             alphabeticallyOrdered: false,
             listEditMode: false
         }
@@ -30,9 +40,21 @@ export default class GroceryList extends Component{
         this.deleteList = this.deleteList.bind(this)
         
     }
+
+    static getDerivedStateFromProps(props, state) {
+        let { currentTribe } = props.location
+        if (currentTribe === undefined) {
+            currentTribe = "Tribe 4"
+        }
+        const tribeLists = {familyLists: state.tribeLists[currentTribe]}
+
+        return tribeLists
+    }
+
     componentDidMount(){
+        const { currentTribe } = this.props.location
         const intialList = Object.keys(this.state.familyLists)
-        this.setState({currentList: intialList[0]})
+        this.setState({currentList: intialList[0], currentTribe: currentTribe})
     }
 
     updateState(updateObj){
@@ -110,7 +132,7 @@ export default class GroceryList extends Component{
         console.log(e.target)
     }
     /*
-    This will delete a list and later on call the server to hand over the new set of lists
+        This will delete a list and later on call the server to hand over the new set of lists
     */
     deleteList(){
         const oldList = this.state.currentList

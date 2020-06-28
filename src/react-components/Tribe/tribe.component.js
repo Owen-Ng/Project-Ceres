@@ -8,18 +8,22 @@ export default class Tribe extends Component {
   constructor(props) {
     super(props);
 
+    // This data will all be pulled from a server
     this.state = {
       membersLists: {   "Family 1" : ["Anna", "Bob" ],
                         "Family 2" : ["James", "Debbie"],
                         "Family 3" : ["Scott", "Barry"], 
                         "Family 4" : ["Doug"],
                         "Family 5" : ["Christine", "Valerie"], 
-                        "Family 6" : ["Stephen", "Joanne", "Kia"]},
+                        "Family 6" : ["Stephen", "Joanne", "Kia"],
+                        "Family 7" : ["TribeAdmin", "Admin", "User"]},
       tribeList: {  "Tribe 1" : ["Family 1", "Family 2", "Family 5"],
                     "Tribe 2" : ["Family 2", "Family 3"],
-                    "Tribe 3" : ["Family 4", "Family 5"]},
+                    "Tribe 3" : ["Family 4", "Family 5"],
+                    "Tribe 4" : ["Family 4", "Family 7"]},
       unassigned: ["Jake", "Betty", "Alice"],
-      currentFamily: "Family 1",
+      currentFamily: "Family 7",
+      currentTribe: "",
     }
 
     this.renderLists = this.renderLists.bind(this);
@@ -28,6 +32,8 @@ export default class Tribe extends Component {
     this.selectList = this.selectList.bind(this);
   }
 
+  // Lists the members of the currently selected family
+  //Will require server call to get names of family members
   renderCurrentList() {
     const currentList = this.state.currentFamily
     const listObject = this.state.membersLists[currentList]
@@ -43,6 +49,8 @@ export default class Tribe extends Component {
     )
   }
 
+  // creates the list of Tribes and which families they contain
+  //Will require server call to get the tribes and whic hfamilies they contain
   renderLists() {
     const tribeList = this.state.tribeList
     const currentFamily = this.state.currentFamily
@@ -68,7 +76,7 @@ export default class Tribe extends Component {
       <div key={uuidv4()}>
         <button
         name={list}
-        onClick={this.selectList}
+        onClick={() => this.selectList(list)}
         className="TribeList-list-change-btn">{list}</button>
         <ul>
           {this.makeList(tribeList[list])}
@@ -76,10 +84,15 @@ export default class Tribe extends Component {
       </div>)
   }
 
-  selectList() {
-    this.props.history.push(`/grocerylists`)
+  /* This function sends the name of the tribe button that was pushed to the 
+  grocery list page in order to display the correct lists based on which tribe
+  was selected */
+  selectList(tribe) {
+    this.props.history.push({pathname: `/grocerylists`, currentTribe: tribe})
   }
 
+  // Helper function, creates the list of families in each tribe
+  // Will require server call
   makeList(listObject) {
     const listKeys = Object.keys(listObject).sort()
     return listKeys.map(key => 
@@ -92,6 +105,7 @@ export default class Tribe extends Component {
     )
   }
 
+  // This function works with the 'Change Family' button and will be removed
   changeFamily() {
     const family = this.state.currentFamily
     const familyList = this.state.membersLists
@@ -119,6 +133,7 @@ export default class Tribe extends Component {
     return (
       <div className="FamilyTribe container">
         
+        { /* This button is for testing purposes only and will be removed */ }
         <button className="btn btn-primary" onClick={this.changeFamily}>Change Family</button>
         <div className="row">
           <div className="Family-list col-lg">
@@ -127,7 +142,7 @@ export default class Tribe extends Component {
             {this.renderCurrentList()}
           </div>
           <div  className="Tribe-list col-sm">
-            <h3>Tribe</h3>
+            <h3>Tribes</h3>
             { this.renderLists()}
           </div>
         </div>
