@@ -19,7 +19,7 @@ export default class GroceryList extends Component{
                                     "List 4": {"fish food" : 1, "bird food": 12 }},
                            "Tribe 3" : {"List 5" : {"potato": 10, "soup": 32}, 
                                     "List 6": {"carrot" : 1, "lettuce": 12 }},
-                           "Tribe 4" : {"List 7" : {"gin": 10, "run": 32}, 
+                           "Tribe 4" : {"List 7" : {"gin": 10, "rum": 32}, 
                                     "List 8": {"pop" : 1, "beer": 12 }},},
                            
             currentList: "No list selected",
