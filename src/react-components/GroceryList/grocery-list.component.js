@@ -37,14 +37,14 @@ export default class GroceryList extends Component{
         
     }
 
-    componentWillMount() {
-        let { currentTribe } = this.props.location
+    static getDerivedStateFromProps(props, state) {
+        let { currentTribe } = props.location
         if (currentTribe === undefined) {
             currentTribe = "Tribe 4"
         }
-        const tribeLists = this.state.tribeLists[currentTribe]
-        const intialList = Object.keys(this.state.tribeLists[currentTribe])
-        this.setState({familyLists: tribeLists, currentList: intialList[0], currentTribe: currentTribe})
+        const tribeLists = {familyLists: state.tribeLists[currentTribe]}
+
+        return tribeLists
     }
 
     componentDidMount(){
