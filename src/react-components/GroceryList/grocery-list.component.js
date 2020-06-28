@@ -13,6 +13,10 @@ import { v4 as uuidv4 } from 'uuid';
 export default class GroceryList extends Component{
     constructor(props) {
         super(props)
+
+          
+        // This data will all be pulled from a server
+
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
@@ -50,7 +54,9 @@ export default class GroceryList extends Component{
 
         return tribeLists
     }
-
+     /* 
+        Our lists will come from a database later on at time of mounting
+    */ 
     componentDidMount(){
         const { currentTribe } = this.props.location
         const intialList = Object.keys(this.state.familyLists)
@@ -132,7 +138,7 @@ export default class GroceryList extends Component{
         console.log(e.target)
     }
     /*
-        This will delete a list and later on call the server to hand over the new set of lists
+    This will delete a list and later on call the server to hand over the new set of lists
     */
     deleteList(){
         const oldList = this.state.currentList
