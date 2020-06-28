@@ -42,11 +42,13 @@ class GroceryListForm extends Component {
                     value={this.state.newItem}
                     onChange={this.onInputChange}
                     />
+
                     <label htmlFor="quantity">Quantity</label>
                     <input
                     className="GroceryListForm-quantity-input"
                     name="newItemQuantity"
                     type="number"
+                    min={1}
                     value={this.state.newItemQuantity}
                     onChange={this.onInputChange}
                     />

@@ -113,8 +113,9 @@ export default class GroceryList extends Component{
         if(currentList !== "No list selected"){
             const listObject = this.state.familyLists[currentList]
             const order = this.state.alphabeticallyOrdered
-            const listKeys = !order ? Object.keys(listObject).sort(): Object.keys(listObject).sort().reverse()
-            return listKeys.map(key =>
+            if(listObject !== undefined){
+                const listKeys = !order ? Object.keys(listObject).sort(): Object.keys(listObject).sort().reverse()
+                return listKeys.map(key =>
         
                 <GroceryItem 
                     key={uuidv4()}
@@ -126,6 +127,8 @@ export default class GroceryList extends Component{
                 />
                 
                 )
+            }
+            
             }
     }
     /* 
