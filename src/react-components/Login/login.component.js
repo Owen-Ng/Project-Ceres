@@ -17,7 +17,10 @@ export default class Login extends Component {
         this.handleChange = this.handleChange.bind(this);
 
     }
-
+    /*
+    This function will have to contact the server to recieve information about the users credentials.
+    Example: if passsword or username is incorrect and possibly to also recieve cookies.
+    */
     handleSubmit(e){
         e.preventDefault();
         const {username, password} = this.state

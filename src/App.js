@@ -19,7 +19,7 @@ export default class App extends Component {
   
     this.state = {
        isAdmin: true,
-       loggedIn: false,
+       loggedIn: true,
        username: ""
     }
     this.setPermissions = this.setPermissions.bind(this)

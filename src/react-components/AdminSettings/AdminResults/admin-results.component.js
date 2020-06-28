@@ -16,10 +16,11 @@ export default class AdminResults extends Component{
     }
 
     selectResult(e){
-        
         this.props.showPanel(e.target.innerHTML, this.props.searchType)
     }
-
+    /*
+    Generates components for the list of obtained results
+    */
     renderResults() {
         const list = this.props.list
         return list.map(item => 
@@ -34,7 +35,9 @@ export default class AdminResults extends Component{
             
         )
     }
-
+    /*
+        Here we pass the information up to the parent on what is being deleted.
+    */
     deleteItem(selectedItem, displayType){
         this.props.deleteItem(this.props.selectedItem, this.props.displayType)
     }

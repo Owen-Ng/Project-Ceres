@@ -1,3 +1,8 @@
+/*
+This page is the main page for this feature. Everything in GroceryList is called from within here 
+or a child. This will be the only coomponent in this feature to call the database as it is the first and last in
+the collection of data thus it is the most accurate.
+*/
 import React, {Component} from 'react';
 import "./grocery-list.css"
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component"
@@ -8,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default class GroceryList extends Component{
     constructor(props) {
         super(props)
-    
+        /* Our lists will come from a database later on at time of mounting*/
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
@@ -33,7 +38,9 @@ export default class GroceryList extends Component{
     updateState(updateObj){
         this.setState(updateObj)
     }
-
+    /*
+        Later on this will call the server to hand over the new set of lists and items.
+    */
     editItem(item) {
         const currentList = this.state.currentList
         let updatedList = this.state.familyLists
@@ -42,7 +49,9 @@ export default class GroceryList extends Component{
         this.setState((state) =>  updatedList)
    
     }
-    
+    /*
+        Later on this will call the server to hand over the new set of lists and items.
+    */
     deleteItem(itemName){
         const currentList = this.state.currentList
         let updatedList = this.state.familyLists
@@ -53,7 +62,8 @@ export default class GroceryList extends Component{
     }
     /*
         Recieves items from the GroceryListForm and is passed down as a prop. Once the new item object is recieved
-        the appropriate list is appended the new item.
+        the appropriate list is appended the new item. Later on this will call the server to hand over the new 
+        set of lists and items.
     */
     addItem(newItem){
         const currentList = this.state.currentList
@@ -89,8 +99,6 @@ export default class GroceryList extends Component{
                 
                 )
             }
-
-    
     }
     /* 
         The function that allows the buttons on the list view panel to switch the current working list.
@@ -101,7 +109,9 @@ export default class GroceryList extends Component{
         this.setState({alphabeticallyOrdered: !this.state.alphabeticallyOrdered})
         console.log(e.target)
     }
-
+    /*
+    This will delete a list and later on call the server to hand over the new set of lists
+    */
     deleteList(){
         const oldList = this.state.currentList
         const updatedListKeys = Object.keys(this.state.familyLists).filter(list => list !== oldList)
@@ -114,8 +124,6 @@ export default class GroceryList extends Component{
         else{
             this.setState({ currentList: "No list selected" })
         }
-
-   
     }
 
     render() {
@@ -144,4 +152,3 @@ export default class GroceryList extends Component{
     }
     
 }
-

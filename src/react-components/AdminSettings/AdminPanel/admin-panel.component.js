@@ -13,26 +13,28 @@ export default class AdminPanel extends Component {
             selectedObj: this.props.selectedObj
 
         }
-        this.displayUser = this.displayUser.bind(this)
+        this.displayInfo = this.displayInfo.bind(this)
         this.deleteObj = this.deleteObj.bind(this)
     }
-
+    
     deleteObj(){
         this.props.deleteObj(this.props.selectedItem, this.props.displayType)
     }
 
    
 
-    displayUser(){
+    displayInfo(){
         const deleteButton = <button className="btn btn-danger" onClick={this.deleteObj}>Delete</button>
-        if(this.props.selectedObj !== undefined && this.props.displayType === "user"){
-            return  (
-                <div key={uuidv4()} >
-                    <p>Username: {this.props.selectedItem}</p>
-                    <p>Family Name: {this.props.selectedObj["familyName"]}</p>
-                    {deleteButton}
-                </div>)
-                
+        if(this.props.selectedObj !== undefined && this.props.displayType === "family"){
+            let users = this.props.selectedObj
+            if(users !== undefined){
+                return  (
+                    <div key={uuidv4()} >
+                        <p>Family Name: {this.props.selectedItem}</p>
+                        <p className="AdminPanel-tribe-members">Family Members: {users.map(user => user.concat('\n'))}</p>
+                        {deleteButton}
+                    </div>)
+            }
         }
         else if(this.props.selectedObj !== undefined && this.props.displayType === "store"){
             return  (
@@ -44,7 +46,7 @@ export default class AdminPanel extends Component {
                 </div>)
         }
         else if (this.props.selectedObj !== undefined && this.props.displayType === "tribe"){
-            let members = this.props.selectedObj['members']
+            let members = this.props.selectedObj
             if(members !== undefined){
                 return  (
                     <div key={uuidv4()}>
@@ -61,7 +63,7 @@ export default class AdminPanel extends Component {
     render() {
         return (
             <div className="AdminPanel">
-                {this.displayUser()}
+                {this.displayInfo()}
             </div>
         )
     }

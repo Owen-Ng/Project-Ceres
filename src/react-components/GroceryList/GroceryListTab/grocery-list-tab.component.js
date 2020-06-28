@@ -12,26 +12,35 @@ export default class GroceryListTab extends Component{
             currentList: "No list selected",
             listInputBar: "",
         }
+        this.onInputChange = this.onInputChange.bind(this)
         this.selectList = this.selectList.bind(this)
         this.addList = this.addList.bind(this)
-        this.onInputChange = this.onInputChange.bind(this)
         this.renderLists = this.renderLists.bind(this)
         this.makeList = this.makeList.bind(this)
     }
     
+    /* 
+        We will pull grocery data on the user from the database here upon mounting
+    */
     componentDidMount(){
         const initialList = Object.keys(this.state.familyLists)
         this.setState({currentList: initialList[0]})
     }
 
-    selectList(e){
-       
+    onInputChange(e){
         this.setState({
-            currentList:  e.target.name
-        })
+            [e.target.name] : e.target.value
+         })
+    }
+
+    selectList(e){
+        this.setState({currentList: e.target.name})
         this.props.updateState({currentList: e.target.name})
     }
 
+    /*
+        Passes new data to the main component (parent) and which will push it to the database.
+    */
     addList(e){
         e.preventDefault()
         let updatedList = this.state.familyLists
@@ -52,8 +61,9 @@ export default class GroceryListTab extends Component{
 
     }
 
-       /*
-        Loops through every available list and calls another function which does the same for each item for that lists
+    /*
+        Loops through every available list and calls another function which does the same for each item f
+        or that list.
     */
    renderLists(){
     const familyLists = this.state.familyLists
@@ -74,11 +84,11 @@ export default class GroceryListTab extends Component{
         )
 
 }
-/*
-    A helper function for renderLists. In order to make an the <li> for each item on a list
-    we need to invidually iterate through each item. Given on list i.e {list1: item: 3,...}
-    we map each item and its quantity to a <li> and a GroceryItem component so that it can be returned to renderLists.
-*/
+    /*
+        A helper function for renderLists. In order to make an the <li> for each item on a list
+        we need to invidually iterate through each item. Given on list i.e {list1: item: 3,...}
+        we map each item and its quantity to a <li> and a GroceryItem component so that it can be returned to renderLists.
+    */
     makeList(listObject){
     
         const order = this.props.alphabeticallyOrdered
@@ -97,11 +107,6 @@ export default class GroceryListTab extends Component{
             )
     }
 
-    onInputChange(e){
-        this.setState({
-            [e.target.name] : e.target.value
-         })
-    }
     render() {
         return (
             <div className="GroceryListTab col-sm">
