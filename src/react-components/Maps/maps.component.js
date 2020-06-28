@@ -6,6 +6,7 @@ export default class Maps extends Component {
   constructor(props) {
     super(props)
 
+    // This data will all be pulled from a server
     this.state = {
         currentstate:{
           Store:"",

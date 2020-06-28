@@ -8,6 +8,7 @@ export default class Tribe extends Component {
   constructor(props) {
     super(props);
 
+    // This data will all be pulled from a server
     this.state = {
       membersLists: {   "Family 1" : ["Anna", "Bob" ],
                         "Family 2" : ["James", "Debbie"],
@@ -31,6 +32,8 @@ export default class Tribe extends Component {
     this.selectList = this.selectList.bind(this);
   }
 
+  // Lists the members of the currently selected family
+  //Will require server call to get names of family members
   renderCurrentList() {
     const currentList = this.state.currentFamily
     const listObject = this.state.membersLists[currentList]
@@ -46,6 +49,8 @@ export default class Tribe extends Component {
     )
   }
 
+  // creates the list of Tribes and which families they contain
+  //Will require server call to get the tribes and whic hfamilies they contain
   renderLists() {
     const tribeList = this.state.tribeList
     const currentFamily = this.state.currentFamily
@@ -79,10 +84,15 @@ export default class Tribe extends Component {
       </div>)
   }
 
+  /* This function sends the name of the tribe button that was pushed to the 
+  grocery list page in order to display the correct lists based on which tribe
+  was selected */
   selectList(tribe) {
     this.props.history.push({pathname: `/grocerylists`, currentTribe: tribe})
   }
 
+  // Helper function, creates the list of families in each tribe
+  // Will require server call
   makeList(listObject) {
     const listKeys = Object.keys(listObject).sort()
     return listKeys.map(key => 
@@ -95,6 +105,7 @@ export default class Tribe extends Component {
     )
   }
 
+  // This function works with the 'Change Family' button and will be removed
   changeFamily() {
     const family = this.state.currentFamily
     const familyList = this.state.membersLists
@@ -122,6 +133,7 @@ export default class Tribe extends Component {
     return (
       <div className="FamilyTribe container">
         
+        { /* This button is for testing purposes only and will be removed */ }
         <button className="btn btn-primary" onClick={this.changeFamily}>Change Family</button>
         <div className="row">
           <div className="Family-list col-lg">
@@ -130,7 +142,7 @@ export default class Tribe extends Component {
             {this.renderCurrentList()}
           </div>
           <div  className="Tribe-list col-sm">
-            <h3>Tribe</h3>
+            <h3>Tribes</h3>
             { this.renderLists()}
           </div>
         </div>

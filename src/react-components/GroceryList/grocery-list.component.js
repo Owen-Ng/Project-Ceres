@@ -9,6 +9,7 @@ export default class GroceryList extends Component{
     constructor(props) {
         super(props)
     
+        // This data will all be pulled from a server
         this.state = {
             familyLists:{ "List 1" : {"carrot": 10, "apple": 32}, 
                            "List 2": {"dog food" : 1, "cat food": 12 }},
