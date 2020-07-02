@@ -79,7 +79,7 @@ This page will allow the user to change their email and password and will be the
 
 #### Admin Settings
 
-This page will only be available for admin users. The page will allow administrators to search for tribes, families and stores as well as add and delete tribes, families and stores. The right hand panel is where the data is entered to add new information. and the left hand panel allows for search functions. Clicking on the different tribe/family/store will show information in the bottom panel and allow the admin user to delete the selected data.
+This page will only be available for admin users. The page will allow administrators to search for tribes, families and stores as well as add and delete tribes, families and stores. The right hand panel is where the data is entered to add new information and the left hand panel allows for search functions. As you type the autosuggest will filter all data that starts with what you entered. Clicking on the different tribe/family/store will show information in the bottom panel and allow the admin user to delete the selected data. Click on the search type (Family, Store or Tribe) to reload any changes you may have made such as deleting and adding new entries.
 
 [Back To The Top](#project-ceres)
 
