@@ -49,7 +49,7 @@ export default class Profile extends Component {
 
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="New Email"
               value={this.state.input.email}
               onChange={this.handleChange}
               required
@@ -59,18 +59,21 @@ export default class Profile extends Component {
 
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="New Password"
               value={this.state.input.password}
               onChange={this.handleChange}
               required
             />
-            <br></br>
+            <br />
             <button className="buttonsubmit btn btn-primary" type="submit">Change Password and Email</button>
 
           </form>
         </div>
         <div className=" stylechanges col-md  ">
-          <form className="pt-4">
+        <div className="list">
+            <li > <strong>Create New Family:</strong></li>
+          </div>
+          <form>
             <input
 
               type="name"
@@ -80,7 +83,8 @@ export default class Profile extends Component {
               // onChange={}
               required
             />
-            <button className=" btn-primary"> Add Family</button>
+            <br />
+            <button className="buttonsubmit btn btn-primary" type="submit">Add Family</button>
 
           </form>
         </div>
