@@ -71,7 +71,7 @@ export default class AdminData extends Component{
         const familyData = 
             <div>
                 <form onSubmit={this.handleSubmit}>
-                <p>(Note: All users entries must be seperated by a space)</p>
+                <p>(Note: All "users" entries must be seperated by a space)</p>
                     <input 
                         className="AdminData-input"
                         name="dataName"
@@ -130,7 +130,7 @@ export default class AdminData extends Component{
 
         const tribeData = 
                 <div>
-                    <p>(Note: All family entries must be seperated by a space)</p>
+                    <p>(Note: All "families" entries must be seperated by a space)</p>
                     <form onSubmit={this.handleSubmit}>
                         <input 
                             className="AdminData-input"

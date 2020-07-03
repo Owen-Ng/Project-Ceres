@@ -18,8 +18,8 @@ export default class App extends Component {
     super(props)
   
     this.state = {
-       isAdmin: true,
-       loggedIn: true,
+       isAdmin: false,
+       loggedIn: false,
        username: ""
     }
     this.setPermissions = this.setPermissions.bind(this)
