@@ -158,7 +158,7 @@ export default class GroceryList extends Component{
     }
 
     render() {
-        const listDeleteButton = <button className="GroceryList-list-btn btn btn-danger" onClick={this.deleteList}>Delete</button>
+        const listDeleteButton = <button className="GroceryList-list-btn btn btn-secondary btn-delete" onClick={this.deleteList}>Delete</button>
         return (
             <div className="GroceryList container" >
                 <div className="row">
