@@ -1,4 +1,33 @@
 .box input{
+    
     margin-bottom: 20px ;
     margin-left: 50px;
+    /* background-color: antiquewhite; */
+
+}
+.box{
+    /* background-color: antiquewhite; */
+    width: 100%;
+    padding: 20px;
+    padding-top: 5px;
+   
+}
+.list li{
+    display: inline;
+    list-style: none;
+    padding-left: 50px;
+    padding-right: 35px;
+}
+.buttonsubmit{
+    margin-left: 50px;
+ 
+}
+.stylechanges{
+    border: 2px solid black;
+ 
+    border-radius: 10px;
+    background-color: antiquewhite;
+    
+    margin: 10px;
+    padding: 10px;
 }

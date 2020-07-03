@@ -1,6 +1,9 @@
 .leaflet-container {
   height: 498px;
   width: 100%;
+  border-radius: 10px;
+ 
+  
 }
 .search{
   --icon-width: 300px;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import "./navbar.css"
 export default class Navbar extends Component {
  
   
@@ -8,7 +8,7 @@ export default class Navbar extends Component {
     const adminLink = <li className="navbar-item">
                         <Link to="/admin" className="nav-link">Admin Settings</Link>
                       </li>
-    const navBar =  <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
+    const navBar =  <nav  className="barcolor navbar navbar-dark navbar-expand-lg"> 
           <Link to="/" className="navbar-brand">Project Ceres</Link>
           <button className="navbar-toggler" 
                   type="button" 
@@ -40,10 +40,12 @@ export default class Navbar extends Component {
             </ul>
           </div>
         </nav>
-        const loginNav = <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
-            <ul className="navbar-nav mr-auto">
+        const loginNav = <nav className="barcolor navbar navbar-dark navbar-expand-lg">
+          <Link to="/" className="navbar-brand">Project Ceres</Link>
+            <ul className="navbar-nav ml-auto">
               <li className="navbar-item">
-                <Link className="btn btn-primary nav-link" to="/login">Login</Link>
+              
+                <Link aria-pressed="false" className="btn  btn-secondary nav-link"  to="/login">Login</Link>
               </li>
             </ul>
           </nav>

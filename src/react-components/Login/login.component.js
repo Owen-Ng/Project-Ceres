@@ -46,7 +46,7 @@ export default class Login extends Component {
                 
         return (
 
-            <div className="container">
+            <div className="container-xl">
                 <p><strong>Welcome to Project Ceres </strong></p>
                 {this.state.isError ? <p className="red"><strong>Incorrect Password </strong></p> : "" }
                 <div className="row Login-box">

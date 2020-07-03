@@ -22,7 +22,7 @@ export default class Maps extends Component {
            toronto:[43.651717, -79.383545], scarborough:[43.774614, -79.259978],
           york: [43.694012, -79.450578]}
         ,citystate:"",
-        currentcity:"toronto",
+        currentcity:"etobicoke",
       }
     this.change = this.change.bind(this);
     this.getdata= this.getdata.bind(this);
@@ -49,8 +49,6 @@ export default class Maps extends Component {
   Keypress(event){
     const key = event.Keycode || event.which;
     
-    console.log(Object.keys(this.state.City).length)
-   
           if (key === 13){
             if(this.state.citystate in this.state.City){
             this.setState(({citystate}) => ({
@@ -60,7 +58,7 @@ export default class Maps extends Component {
             
           }));
           
-          console.log(this.state)
+      
           }
           else{
             this.setState({citystate: "City does not exist"});
@@ -80,20 +78,20 @@ export default class Maps extends Component {
   
   render() {
     return (
-      <div className='container-xl' style={{ alignContent: 'center', justifyContent: 'center', }}>
+      <div className='mapcenter container-xl' >
         <div className="row">
-          <div className="col-lg-9 border border-dark" style={{height:500}}>
+          <div className="mapcolor p-1 m-0 col-lg-9 border border-dark">
             <Map name = {this.state.currentcity}  city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
           </div>
-          <div className="p-0 m-0 col-3 border border-dark" >
+          <div className="backcolor p-0 m-0 col-3 border border-dark " >
             <div className="mapborderbottom" >
               <input name = "currentcity" 
               value = {this.state.citystate} 
               onChange={this.changecity} 
               onKeyUp={this.Keypress} 
               type="text" 
-              className="m-2 border-dark" placeholder="Enter City" 
-              style={{width:"94%",textAlign: "center"}}/>
+              className="inputext m-2 border-dark" placeholder="Enter City" 
+     />
              
             </div>
             <div className= "infor">
@@ -104,7 +102,7 @@ export default class Maps extends Component {
             </div>
             <div className="bottomtext">
               <span> Report how long your visit took</span>
-              <input id= "report" type= "text" style={{width:"90%", height:100, fontSize:50, textAlign:"center"}}></input>
+              <input id= "report" type= "text" className="waitTime"></input>
             </div>
           </div>
           </div>
