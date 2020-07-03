@@ -5,6 +5,7 @@
 }
 .infor{
     height: 300px;
+    
 }
 .infor strong{
     text-align: end;
@@ -13,7 +14,7 @@
     
     margin: 10px;
     padding: 10px;
- 
+    
 }
 .bottomtext{
     
@@ -40,13 +41,14 @@
 .backcolor{
     background-color: antiquewhite;
     border-radius: 10px;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
     
 }
 
 .mapcolor{
     background-color: antiquewhite;
     border-radius: 10px;
-   
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 }
 
 .mapcenter{
