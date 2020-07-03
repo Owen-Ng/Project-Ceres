@@ -72,7 +72,7 @@ export default class Login extends Component {
                             required 
                             /> 
             
-                            <button type = "submit">Login</button> 
+                            <button className="btn btn-success btn-login" type="submit">Login</button> 
                         
                         </form>
                         <p className="Login-register">Don't have an account? </p>
