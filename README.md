@@ -49,8 +49,6 @@ The user login will allow users to access the Map, Tribe, Grocery List and Profi
 Admin credentials are admin/admin.  
 The admin login will allow users to access the Map, Tribe, Grocery List, Admin Settings and Profile pages of the app.
 
-Note: Credentials are pretyped under user and password for this access level. This is for your convenience.
-
 ## How to Use
 
 On accessing the website the user will be presented with the map view. This will allow for the general public to access the information on the map page, namely the wait times associated with grocery stores in their area. In order to access other areas of the site the user must log in by pressing the 'Login' button in the upper left hand corner of the website.
