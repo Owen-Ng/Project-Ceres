@@ -8,7 +8,7 @@ export default class Navbar extends Component {
     const adminLink = <li className="navbar-item">
                         <Link to="/admin" className="nav-link">Admin Settings</Link>
                       </li>
-    const navBar =  <nav  className="barcolor navbar navbar-dark navbar-expand-lg"> 
+    const navBar =  <nav  className="barcolor navbar navbar-light navbar-expand-lg bg-prime"> 
           <Link to="/" className="navbar-brand">Project Ceres</Link>
           <button className="navbar-toggler" 
                   type="button" 
