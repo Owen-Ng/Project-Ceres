@@ -8,8 +8,8 @@ export default class Login extends Component {
 
 
         this.state = {
-            username: "admin",
-            password: "admin",
+            username: "",
+            password: "",
             isError: false
         };
 
