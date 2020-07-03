@@ -40,12 +40,16 @@ export default class Navbar extends Component {
             </ul>
           </div>
         </nav>
-        const loginNav = <nav className="barcolor navbar navbar-dark navbar-expand-lg">
-          <Link to="/" className="navbar-brand">Project Ceres</Link>
+        const loginNav = <nav className="barcolor bg-prime navbar navbar-light navbar-expand-lg">
+           <ul className="navbar-nav mr-auto">
+              <li className="navbar-item">
+                <Link to="/" className="navbar-brand">Project Ceres</Link>
+              </li>
+           </ul>
+          
             <ul className="navbar-nav ml-auto">
               <li className="navbar-item">
-              
-                <Link aria-pressed="false" className="btn  btn-secondary nav-link btn-log"  to="/login">Login</Link>
+                <Link className="btn  btn-secondary nav-link btn-log"  to="/login">Login</Link>
               </li>
             </ul>
           </nav>
