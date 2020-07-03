@@ -35,7 +35,7 @@ export default class Navbar extends Component {
                 <Link to="/profile" className="nav-link">Profile</Link>
               </li>
               <li className="navbar-item">
-                <Link className="btn btn-danger nav-link btn-logout" to="/map" onClick={this.props.logout}>Logout</Link>
+                <Link className="btn btn-danger nav-link btn-log" to="/map" onClick={this.props.logout}>Logout</Link>
               </li>
             </ul>
           </div>
@@ -45,7 +45,7 @@ export default class Navbar extends Component {
             <ul className="navbar-nav ml-auto">
               <li className="navbar-item">
               
-                <Link aria-pressed="false" className="btn  btn-secondary nav-link"  to="/login">Login</Link>
+                <Link aria-pressed="false" className="btn  btn-secondary nav-link btn-log"  to="/login">Login</Link>
               </li>
             </ul>
           </nav>
