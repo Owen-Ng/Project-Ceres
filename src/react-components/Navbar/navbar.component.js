@@ -35,7 +35,7 @@ export default class Navbar extends Component {
                 <Link to="/profile" className="nav-link">Profile</Link>
               </li>
               <li className="navbar-item">
-                <Link className="btn btn-danger nav-link logout" to="/map" onClick={this.props.logout}>Logout</Link>
+                <Link className="btn btn-danger nav-link btn-logout" to="/map" onClick={this.props.logout}>Logout</Link>
               </li>
             </ul>
           </div>
