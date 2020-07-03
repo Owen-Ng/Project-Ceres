@@ -69,20 +69,24 @@
 
 .btn-delete {
 	border: 1px solid darkred;
+	background:linear-gradient(to bottom, darkgrey 5%, #535353 100%);
 	background-color: darkgrey;
 }
 
 .btn-delete:hover {
+	background:linear-gradient(to bottom, darkred 5%, red 100%);
 	background-color: darkred;
 	color: white;
 }
 
 .btn-edit {
 	border: 1px solid #0275d8;
+	background:linear-gradient(to bottom, darkgrey 5%, #535353 100%);
 	background-color: darkgrey;
 }
 
 .btn-edit:hover {
+	background:linear-gradient(to bottom, blue 5%, #0275d8 100%);
 	background-color: #0275d8;
 	color: white;
 }
