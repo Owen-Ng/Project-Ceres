@@ -56,7 +56,7 @@ export default class Login extends Component {
                             className="Login-input"
                             type = "username"
                             name = "username"
-                            placeholder = "Username"
+                            placeholder = " Username"
                             value = {this.state.username}
                             onChange={this.handleChange}
                             required
@@ -66,7 +66,7 @@ export default class Login extends Component {
                             className="Login-input"
                             type = "password"
                             name = "password"
-                            placeholder = "Password"
+                            placeholder = " Password"
                             value = {this.state.password}
                             onChange={this.handleChange}
                             required 
