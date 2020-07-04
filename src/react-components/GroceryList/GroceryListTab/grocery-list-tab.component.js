@@ -121,7 +121,7 @@ export default class GroceryListTab extends Component{
                                 placeholder="New list name"
                                 onChange={this.onInputChange}
                                  />
-                            <button className="GroceryListTab-btn btn btn-primary">+</button>
+                            <button className="GroceryListTab-btn btn btn-success">+</button>
                         </form>
                     </div>
         )

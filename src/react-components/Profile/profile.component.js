@@ -65,7 +65,7 @@ export default class Profile extends Component {
               required
             />
             <br />
-            <button className="buttonsubmit btn btn-primary" type="submit">Change Password and Email</button>
+            <button className="buttonsubmit btn btn-primary btn-add" type="submit">Change Password and Email</button>
 
           </form>
         </div>
@@ -84,7 +84,7 @@ export default class Profile extends Component {
               required
             />
             <br />
-            <button className="buttonsubmit btn btn-primary" type="submit">Add Family</button>
+            <button className="buttonsubmit btn btn-primary btn-add" type="submit">Add Family</button>
 
           </form>
         </div>

@@ -99,7 +99,7 @@ export default class AdminData extends Component{
                         value={this.state.users}
                         autoComplete="off"
                     />
-                    <button className="btn btn-primary">Add Family</button>
+                    <button className="btn btn-primary btn-add">Add Family</button>
                 </form>
             </div>
 
@@ -124,7 +124,7 @@ export default class AdminData extends Component{
                         value={this.state.storeAddress}
                         autoComplete="off"
                     />
-                    <button className="btn btn-primary">Add Store</button>
+                    <button className="btn btn-primary btn-add">Add Store</button>
                 </form>
             </div>
 
@@ -150,7 +150,7 @@ export default class AdminData extends Component{
                             value={this.state.families}
                             autoComplete="off"
                         />
-                        <button className="btn btn-primary">Add Tribe</button>
+                        <button className="btn btn-primary btn-add">Add Tribe</button>
                     </form>
                 </div>
         return (
