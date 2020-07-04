@@ -1,6 +1,6 @@
 .GroceryListForm-item-input{
     margin: 10px;
-	border-radius: 50px;
+	border-radius: 5px;
 	padding: 5px;
 	width: 235px;
 	display: inline-block;
@@ -9,7 +9,7 @@
 
 .GroceryListForm-quantity-input{
     margin: 10px;
-    border-radius: 50px;
+    border-radius: 5px;
 	width: 100px;
 	display: inline-block;
 	border-color: black;
