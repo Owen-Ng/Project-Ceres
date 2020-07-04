@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "./navbar.css"
+import logo from "./../../images/logo.png"
 export default class Navbar extends Component {
  
   
@@ -9,7 +10,7 @@ export default class Navbar extends Component {
                         <Link to="/admin" className="nav-link">Admin Settings</Link>
                       </li>
     const navBar =  <nav  className="barcolor navbar navbar-light navbar-expand-lg bg-prime"> 
-          <Link to="/" className="navbar-brand">Project Ceres</Link>
+          <Link to="/" className="navbar-brand"><img src={logo} className="logo" alt="logo"/> Project Ceres</Link>
           <button className="navbar-toggler" 
                   type="button" 
                   data-toggle="collapse" 
@@ -43,7 +44,7 @@ export default class Navbar extends Component {
         const loginNav = <nav className="barcolor bg-prime navbar navbar-light navbar-expand-lg">
            <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
-                <Link to="/" className="navbar-brand">Project Ceres</Link>
+                <Link to="/" className="navbar-brand"><img src={logo} className="logo" alt="logo"/> Project Ceres</Link>
               </li>
            </ul>
           
