@@ -9,7 +9,7 @@ const { mongoose } = require("./db/mongoose");
 mongoose.set('useFindAndModify', false);
 
 // import mongoose models
-
+const { User } = require("./models/user");
 
 // to validate object IDs
 const { ObjectID } = require('mongodb');
@@ -36,6 +36,61 @@ app.use(
         }
     })
 );
+
+app.post("/users/login", (req, res) => {
+    
+    const email = req.body.email;
+    const password = req.body.password;
+
+    log(email, password);
+
+    User.findByEmailPassword(email, password)
+    .then(user => {
+        req.session.user = user._id;
+        req.session.email = user.email;
+        res.send({ currentUser: user.email });
+    })
+    .catch(error => {
+        res.status(400).send()
+    });
+});
+
+app.get("/users/logout", (req, res) => {
+
+    req.session.destroy(error => {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            res.send();
+        }
+    });
+})
+
+app.get("/users/check-session", (req, res) => {
+    if (req.session.user) {
+        res.send({ currentUser: req.session.email });
+    } else {
+        res.status(401).send();
+    }
+})
+
+app.post("/users", (req, res) => {
+    log(req.body);
+
+    const user = new User({
+        email: req.body.email,
+        password: req.body.password
+    });
+
+    user.save().then(
+        user => {
+            res.send(user);
+        },
+        error => {
+            res.status(400).send(error);
+        }
+    );
+});
 
 /* API Routes *** */
 
