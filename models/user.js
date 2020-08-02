@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { resolve } = require('path');
+const { ObjectID } = require('mongodb');
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -18,11 +19,32 @@ const UserSchema = new mongoose.Schema({
             message: 'Not valid email'
         }
     },
-     password: {
+    password: {
         type: String,
         required: true,
         minlength: 6
-     }
+    },
+    name: {
+        type: String,
+        required: true,
+        minlength: 1
+    },
+    familyID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Family',
+        default: null
+    },
+    familyAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    created: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    }
+
 })
 
 UserSchema.pre('save', function(next) {
