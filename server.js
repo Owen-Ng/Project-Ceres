@@ -10,6 +10,7 @@ mongoose.set('useFindAndModify', false);
 
 // import mongoose models
 const { User } = require("./models/user");
+const { Family } = require("./models/family")
 
 // to validate object IDs
 const { ObjectID } = require('mongodb');
@@ -64,7 +65,7 @@ app.get("/users/logout", (req, res) => {
             res.send();
         }
     });
-})
+});
 
 app.get("/users/check-session", (req, res) => {
     if (req.session.user) {
@@ -72,14 +73,15 @@ app.get("/users/check-session", (req, res) => {
     } else {
         res.status(401).send();
     }
-})
+});
 
 app.post("/users", (req, res) => {
     log(req.body);
 
     const user = new User({
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        name: req.body.name
     });
 
     user.save().then(
@@ -90,6 +92,63 @@ app.post("/users", (req, res) => {
             res.status(400).send(error);
         }
     );
+});
+
+app.get("/users", (req, res) => {
+    const currentUser = req.session.user;
+    
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send('Resource Not Found');
+        } else {
+            res.send(user);
+        }
+    })
+});
+
+app.post("/family", (req, res) => {
+    const family = new Family({
+        familyName: req.body.familyName
+    });
+
+    family.save().then(
+        family => {
+            res.send(family);
+        },
+        error => {
+            res.status(400).send(error);
+        }
+    )
+});
+
+app.post("/family/join/:fid", (req, res) => {
+
+    const fid = req.params.fid;
+    
+    if (!ObjectID.isValid(fid)) {
+		res.status(404).send();
+		return;
+    }
+    
+    Family.findById(fid).then((family) => {
+        if (!family) {
+            res.status(404).send('Resource not found');
+        } else {
+            const currentUser = req.session.user;
+
+            User.findById(currentUser).then((user) => {
+                user.familyID = fid;
+
+                user.save().then((result) => {
+                    res.send({ user: result, family });
+                })
+                .catch((error) => {
+                    log(error);
+                    res.status(400).send('Bad Request');
+                })
+            });
+        }
+    });
 });
 
 /* API Routes *** */
