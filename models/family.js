@@ -6,6 +6,10 @@ const Family = mongoose.model('Family', {
         type: String,
          required: true,
          minlength:1
+    },
+    tribes: {
+        type: Array,
+        required: true
     }
 });
 

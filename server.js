@@ -12,6 +12,7 @@ mongoose.set('useFindAndModify', false);
 const { User } = require("./models/user");
 const { Family } = require("./models/family");
 const { List } = require("./models/list");
+const { Tribe } = require("./models/tribe");
 
 // to validate object IDs
 const { ObjectID } = require('mongodb');
@@ -170,6 +171,79 @@ app.post("/family/join/:fid", (req, res) => {
                     res.status(400).send('Bad Request');
                 })
             });
+        }
+    });
+});
+
+// Create a new tribe
+app.post("/tribe", (req, res) => {
+    const tribe = new Tribe({
+        tribeName: req.body.tribeName
+    });
+
+    tribe.save().then(
+        tribe => {
+            res.send(tribe);
+        },
+        error => {
+            res.status(400).send(error);
+        }
+    )
+});
+
+// Current users family joins tribe tid
+app.post("/tribe/join/:tid", (req, res) => {
+
+    const tid = req.params.tid;
+    
+    if (!ObjectID.isValid(tid)) {
+		res.status(404).send();
+		return;
+    }
+    
+    Tribe.findById(tid).then((tribe) => {
+        if (!tribe) {
+            res.status(404).send('Resource not found');
+        } else {
+            const currentUser = req.session.user;
+
+            if(!currentUser) {
+                log('no user')
+                res.status(404).send('Resource not found');
+            } else {
+                log(currentUser)
+                User.findById(currentUser).then((user) => {
+                    const familyID = user.familyID;
+                    if (!familyID) {
+                        log ('user does not belong to a family');
+                        res.status(404).send('Resource not found')
+                    } else {
+                        Family.findById(familyID).then((family) => {
+                            if (!family) {
+                                res.status(404).send('Resource not found')
+                            } else {
+                                family.tribes.push(tid);
+
+                                family.save().then((result) => {
+                                    res.send({ family: result, tribe });
+                                })
+                                .catch((error) => {
+                                    log(error);
+                                    res.status(400).send('Bad Request');
+                                })
+                            }
+                        })
+                    }
+                });
+            }
+                // user.save().then((result) => {
+                //     res.send({ user: result, family });
+                // })
+                // .catch((error) => {
+                //     log(error);
+                //     res.status(400).send('Bad Request');
+                // })
+                // });
         }
     });
 });
