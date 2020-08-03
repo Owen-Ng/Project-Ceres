@@ -137,16 +137,9 @@ app.get("/family/:fid", (req, res) => {
 		return;
     }
 
-    User.find().then((users) => {
-        const family = []
-        users.map((user) => {
-            if (user.familyID == fid) {
-                log(user.familyID);
-                family.push(user);
-            }
-        });  
-        res.send(family);
-    });
+    User.find({familyID: fid}).then((users) => {
+        res.send(users);
+    })
 });
 
 // Current user joins family fid
