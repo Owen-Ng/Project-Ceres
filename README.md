@@ -1,6 +1,6 @@
 ## Project Ceres
 
-![Project Image](public/logo192.png)
+![Project Image](client/public/logo192.png)
 
 Grocery List sharing web app.
 
