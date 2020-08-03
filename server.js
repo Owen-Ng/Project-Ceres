@@ -50,7 +50,6 @@ app.post("/users/login", (req, res) => {
 
     User.findByEmailPassword(email, password)
         .then((user) => {
-            log("herer");
             req.session.user = user._id;
             req.session.email = user.email;
             res.status(200).send({ currentUser: user.email });
