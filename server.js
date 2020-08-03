@@ -10,7 +10,8 @@ mongoose.set('useFindAndModify', false);
 
 // import mongoose models
 const { User } = require("./models/user");
-const { Family } = require("./models/family")
+const { Family } = require("./models/family");
+const { List } = require("./models/list");
 
 // to validate object IDs
 const { ObjectID } = require('mongodb');
@@ -171,6 +172,53 @@ app.post("/family/join/:fid", (req, res) => {
             });
         }
     });
+});
+
+// Create new list
+app.post("/list/:fid", (req, res) => {
+
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+		res.status(404).send();
+		return;
+    }
+    
+    Family.findById(fid).then((family) => {
+        if (!family) {
+            res.status(404).send('Resource not found');
+        } else {
+            const list = new List({
+                listname: req.body.listname,
+                familyID: fid,
+                shared: req.body.shared
+            });
+        
+            list.save().then(
+                list => {
+                    res.send(list);
+                },
+                error => {
+                    res.status(400).send(error);
+                }
+            );
+        }
+    });   
+});
+
+// Returns all lists in an array belonging to family fid
+app.get("/list/:fid", (req, res) => {
+
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+		res.status(404).send();
+		return;
+    }
+
+    List.find({familyID: fid}).then((lists) => {
+        res.send(lists);
+    })
 });
 
 /* API Routes *** */
