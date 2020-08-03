@@ -8,6 +8,13 @@ const { resolve } = require("path");
 const { ObjectID } = require("mongodb");
 
 const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true,
+        unique: true,
+    },
     email: {
         type: String,
         required: true,
@@ -22,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6,
+        minlength: 4,
     },
     name: {
         type: String,
@@ -71,10 +78,10 @@ UserSchema.pre("save", function (next) {
     }
 });
 
-UserSchema.statics.findByEmailPassword = function (email, password) {
+UserSchema.statics.findByUsernamePassword = function (username, password) {
     const User = this;
 
-    return User.findOne({ email: email }).then((user) => {
+    return User.findOne({ username: username }).then((user) => {
         if (!user) {
             return Promise.reject();
         }

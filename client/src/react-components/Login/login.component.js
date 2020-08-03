@@ -6,7 +6,7 @@ export default class Login extends Component {
         super(props);
 
         this.state = {
-            username: "admin@admin.com",
+            username: "admin",
             password: "admin123",
             isError: false,
         };
@@ -32,7 +32,7 @@ export default class Login extends Component {
                 },
                 referrerPolicy: "no-referrer",
                 body: JSON.stringify({
-                    email: this.state.username,
+                    username: this.state.username,
                     password: this.state.password,
                 }),
             });

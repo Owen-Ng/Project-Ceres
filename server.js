@@ -35,6 +35,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
+            expires: 600000,
             httpOnly: true,
         },
     })
@@ -42,22 +43,14 @@ app.use(
 
 // Login route sets currentUser
 app.post("/users/login", (req, res) => {
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
-    User.findByEmailPassword(email, password)
+
+    User.findByUsernamePassword(username, password)
         .then((user) => {
             req.session.user = user._id;
             req.session.email = user.email;
-            log(req.session);
-            req.session.save();
-            res.status(200).send({
-                currentUser: user.email,
-                name: user.name,
-                admin: user.admin,
-                tribeAdmin: user.tribeAdmin,
-                familyAdmin: user.familyAdmin,
-                familyID: user.familyID,
-            });
+            res.status(200).send({ currentUser: user.username });
         })
         .catch((error) => {
             res.status(400).send();
@@ -86,10 +79,9 @@ app.get("/users/check-session", (req, res) => {
 
 // Create new user
 app.post("/users", (req, res) => {
-    log(req.body);
-
     const user = new User({
         email: req.body.email,
+        username: req.body.username,
         password: req.body.password,
         name: req.body.name,
     });
