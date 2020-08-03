@@ -21,12 +21,12 @@ const { ObjectID } = require("mongodb");
 // body-parser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // express-session for user sessions
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-/* Session Handleing *** */
+/* Session Handling *** */
 
 // Create session cookie
 app.use(
@@ -35,7 +35,6 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            expires: 60000,
             httpOnly: true,
         },
     })
@@ -45,14 +44,20 @@ app.use(
 app.post("/users/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    log(req.body);
-    log(email, password);
-
     User.findByEmailPassword(email, password)
         .then((user) => {
             req.session.user = user._id;
             req.session.email = user.email;
-            res.status(200).send({ currentUser: user.email });
+            log(req.session);
+            req.session.save();
+            res.status(200).send({
+                currentUser: user.email,
+                name: user.name,
+                admin: user.admin,
+                tribeAdmin: user.tribeAdmin,
+                familyAdmin: user.familyAdmin,
+                familyID: user.familyID,
+            });
         })
         .catch((error) => {
             res.status(400).send();
