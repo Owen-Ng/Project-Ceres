@@ -4,9 +4,10 @@ const log = console.log;
 const express = require("express");
 const app = express();
 
+const cors = require("cors");
 //mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
 
 // import mongoose models
 const { User } = require("./models/user");
@@ -15,12 +16,12 @@ const { List } = require("./models/list");
 const { Tribe } = require("./models/tribe");
 
 // to validate object IDs
-const { ObjectID } = require('mongodb');
+const { ObjectID } = require("mongodb");
 
 // body-parser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
+app.use(cors());
 // express-session for user sessions
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,34 +36,33 @@ app.use(
         saveUninitialized: false,
         cookie: {
             expires: 60000,
-            httpOnly: true
-        }
+            httpOnly: true,
+        },
     })
 );
 
 // Login route sets currentUser
 app.post("/users/login", (req, res) => {
-    
     const email = req.body.email;
     const password = req.body.password;
-
+    log(req.body);
     log(email, password);
 
     User.findByEmailPassword(email, password)
-    .then(user => {
-        req.session.user = user._id;
-        req.session.email = user.email;
-        res.send({ currentUser: user.email });
-    })
-    .catch(error => {
-        res.status(400).send()
-    });
+        .then((user) => {
+            log("herer");
+            req.session.user = user._id;
+            req.session.email = user.email;
+            res.status(200).send({ currentUser: user.email });
+        })
+        .catch((error) => {
+            res.status(400).send();
+        });
 });
 
 // Logout route destroys session cookie
 app.get("/users/logout", (req, res) => {
-
-    req.session.destroy(error => {
+    req.session.destroy((error) => {
         if (error) {
             res.status(500).send(error);
         } else {
@@ -87,14 +87,14 @@ app.post("/users", (req, res) => {
     const user = new User({
         email: req.body.email,
         password: req.body.password,
-        name: req.body.name
+        name: req.body.name,
     });
 
     user.save().then(
-        user => {
+        (user) => {
             res.send(user);
         },
-        error => {
+        (error) => {
             res.status(400).send(error);
         }
     );
@@ -103,73 +103,72 @@ app.post("/users", (req, res) => {
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
-    
+
     User.findById(currentUser).then((user) => {
         if (!user) {
-            res.status(404).send('Resource Not Found');
+            res.status(404).send("Resource Not Found");
         } else {
             res.send(user);
         }
-    })
+    });
 });
 
 // Create a new family
 app.post("/family", (req, res) => {
     const family = new Family({
-        familyName: req.body.familyName
+        familyName: req.body.familyName,
     });
 
     family.save().then(
-        family => {
+        (family) => {
             res.send(family);
         },
-        error => {
+        (error) => {
             res.status(400).send(error);
         }
-    )
+    );
 });
 
 // Returns all users in an array belonging to family fid
 app.get("/family/:fid", (req, res) => {
-
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
 
-    User.find({familyID: fid}).then((users) => {
+    User.find({ familyID: fid }).then((users) => {
         res.send(users);
-    })
+    });
 });
 
 // Current user joins family fid
 app.post("/family/join/:fid", (req, res) => {
-
     const fid = req.params.fid;
-    
+
     if (!ObjectID.isValid(fid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
-    
+
     Family.findById(fid).then((family) => {
         if (!family) {
-            res.status(404).send('Resource not found');
+            res.status(404).send("Resource not found");
         } else {
             const currentUser = req.session.user;
 
             User.findById(currentUser).then((user) => {
                 user.familyID = fid;
 
-                user.save().then((result) => {
-                    res.send({ user: result, family });
-                })
-                .catch((error) => {
-                    log(error);
-                    res.status(400).send('Bad Request');
-                })
+                user.save()
+                    .then((result) => {
+                        res.send({ user: result, family });
+                    })
+                    .catch((error) => {
+                        log(error);
+                        res.status(400).send("Bad Request");
+                    });
             });
         }
     });
@@ -178,121 +177,120 @@ app.post("/family/join/:fid", (req, res) => {
 // Create a new tribe
 app.post("/tribe", (req, res) => {
     const tribe = new Tribe({
-        tribeName: req.body.tribeName
+        tribeName: req.body.tribeName,
     });
 
     tribe.save().then(
-        tribe => {
+        (tribe) => {
             res.send(tribe);
         },
-        error => {
+        (error) => {
             res.status(400).send(error);
         }
-    )
+    );
 });
 
 // Current users family joins tribe tid
 app.post("/tribe/join/:tid", (req, res) => {
-
     const tid = req.params.tid;
-    
+
     if (!ObjectID.isValid(tid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
-    
+
     Tribe.findById(tid).then((tribe) => {
         if (!tribe) {
-            res.status(404).send('Resource not found');
+            res.status(404).send("Resource not found");
         } else {
             const currentUser = req.session.user;
 
-            if(!currentUser) {
-                log('no user')
-                res.status(404).send('Resource not found');
+            if (!currentUser) {
+                log("no user");
+                res.status(404).send("Resource not found");
             } else {
-                log(currentUser)
+                log(currentUser);
                 User.findById(currentUser).then((user) => {
                     const familyID = user.familyID;
                     if (!familyID) {
-                        log ('user does not belong to a family');
-                        res.status(404).send('Resource not found')
+                        log("user does not belong to a family");
+                        res.status(404).send("Resource not found");
                     } else {
                         Family.findById(familyID).then((family) => {
                             if (!family) {
-                                res.status(404).send('Resource not found')
+                                res.status(404).send("Resource not found");
                             } else {
                                 family.tribes.push(tid);
 
-                                family.save().then((result) => {
-                                    res.send({ family: result, tribe });
-                                })
-                                .catch((error) => {
-                                    log(error);
-                                    res.status(400).send('Bad Request');
-                                })
+                                family
+                                    .save()
+                                    .then((result) => {
+                                        res.send({ family: result, tribe });
+                                    })
+                                    .catch((error) => {
+                                        log(error);
+                                        res.status(400).send("Bad Request");
+                                    });
                             }
-                        })
+                        });
                     }
                 });
             }
-                // user.save().then((result) => {
-                //     res.send({ user: result, family });
-                // })
-                // .catch((error) => {
-                //     log(error);
-                //     res.status(400).send('Bad Request');
-                // })
-                // });
+            // user.save().then((result) => {
+            //     res.send({ user: result, family });
+            // })
+            // .catch((error) => {
+            //     log(error);
+            //     res.status(400).send('Bad Request');
+            // })
+            // });
         }
     });
 });
 
 // Create new list
 app.post("/list/:fid", (req, res) => {
-
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
-    
+
     Family.findById(fid).then((family) => {
         if (!family) {
-            res.status(404).send('Resource not found');
+            res.status(404).send("Resource not found");
         } else {
             const list = new List({
                 listname: req.body.listname,
                 familyID: fid,
-                shared: req.body.shared
+                shared: req.body.shared,
             });
-        
+
             list.save().then(
-                list => {
+                (list) => {
                     res.send(list);
                 },
-                error => {
+                (error) => {
                     res.status(400).send(error);
                 }
             );
         }
-    });   
+    });
 });
 
 // Returns all lists in an array belonging to family fid
 app.get("/list/:fid", (req, res) => {
-
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
 
-    List.find({familyID: fid}).then((lists) => {
+    List.find({ familyID: fid }).then((lists) => {
         res.send(lists);
-    })
+    });
 });
 
 /* API Routes *** */
@@ -301,30 +299,40 @@ app.get("/list/:fid", (req, res) => {
 
 app.use(express.static(__dirname + "/client/build"));
 
-app.get('*', (req, res) => {
-
+app.get("*", (req, res) => {
     // check mongoose connection established.
     if (mongoose.connection.readyState != 1) {
-        log('Issue with mongoose connection');
-        res.status(500).send('Internal server error');
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
         return;
     }
 
-    const goodPageRoutes = ["/", "/map", "/tribe", "grocerylists", "admin", "profile"];
+    const goodPageRoutes = [
+        "/",
+        "/map",
+        "/tribe",
+        "grocerylists",
+        "admin",
+        "profile",
+    ];
     if (!goodPageRoutes.includes(req.url)) {
         res.status(404);
     }
 
     res.sendFile(__dirname + "/client/build/index.html");
-})
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    log(`Listening on port ${port}...`)
+    log(`Listening on port ${port}...`);
 });
 
 /* Helper Functions Below *** */
 
 function isMongoError(error) {
-    return typeof error === 'object' && error !== null && error.name === 'MongoNetworkError';
+    return (
+        typeof error === "object" &&
+        error !== null &&
+        error.name === "MongoNetworkError"
+    );
 }
