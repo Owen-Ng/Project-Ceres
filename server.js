@@ -43,16 +43,16 @@ app.use(
 // Login route sets currentUser
 app.post("/users/login", (req, res) => {
     
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
 
-    log(email, password);
+    log(username, password);
 
-    User.findByEmailPassword(email, password)
+    User.findByUsernamePassword(username, password)
     .then(user => {
         req.session.user = user._id;
         req.session.email = user.email;
-        res.send({ currentUser: user.email });
+        res.send({ currentUser: user.username });
     })
     .catch(error => {
         res.status(400).send()
@@ -86,6 +86,7 @@ app.post("/users", (req, res) => {
 
     const user = new User({
         email: req.body.email,
+        username: req.body.username,
         password: req.body.password,
         name: req.body.name
     });
