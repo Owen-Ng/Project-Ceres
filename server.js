@@ -38,6 +38,7 @@ app.use(
     })
 );
 
+// Login route sets currentUser
 app.post("/users/login", (req, res) => {
     
     const email = req.body.email;
@@ -56,6 +57,7 @@ app.post("/users/login", (req, res) => {
     });
 });
 
+// Logout route destroys session cookie
 app.get("/users/logout", (req, res) => {
 
     req.session.destroy(error => {
@@ -67,6 +69,7 @@ app.get("/users/logout", (req, res) => {
     });
 });
 
+// Checks the current user
 app.get("/users/check-session", (req, res) => {
     if (req.session.user) {
         res.send({ currentUser: req.session.email });
@@ -75,6 +78,7 @@ app.get("/users/check-session", (req, res) => {
     }
 });
 
+// Create new user
 app.post("/users", (req, res) => {
     log(req.body);
 
@@ -94,6 +98,7 @@ app.post("/users", (req, res) => {
     );
 });
 
+// Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
     
@@ -106,6 +111,7 @@ app.get("/users", (req, res) => {
     })
 });
 
+// Create a new family
 app.post("/family", (req, res) => {
     const family = new Family({
         familyName: req.body.familyName
@@ -121,6 +127,29 @@ app.post("/family", (req, res) => {
     )
 });
 
+// Returns all users in an array belonging to family fid
+app.get("/family/:fid", (req, res) => {
+
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+		res.status(404).send();
+		return;
+    }
+
+    User.find().then((users) => {
+        const family = []
+        users.map((user) => {
+            if (user.familyID == fid) {
+                log(user.familyID);
+                family.push(user);
+            }
+        });  
+        res.send(family);
+    });
+});
+
+// Current user joins family fid
 app.post("/family/join/:fid", (req, res) => {
 
     const fid = req.params.fid;
