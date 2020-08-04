@@ -147,7 +147,7 @@ app.get("/family/:fid", (req, res) => {
 });
 
 // Current user joins family fid
-app.post("/family/join/:fid", (req, res) => {
+app.patch("/family/join/:fid", (req, res) => {
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
@@ -169,8 +169,7 @@ app.post("/family/join/:fid", (req, res) => {
                         res.send({ user: result, family });
                     })
                     .catch((error) => {
-                        log(error);
-                        res.status(400).send("Bad Request");
+                        res.status(400).send(error);
                     });
             });
         }
@@ -213,7 +212,7 @@ app.get("/tribe/:tid", (req, res) => {
 });
 
 // Current users family joins tribe tid
-app.post("/tribe/join/:tid", (req, res) => {
+app.patch("/tribe/join/:tid", (req, res) => {
     const tid = req.params.tid;
 
     if (!ObjectID.isValid(tid)) {
@@ -228,14 +227,11 @@ app.post("/tribe/join/:tid", (req, res) => {
             const currentUser = req.session.user;
 
             if (!currentUser) {
-                log("no user");
                 res.status(404).send("Resource not found");
             } else {
-                log(currentUser);
                 User.findById(currentUser).then((user) => {
                     const familyID = user.familyID;
                     if (!familyID) {
-                        log("user does not belong to a family");
                         res.status(404).send("Resource not found");
                     } else {
                         Family.findById(familyID).then((family) => {
@@ -250,8 +246,7 @@ app.post("/tribe/join/:tid", (req, res) => {
                                         res.send({ family: result, tribe });
                                     })
                                     .catch((error) => {
-                                        log(error);
-                                        res.status(400).send("Bad Request");
+                                        res.status(400).send(error);
                                     });
                             }
                         });
@@ -333,11 +328,7 @@ app.post("/list/:fid/:lid", (req, res) => {
             return list._id == listID
         });
 
-        log(item)
-
         list.items.push(item);
-
-        log(list)
 
         list.save().then((result) => {
             res.send({ item, list });
