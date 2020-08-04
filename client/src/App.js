@@ -90,9 +90,18 @@ export default class App extends Component {
         }
     }
 
-    logout() {
+    async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        //window.location.reload()
+        const response = await fetch("http://localhost:5000/users/logout", {
+            method: "GET",
+            crossDomain: true,
+            credentials: "include",
+            redirect: "follow",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+        });
         return <Redirect to="/map" />;
     }
 
