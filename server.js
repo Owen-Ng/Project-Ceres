@@ -237,14 +237,6 @@ app.post("/tribe/join/:tid", (req, res) => {
                     }
                 });
             }
-            // user.save().then((result) => {
-            //     res.send({ user: result, family });
-            // })
-            // .catch((error) => {
-            //     log(error);
-            //     res.status(400).send('Bad Request');
-            // })
-            // });
         }
     });
 });
@@ -291,6 +283,47 @@ app.get("/list/:fid", (req, res) => {
 
     List.find({ familyID: fid }).then((lists) => {
         res.send(lists);
+    });
+});
+
+// add item to a list
+app.post("/list/:fid/:lid", (req, res) => {
+
+    const listID = req.params.lid;
+    const familyID = req.params.fid;
+
+    if (!ObjectID.isValid(listID)) {
+		res.status(404).send();
+		return;
+    }
+    
+    if (!ObjectID.isValid(familyID)) {
+        res.status(404).send();
+        return;
+    }
+
+    List.find({ familyID }).then((lists) => {
+        const item = {
+            "itemname": req.body.itemname,
+            "quantity": req.body.quantity
+        }
+
+        const list = lists.find((list) => {
+            return list._id == listID
+        });
+
+        log(item)
+
+        list.items.push(item);
+
+        log(list)
+
+        list.save().then((result) => {
+            res.send({ item, list });
+        })
+        .catch((error) => {
+            res.status(400).send(error);
+        })
     });
 });
 
