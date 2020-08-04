@@ -39,7 +39,11 @@ const UserSchema = new mongoose.Schema({
     familyID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Family",
-        default: null,
+        default: null
+    },
+    pending: {
+        type: Boolean,
+        default: undefined
     },
     admin: {
         type: Boolean,
@@ -50,6 +54,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false,
+    },
+    tribeAdmin: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Tribe",
+        required: true
     },
     created: {
         type: Date,
