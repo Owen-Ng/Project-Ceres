@@ -102,7 +102,7 @@ export default class Maps extends Component {
             </div>
             <div className="bottomtext">
               <span> Report how long your visit took</span>
-              <input id= "report" type= "text" className="waitTime"></input>
+              <input id= "report" type= "text" className="waitTime" placeholder="Enter time taken"></input>
             </div>
           </div>
           </div>

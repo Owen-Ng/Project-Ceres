@@ -36,19 +36,6 @@ export default class PublicMap extends Component {
               url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
 
-            {/* react-leaflet-search api https://www.npmjs.com/package/react-leaflet-search */}
-            <SearchComponent className="search"
-            position="topright"
-            inputPlaceholder="Enter Address here"
-            search={[33.100745405144245, 46.48315429687501]}
-            showMarker={false}
-            zoom={5}
-            showPopup={false}
-            openSearchOnLoad={true}
-            
-          />
-
-          
           {groceries.features.map(map =>(
             <Marker key = {map.properties.SHOP_ID} position={[
               map.geometry.coordinates[1], 
