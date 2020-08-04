@@ -38,15 +38,20 @@ export default class Login extends Component {
             });
             if (response.status === 200) {
                 this.state.isError = false; // remove error message
-                const data = await response.json();
-                if (data.admin) {
-                    this.props.setPermissions("admin", data.name);
-                } else if (data.tribeAdmin) {
-                    this.props.setPermissions("tribeAdmin", data.name);
-                } else if (data.familyAdmin) {
-                    this.props.setPermissions("familyAdmin", data.name);
-                } else {
-                    this.props.setPermissions("user", data.name);
+                const user = await response.json();
+                console.log(user);
+                if (user.admin) {
+                    this.props.setPermissions("admin", user.name);
+                } else if (user.tribeAdmin) {
+                    this.props.setPermissions("tribeAdmin", user.name);
+                } else if (user.familyAdmin) {
+                    this.props.setPermissions("familyAdmin", user.name);
+                } else if (
+                    !user.admin ||
+                    !user.tribeAdmin ||
+                    !user.familyAdmin
+                ) {
+                    this.props.setPermissions("user", user.name);
                 }
             }
         } catch (err) {

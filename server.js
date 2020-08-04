@@ -50,7 +50,14 @@ app.post("/users/login", (req, res) => {
         .then((user) => {
             req.session.user = user._id;
             req.session.email = user.email;
-            res.status(200).send({ currentUser: user.username });
+            res.status(200).send({
+                currentUser: user.username,
+                name: user.name,
+                admin: user.admin,
+                tribeAdmin: user.tribeAdmin,
+                familyAdmin: user.familyAdmin,
+                familyID: user.familyID,
+            });
         })
         .catch((error) => {
             res.status(400).send();
