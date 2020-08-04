@@ -39,20 +39,7 @@ export default class Login extends Component {
             if (response.status === 200) {
                 this.state.isError = false; // remove error message
                 const user = await response.json();
-                console.log(user);
-                if (user.admin) {
-                    this.props.setPermissions("admin", user.name);
-                } else if (user.tribeAdmin) {
-                    this.props.setPermissions("tribeAdmin", user.name);
-                } else if (user.familyAdmin) {
-                    this.props.setPermissions("familyAdmin", user.name);
-                } else if (
-                    !user.admin ||
-                    !user.tribeAdmin ||
-                    !user.familyAdmin
-                ) {
-                    this.props.setPermissions("user", user.name);
-                }
+                this.props.determinePermissions(user);
             }
         } catch (err) {
             console.log(err);
