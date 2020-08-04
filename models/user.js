@@ -51,11 +51,6 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
-    tribeAdmin: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
     created: {
         type: Date,
         required: true,
