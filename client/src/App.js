@@ -25,19 +25,29 @@ export default class App extends Component {
             username: "",
         };
         this.setPermissions = this.setPermissions.bind(this);
+        this.determinePermissions = this.determinePermissions.bind(this);
         this.logout = this.logout.bind(this);
     }
     async componentDidMount() {
-        const response = await fetch("http://localhost:5000/users", {
-            method: "GET",
-            crossDomain: true,
-            credentials: "include",
-            redirect: "follow",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            referrerPolicy: "no-referrer",
-        });
+        try {
+            const response = await fetch("http://localhost:5000/users", {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            const user = await response.json();
+            if (!user) {
+                return;
+            }
+            this.determinePermissions(user);
+        } catch (err) {
+            console.log(err);
+        }
     }
     setPermissions(permissionString, username) {
         if (permissionString === "user") {
@@ -68,10 +78,30 @@ export default class App extends Component {
             alert("Unable to establish permissions");
         }
     }
+    determinePermissions(user) {
+        if (user.admin) {
+            this.setPermissions("admin", user.name);
+        } else if (user.tribeAdmin) {
+            this.setPermissions("tribeAdmin", user.name);
+        } else if (user.familyAdmin) {
+            this.props.setPermissions("familyAdmin", user.name);
+        } else if (!user.admin || !user.tribeAdmin || !user.familyAdmin) {
+            this.setPermissions("user", user.name);
+        }
+    }
 
-    logout() {
+    async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        //window.location.reload()
+        const response = await fetch("http://localhost:5000/users/logout", {
+            method: "GET",
+            crossDomain: true,
+            credentials: "include",
+            redirect: "follow",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+        });
         return <Redirect to="/map" />;
     }
 
@@ -91,7 +121,7 @@ export default class App extends Component {
                     exact
                     render={() => (
                         <Login
-                            setPermissions={this.setPermissions}
+                            determinePermissions={this.determinePermissions}
                             loggedIn={this.state.loggedIn}
                         />
                     )}

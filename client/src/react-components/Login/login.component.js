@@ -38,16 +38,8 @@ export default class Login extends Component {
             });
             if (response.status === 200) {
                 this.state.isError = false; // remove error message
-                const data = await response.json();
-                if (data.admin) {
-                    this.props.setPermissions("admin", data.name);
-                } else if (data.tribeAdmin) {
-                    this.props.setPermissions("tribeAdmin", data.name);
-                } else if (data.familyAdmin) {
-                    this.props.setPermissions("familyAdmin", data.name);
-                } else {
-                    this.props.setPermissions("user", data.name);
-                }
+                const user = await response.json();
+                this.props.determinePermissions(user);
             }
         } catch (err) {
             console.log(err);
