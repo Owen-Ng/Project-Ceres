@@ -21,12 +21,12 @@ const { ObjectID } = require("mongodb");
 // body-parser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // express-session for user sessions
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-/* Session Handleing *** */
+/* Session Handling *** */
 
 // Create session cookie
 app.use(
@@ -35,7 +35,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            expires: 60000,
+            expires: 600000,
             httpOnly: true,
         },
     })
@@ -43,21 +43,18 @@ app.use(
 
 // Login route sets currentUser
 app.post("/users/login", (req, res) => {
-    
     const username = req.body.username;
     const password = req.body.password;
 
-    log(username, password);
-
     User.findByUsernamePassword(username, password)
-    .then(user => {
-        req.session.user = user._id;
-        req.session.email = user.email;
-        res.send({ currentUser: user.username });
-    })
-    .catch(error => {
-        res.status(400).send()
-    });
+        .then((user) => {
+            req.session.user = user._id;
+            req.session.email = user.email;
+            res.status(200).send({ currentUser: user.username });
+        })
+        .catch((error) => {
+            res.status(400).send();
+        });
 });
 
 // Logout route destroys session cookie
@@ -82,8 +79,6 @@ app.get("/users/check-session", (req, res) => {
 
 // Create new user
 app.post("/users", (req, res) => {
-    log(req.body);
-
     const user = new User({
         email: req.body.email,
         username: req.body.username,

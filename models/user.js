@@ -1,11 +1,11 @@
 /* User mongoose model */
-"use strict"
+"use strict";
 
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const { resolve } = require('path');
-const { ObjectID } = require('mongodb');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const { resolve } = require("path");
+const { ObjectID } = require("mongodb");
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 1,
         trim: true,
-        unique: true
+        unique: true,
     },
     email: {
         type: String,
@@ -23,53 +23,62 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: validator.isEmail,
-            message: 'Not valid email'
-        }
+            message: "Not valid email",
+        },
     },
     password: {
         type: String,
         required: true,
-        minlength: 4
+        minlength: 4,
     },
     name: {
         type: String,
         required: true,
-        minlength: 1
+        minlength: 1,
     },
     familyID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Family',
-        default: null
+        ref: "Family",
+        default: null,
+    },
+    admin: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     familyAdmin: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
+    },
+    tribeAdmin: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     created: {
         type: Date,
         required: true,
-        default: Date.now()
-    }
+        default: Date.now(),
+    },
+});
 
-})
-
-UserSchema.pre('save', function(next) {
+UserSchema.pre("save", function (next) {
     const user = this;
 
-    if (user.isModified('password')) {
+    if (user.isModified("password")) {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash;
                 next();
-            })
-        })
+            });
+        });
     } else {
         next();
     }
-})
+});
 
-UserSchema.statics.findByUsernamePassword = function(username, password) {
+UserSchema.statics.findByUsernamePassword = function (username, password) {
     const User = this;
 
     return User.findOne({ username: username }).then((user) => {
@@ -84,10 +93,10 @@ UserSchema.statics.findByUsernamePassword = function(username, password) {
                 } else {
                     reject();
                 }
-            })
-        })
-    })
-}
+            });
+        });
+    });
+};
 
-const User = mongoose.model('User', UserSchema);
-module.exports = { User }
+const User = mongoose.model("User", UserSchema);
+module.exports = { User };

@@ -7,7 +7,7 @@ export default class Login extends Component {
 
         this.state = {
             username: "admin",
-            password: "admin",
+            password: "admin123",
             isError: false,
         };
 
@@ -18,25 +18,41 @@ export default class Login extends Component {
     This function will have to contact the server to recieve information about the users credentials.
     Example: if passsword or username is incorrect and possibly to also recieve cookies.
     */
+
     async handleSubmit(e) {
         e.preventDefault();
-        const { username, password } = this.state;
-        const testObj = {
-            email: "omarshabana@gmail.com",
-            password: "flare101",
-        };
-        const response = await fetch("http://localhost:5000/users/login", {
-            method: "POST",
-            crossDomain: true,
-            credentials: "same-origin",
-            redirect: "follow",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            referrerPolicy: "no-referrer",
-            body: JSON.stringify(testObj),
-        });
-        console.log(response);
+        try {
+            const response = await fetch("http://localhost:5000/users/login", {
+                method: "POST",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify({
+                    username: this.state.username,
+                    password: this.state.password,
+                }),
+            });
+            if (response.status === 200) {
+                this.state.isError = false; // remove error message
+                const data = await response.json();
+                if (data.admin) {
+                    this.props.setPermissions("admin", data.name);
+                } else if (data.tribeAdmin) {
+                    this.props.setPermissions("tribeAdmin", data.name);
+                } else if (data.familyAdmin) {
+                    this.props.setPermissions("familyAdmin", data.name);
+                } else {
+                    this.props.setPermissions("user", data.name);
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        /*
         if (username === "user" && password === "user") {
             this.props.setPermissions("user");
         } else if (username === "admin" && password === "admin") {
@@ -44,6 +60,7 @@ export default class Login extends Component {
         } else {
             this.setState({ isError: true });
         }
+        */
     }
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
@@ -100,7 +117,7 @@ export default class Login extends Component {
                         </p>
                         <a className="Login-register" href="/">
                             {" "}
-                            Click to register (Coming phase 2)
+                            Click to register
                         </a>
                     </div>
                 </div>
