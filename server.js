@@ -186,6 +186,25 @@ app.post("/tribe", (req, res) => {
     );
 });
 
+//List Families in a tribe
+app.get("/tribe/:tid", (req, res) => {
+
+    const tid = req.params.tid;
+
+    if (!ObjectID.isValid(tid)) {
+		res.status(404).send();
+		return;
+    }
+
+    Family.find({ tribes: tid }).then((tribe) => {
+        if (!tribe) {
+            res.status(404).send("Resource not found")
+        } else {
+            res.send(tribe)
+        }
+    })
+});
+
 // Current users family joins tribe tid
 app.post("/tribe/join/:tid", (req, res) => {
     const tid = req.params.tid;
