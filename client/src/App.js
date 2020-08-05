@@ -23,6 +23,7 @@ export default class App extends Component {
             isTribeAdmin: false,
             loggedIn: false,
             username: "",
+            user: null,
         };
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
@@ -40,11 +41,14 @@ export default class App extends Component {
                 },
                 referrerPolicy: "no-referrer",
             });
-            const user = await response.json();
-            if (!user) {
-                return;
+            if (response.status < 400) {
+                const user = await response.json();
+                if (!user) {
+                    return;
+                }
+                this.setState({ user });
+                this.determinePermissions(user);
             }
-            this.determinePermissions(user);
         } catch (err) {
             console.log(err);
         }
@@ -73,6 +77,7 @@ export default class App extends Component {
                 loggedIn: true,
                 username,
             });
+
             return <Redirect to="/map" />;
         } else {
             alert("Unable to establish permissions");
@@ -88,6 +93,7 @@ export default class App extends Component {
         } else if (!user.admin || !user.tribeAdmin || !user.familyAdmin) {
             this.setPermissions("user", user.name);
         }
+        this.setState({ user });
     }
 
     async logout() {
@@ -123,13 +129,18 @@ export default class App extends Component {
                         <Login
                             determinePermissions={this.determinePermissions}
                             loggedIn={this.state.loggedIn}
+                            user={this.state.user}
                         />
                     )}
                 />
 
                 <Route path="/map" exact component={Maps} />
                 <Route path="/tribe" exact component={Tribe} />
-                <Route path="/grocerylists" exact component={GroceryList} />
+                <Route
+                    path="/grocerylists"
+                    exact
+                    render={() => <GroceryList user={this.state.user} />}
+                />
 
                 <Route path="/admin" exact component={AdminSettings} />
                 <Route path="/profile" exact component={Profile} />

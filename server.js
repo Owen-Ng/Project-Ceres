@@ -58,6 +58,7 @@ app.post("/users/login", (req, res) => {
                 familyAdmin: user.familyAdmin,
                 familyID: user.familyID,
             });
+            req.session.save();
         })
         .catch((error) => {
             res.status(400).send();
@@ -106,7 +107,7 @@ app.post("/users", (req, res) => {
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
-
+    console.log(currentUser);
     User.findById(currentUser).then((user) => {
         if (!user) {
             res.status(404).send("Resource Not Found");
@@ -194,21 +195,20 @@ app.post("/tribe", (req, res) => {
 
 //List Families in a tribe
 app.get("/tribe/:tid", (req, res) => {
-
     const tid = req.params.tid;
 
     if (!ObjectID.isValid(tid)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
 
     Family.find({ tribes: tid }).then((tribe) => {
         if (!tribe) {
-            res.status(404).send("Resource not found")
+            res.status(404).send("Resource not found");
         } else {
-            res.send(tribe)
+            res.send(tribe);
         }
-    })
+    });
 });
 
 // Current users family joins tribe tid
@@ -304,15 +304,14 @@ app.get("/list/:fid", (req, res) => {
 
 // add item to a list
 app.post("/list/:fid/:lid", (req, res) => {
-
     const listID = req.params.lid;
     const familyID = req.params.fid;
 
     if (!ObjectID.isValid(listID)) {
-		res.status(404).send();
-		return;
+        res.status(404).send();
+        return;
     }
-    
+
     if (!ObjectID.isValid(familyID)) {
         res.status(404).send();
         return;
@@ -320,22 +319,23 @@ app.post("/list/:fid/:lid", (req, res) => {
 
     List.find({ familyID }).then((lists) => {
         const item = {
-            "itemname": req.body.itemname,
-            "quantity": req.body.quantity
-        }
+            itemname: req.body.itemname,
+            quantity: req.body.quantity,
+        };
 
         const list = lists.find((list) => {
-            return list._id == listID
+            return list._id == listID;
         });
 
         list.items.push(item);
 
-        list.save().then((result) => {
-            res.send({ item, list });
-        })
-        .catch((error) => {
-            res.status(400).send(error);
-        })
+        list.save()
+            .then((result) => {
+                res.send({ item, list });
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            });
     });
 });
 

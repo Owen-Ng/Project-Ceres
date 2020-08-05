@@ -5,10 +5,12 @@ the collection of data thus it is the most accurate.
 */
 import React, { Component } from "react";
 import "./grocery-list.css";
+import Map from "../Maps/maps.component.js";
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component";
 import GroceryItem from "./GroceryItem/grocery-item.component";
 import GroceryListTab from "./GroceryListTab/grocery-list-tab.component";
 import { v4 as uuidv4 } from "uuid";
+import { Router, Route, Redirect } from "react-router-dom";
 
 export default class GroceryList extends Component {
     constructor(props) {
@@ -58,7 +60,7 @@ export default class GroceryList extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        let { currentTribe } = props.location;
+        let currentTribe = props.location;
         if (currentTribe === undefined) {
             currentTribe = "Tribe 4";
         }
@@ -66,26 +68,34 @@ export default class GroceryList extends Component {
 
         return tribeLists;
     }
-    /* 
-        Our lists will come from a database later on at time of mounting
-    */
 
     async componentDidMount() {
-        const response = await fetch("http://localhost:5000/users", {
-            method: "GET",
-            crossDomain: true,
-            credentials: "include",
-            redirect: "follow",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            referrerPolicy: "no-referrer",
-        });
-        const { currentTribe } = this.props.location;
+        const user = this.props.user;
+        if (user !== null) {
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/list/${user.familyID}`,
+                    {
+                        method: "GET",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                    }
+                );
+                const res = await response.json();
+                console.log(res);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        //const { currentTribe } = this.props.location;
         const intialList = Object.keys(this.state.familyLists);
         this.setState({
             currentList: intialList[0],
-            currentTribe: currentTribe,
         });
     }
 
@@ -191,34 +201,36 @@ export default class GroceryList extends Component {
                 Delete
             </button>
         );
+        const loggedInData = (
+            <div className="row">
+                <div className="GroceryList-currentList col-lg-">
+                    <h4 className="GroceryList-list-title">
+                        {this.state.currentList}
+                    </h4>
+                    {this.state.currentList === "No list selected"
+                        ? ""
+                        : listDeleteButton}
+                    {this.state.currentList !== "No list selected"
+                        ? this.renderCurrentList()
+                        : ""}
+                    <GroceryListForm addItem={this.addItem} />
+                    <br></br>
+                </div>
+                <GroceryListTab
+                    familyLists={this.state.familyLists}
+                    updateState={this.updateState}
+                    currentList={this.state.currentList}
+                    alphabeticallyOrdered={this.state.alphabeticallyOrdered}
+                />
+            </div>
+        );
         return (
             <div className="GroceryList container">
-                <div className="row">
-                    <div className="GroceryList-currentList col-lg-">
-                        <h4 className="GroceryList-list-title">
-                            {this.state.currentList}
-                        </h4>
-                        {this.state.currentList === "No list selected"
-                            ? ""
-                            : listDeleteButton}
-                        {this.state.currentList !== "No list selected"
-                            ? this.renderCurrentList()
-                            : ""}
-                        <GroceryListForm addItem={this.addItem} />
-                        <br></br>
-                        Reverse Order{" "}
-                        <input
-                            type="checkbox"
-                            onClick={this.changeAlphabeticalOrdering}
-                        ></input>
-                    </div>
-                    <GroceryListTab
-                        familyLists={this.state.familyLists}
-                        updateState={this.updateState}
-                        currentList={this.state.currentList}
-                        alphabeticallyOrdered={this.state.alphabeticallyOrdered}
-                    />
-                </div>
+                {this.props.user === null ? (
+                    <Redirect to="/map" />
+                ) : (
+                    loggedInData
+                )}
             </div>
         );
     }

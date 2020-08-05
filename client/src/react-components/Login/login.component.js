@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import "./login.component.css";
-
+//import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+//import Map from "../Maps/maps.component.js";
 export default class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            username: "admin",
-            password: "admin123",
+            username: "user",
+            password: "user",
             isError: false,
         };
 
@@ -36,23 +37,14 @@ export default class Login extends Component {
                     password: this.state.password,
                 }),
             });
-            if (response.status === 200) {
-                this.state.isError = false; // remove error message
+            if (response.status < 400) {
+                this.state.isError = false; // removes error message
                 const user = await response.json();
-                this.props.determinePermissions(user);
+                await this.props.determinePermissions(user); // Update the App()
             }
         } catch (err) {
             console.log(err);
         }
-        /*
-        if (username === "user" && password === "user") {
-            this.props.setPermissions("user");
-        } else if (username === "admin" && password === "admin") {
-            this.props.setPermissions("admin");
-        } else {
-            this.setState({ isError: true });
-        }
-        */
     }
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
