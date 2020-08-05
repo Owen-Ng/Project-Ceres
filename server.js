@@ -14,7 +14,7 @@ const { User } = require("./models/user");
 const { Family } = require("./models/family");
 const { List } = require("./models/list");
 const { Tribe } = require("./models/tribe");
-
+const { MapList } = require("./models/mapList")
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
@@ -347,6 +347,115 @@ app.post("/list/:fid/:lid", (req, res) => {
         })
     });
 });
+
+//Map database
+app.get("/MapList",(req,res) =>{
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+    MapList.find().then((groceries)=>{
+        res.send(groceries);
+    })
+    .catch((error) =>{
+        res.status(500).send("Internal Server Error");
+    })
+
+})
+app.post('/MapList', (req,res)=>{
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+    const groceries = new MapList({
+        name: req.body.name,
+        address: req.body.address,
+        open: req.body.open,
+        wait: req.body.wait,
+        coordinates: req.body.coordinates,
+        
+    })
+    groceries.save().then((result) =>{
+        res.send(result);
+    }).catch((error)=>{
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			log(error) // log server error to the console, not to the client.
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+
+    })
+})
+// {
+//     timesubmitted: <Time submitted>
+//      
+// }
+app.patch("/MapList/:mid", (req,res)=>{
+    const id = req.params.mid;
+    const time = req.body.timesubmitted;
+    if (!ObjectID.isValid(id)) {
+		res.status(404).send()  
+		return;  
+	}
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+    } 
+    MapList.findById(id).then((result) =>{
+        if(!result){
+            res.status(404).send('Resource not found')  
+        }else{
+            result.timesubmitted.push(time)
+            result.save().then((result) =>{
+                log(result.wait);
+                const timesum = result.timesubmitted.reduce(function(a,b){
+                    return a+b
+                }, 0)
+                const timeav = timesum/result.timesubmitted.length;
+                const fieldstoupdate ={"wait": timeav + 'min'};
+                MapList.findByIdAndUpdate(id, {$set: fieldstoupdate}, {new:true, useFindAndModify:false}).then((groceries)=>{
+                    if (!groceries){
+                        res.status(404).send()
+                    }else{
+                        res.send(groceries)
+                    }
+                }).catch((error) => {
+                    if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                        res.status(500).send('Internal server error')
+                    } else {
+                        log(error)
+                        res.status(400).send('Bad Request') // bad request for changing the student.
+                    }
+                })
+
+
+            }).catch((error) => {
+                if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                    res.status(500).send('Internal server error')
+                } else {
+                    log(error)
+                    res.status(400).send('Bad Request') // bad request for changing the student.
+                }
+            });
+         
+
+        }
+    }).catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			log(error)
+			res.status(400).send('Bad Request') // bad request for changing the student.
+		}
+	})
+
+})
 
 /* API Routes *** */
 
