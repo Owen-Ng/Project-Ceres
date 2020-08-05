@@ -36,9 +36,6 @@ export default class PublicMap extends Component {
               url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
 
-          
-
-          
           {groceries.features.map(map =>(
             <Marker key = {map.properties.SHOP_ID} position={[
               map.geometry.coordinates[1], 

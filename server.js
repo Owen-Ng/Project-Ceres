@@ -21,12 +21,12 @@ const { ObjectID } = require("mongodb");
 // body-parser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // express-session for user sessions
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-/* Session Handleing *** */
+/* Session Handling *** */
 
 // Create session cookie
 app.use(
@@ -35,7 +35,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            expires: 60000,
+            expires: 600000,
             httpOnly: true,
         },
     })
@@ -43,16 +43,21 @@ app.use(
 
 // Login route sets currentUser
 app.post("/users/login", (req, res) => {
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
-    log(req.body);
-    log(email, password);
 
-    User.findByEmailPassword(email, password)
+    User.findByUsernamePassword(username, password)
         .then((user) => {
             req.session.user = user._id;
             req.session.email = user.email;
-            res.status(200).send({ currentUser: user.email });
+            res.status(200).send({
+                currentUser: user.username,
+                name: user.name,
+                admin: user.admin,
+                tribeAdmin: user.tribeAdmin,
+                familyAdmin: user.familyAdmin,
+                familyID: user.familyID,
+            });
         })
         .catch((error) => {
             res.status(400).send();
@@ -81,10 +86,9 @@ app.get("/users/check-session", (req, res) => {
 
 // Create new user
 app.post("/users", (req, res) => {
-    log(req.body);
-
     const user = new User({
         email: req.body.email,
+        username: req.body.username,
         password: req.body.password,
         name: req.body.name,
     });
@@ -189,6 +193,25 @@ app.post("/tribe", (req, res) => {
     );
 });
 
+//List Families in a tribe
+app.get("/tribe/:tid", (req, res) => {
+
+    const tid = req.params.tid;
+
+    if (!ObjectID.isValid(tid)) {
+		res.status(404).send();
+		return;
+    }
+
+    Family.find({ tribes: tid }).then((tribe) => {
+        if (!tribe) {
+            res.status(404).send("Resource not found")
+        } else {
+            res.send(tribe)
+        }
+    })
+});
+
 // Current users family joins tribe tid
 app.post("/tribe/join/:tid", (req, res) => {
     const tid = req.params.tid;
@@ -235,14 +258,6 @@ app.post("/tribe/join/:tid", (req, res) => {
                     }
                 });
             }
-            // user.save().then((result) => {
-            //     res.send({ user: result, family });
-            // })
-            // .catch((error) => {
-            //     log(error);
-            //     res.status(400).send('Bad Request');
-            // })
-            // });
         }
     });
 });
@@ -289,6 +304,47 @@ app.get("/list/:fid", (req, res) => {
 
     List.find({ familyID: fid }).then((lists) => {
         res.send(lists);
+    });
+});
+
+// add item to a list
+app.post("/list/:fid/:lid", (req, res) => {
+
+    const listID = req.params.lid;
+    const familyID = req.params.fid;
+
+    if (!ObjectID.isValid(listID)) {
+		res.status(404).send();
+		return;
+    }
+    
+    if (!ObjectID.isValid(familyID)) {
+        res.status(404).send();
+        return;
+    }
+
+    List.find({ familyID }).then((lists) => {
+        const item = {
+            "itemname": req.body.itemname,
+            "quantity": req.body.quantity
+        }
+
+        const list = lists.find((list) => {
+            return list._id == listID
+        });
+
+        log(item)
+
+        list.items.push(item);
+
+        log(list)
+
+        list.save().then((result) => {
+            res.send({ item, list });
+        })
+        .catch((error) => {
+            res.status(400).send(error);
+        })
     });
 });
 

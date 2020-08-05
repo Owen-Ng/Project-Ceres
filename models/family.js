@@ -8,7 +8,13 @@ const Family = mongoose.model('Family', {
          minlength:1
     },
     tribes: {
-        type: Array,
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Tribe",
+        required: true
+    },
+    offers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "User",
         required: true
     }
 });

@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const ItemSchema = new mongoose.Schema({
-    item: {
+    itemname: {
         type: String,
         minlength: 1,
         required: true

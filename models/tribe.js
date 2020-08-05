@@ -6,6 +6,11 @@ const Tribe = mongoose.model('Tribe', {
         type: String,
          required: true,
          minlength:1
+    },
+    offers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "User",
+        required: true
     }
 });
 
