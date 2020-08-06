@@ -1,34 +1,30 @@
-import React, {Component} from 'react';
-import "./grocery-list-form.css"
+import React, { Component } from "react";
+import "./grocery-list-form.css";
 
 class GroceryListForm extends Component {
-
     constructor(props) {
-        super(props)
-    
+        super(props);
+
         this.state = {
             newItem: "",
-            newItemQuantity: 0
-    }
-        this.onInputChange = this.onInputChange.bind(this)
-        this.sendItem = this.sendItem.bind(this)
+            newItemQuantity: 1,
+        };
+        this.onInputChange = this.onInputChange.bind(this);
+        this.sendItem = this.sendItem.bind(this);
 
         this.addItem = this.props.addItem;
+    }
 
-    }   
-
-    onInputChange(e){
+    onInputChange(e) {
         this.setState({
-            [e.target.name] : e.target.value
-         })
+            [e.target.name]: e.target.value,
+        });
     }
 
-    sendItem(e){
-        e.preventDefault()
-        this.addItem(this.state)
+    sendItem(e) {
+        e.preventDefault();
+        this.addItem(this.state);
     }
-
-    
 
     render() {
         return (
@@ -36,30 +32,27 @@ class GroceryListForm extends Component {
                 <form onSubmit={this.sendItem}>
                     <label htmlFor="item">Item Name</label>
                     <input
-                    className="GroceryListForm-item-input"
-                    name="newItem"
-                    type="text"
-                    value={this.state.newItem}
-                    onChange={this.onInputChange}
+                        className="GroceryListForm-item-input"
+                        name="newItem"
+                        type="text"
+                        value={this.state.newItem}
+                        onChange={this.onInputChange}
                     />
 
                     <label htmlFor="quantity">Quantity</label>
                     <input
-                    className="GroceryListForm-quantity-input"
-                    name="newItemQuantity"
-                    type="number"
-                    min={1}
-                    value={this.state.newItemQuantity}
-                    onChange={this.onInputChange}
+                        className="GroceryListForm-quantity-input"
+                        name="newItemQuantity"
+                        type="number"
+                        min={1}
+                        value={this.state.newItemQuantity}
+                        onChange={this.onInputChange}
                     />
                     <button className="GroceryListForm-add">Add</button>
                 </form>
             </div>
-        )
+        );
     }
-    
 }
 
-export default GroceryListForm
-
-
+export default GroceryListForm;

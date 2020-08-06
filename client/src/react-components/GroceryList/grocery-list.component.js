@@ -5,12 +5,10 @@ the collection of data thus it is the most accurate.
 */
 import React, { Component } from "react";
 import "./grocery-list.css";
-import Map from "../Maps/maps.component.js";
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component";
 import GroceryItem from "./GroceryItem/grocery-item.component";
 import GroceryListTab from "./GroceryListTab/grocery-list-tab.component";
 import { v4 as uuidv4 } from "uuid";
-import { Router, Route, Redirect } from "react-router-dom";
 
 export default class GroceryList extends Component {
     constructor(props) {
@@ -94,22 +92,62 @@ export default class GroceryList extends Component {
     /*
         Later on this will call the server to hand over the new set of lists and items.
     */
-    editItem(item) {
+    async editItem(item) {
         const currentList = this.state.currentList;
         let updatedList = this.state.familyLists;
         delete updatedList[currentList][item.prevItemName];
         updatedList[currentList][item.name] = item.quantity;
         this.setState((state) => updatedList);
+
+        try {
+            await fetch("http://localhost:5000/item", {
+                method: "PATCH",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    listname: currentList,
+                    fid: this.props.user.familyID,
+                    prevName: item.prevItemName,
+                    newName: item.name,
+                    quantity: item.quantity,
+                }),
+                referrerPolicy: "no-referrer",
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
     /*
         Later on this will call the server to hand over the new set of lists and items.
     */
-    deleteItem(itemName) {
+    async deleteItem(itemName) {
         const currentList = this.state.currentList;
         let updatedList = this.state.familyLists;
-
-        delete updatedList[currentList][itemName];
-        this.setState({ familLists: updatedList });
+        try {
+            await fetch("http://localhost:5000/item", {
+                method: "DELETE",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    listname: currentList,
+                    fid: this.state.user.familyID,
+                    itemname: itemName,
+                }),
+                referrerPolicy: "no-referrer",
+            });
+            delete updatedList[currentList][itemName];
+            this.setState({ familLists: updatedList });
+        } catch (err) {
+            console.log(err);
+        }
     }
     /*
         Recieves items from the GroceryListForm and is passed down as a prop. Once the new item object is recieved
@@ -118,9 +156,12 @@ export default class GroceryList extends Component {
     */
     async addItem(newItem) {
         const currentList = this.state.currentList;
-
+        if (newItem.newItem.trim() === "") {
+            alert("Please enter a valid name");
+            return;
+        }
         try {
-            await fetch(`http://localhost:5000/list/`, {
+            await fetch("http://localhost:5000/item", {
                 method: "POST",
                 crossDomain: true,
                 credentials: "include",
@@ -137,7 +178,7 @@ export default class GroceryList extends Component {
                 referrerPolicy: "no-referrer",
             });
             if (currentList !== "No list selected") {
-                let updatedList = this.state.familyLists;
+                const updatedList = this.state.familyLists;
                 updatedList[currentList][newItem.newItem] =
                     newItem.newItemQuantity;
                 this.setState({ familyLists: updatedList });
@@ -246,6 +287,7 @@ export default class GroceryList extends Component {
                     updateState={this.updateState}
                     currentList={this.state.currentList}
                     alphabeticallyOrdered={this.state.alphabeticallyOrdered}
+                    user={this.props.user}
                 />
             </div>
         );
