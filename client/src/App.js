@@ -98,7 +98,7 @@ export default class App extends Component {
 
     async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        const response = await fetch("http://localhost:5000/users/logout", {
+        await fetch("http://localhost:5000/users/logout", {
             method: "GET",
             crossDomain: true,
             credentials: "include",

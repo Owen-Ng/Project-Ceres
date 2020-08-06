@@ -46,21 +46,39 @@ export default class GroceryListTab extends Component {
     /*
         Passes new data to the main component (parent) and which will push it to the database.
     */
-    addList(e) {
+    async addList(e) {
         e.preventDefault();
         let updatedList = this.state.familyLists;
         const listInputBar = this.state.listInputBar;
-
-        if (updatedList[listInputBar] !== undefined) {
-            alert(
-                "A list with that name is already available, please select another."
-            );
-        } else if (listInputBar.trim() === "") {
-            alert("Please enter a name");
-        } else {
-            updatedList[listInputBar.trim()] = {};
-            this.props.updateState({ familyLists: updatedList });
-            this.setState({ familyLists: updatedList });
+        try {
+            if (updatedList[listInputBar] !== undefined) {
+                alert(
+                    "A list with that name is already available, please select another."
+                );
+            } else if (listInputBar.trim() === "") {
+                alert("Please enter a name");
+            } else {
+                updatedList[listInputBar.trim()] = {};
+                this.props.updateState({ familyLists: updatedList });
+                this.setState({ familyLists: updatedList });
+                await fetch("http://localhost:5000/list", {
+                    method: "POST",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        listname: listInputBar.trim(),
+                        fid: this.props.user.familyID,
+                        shared: true,
+                    }),
+                    referrerPolicy: "no-referrer",
+                });
+            }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -95,20 +113,21 @@ export default class GroceryListTab extends Component {
     */
     makeList(listObject) {
         const order = this.props.alphabeticallyOrdered;
-        const listKeys = !order
-            ? Object.keys(listObject).sort()
-            : Object.keys(listObject).sort().reverse();
-
-        return listKeys.map((key) => (
-            <li key={uuidv4()}>
-                <GroceryItem
-                    key={uuidv4()}
-                    editable={false}
-                    name={key}
-                    quantity={listObject[key]}
-                />
-            </li>
-        ));
+        if (listObject !== undefined) {
+            const listKeys = !order
+                ? Object.keys(listObject).sort()
+                : Object.keys(listObject).sort().reverse();
+            return listKeys.map((key) => (
+                <li key={uuidv4()}>
+                    <GroceryItem
+                        key={uuidv4()}
+                        editable={false}
+                        name={key}
+                        quantity={listObject[key]}
+                    />
+                </li>
+            ));
+        }
     }
 
     render() {
