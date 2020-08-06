@@ -8,6 +8,7 @@ import "./grocery-list.css";
 import GroceryListForm from "./GroceryListForm/grocery-list-form.component";
 import GroceryItem from "./GroceryItem/grocery-item.component";
 import GroceryListTab from "./GroceryListTab/grocery-list-tab.component";
+import SigninError from "../Errors/SigninError";
 import { v4 as uuidv4 } from "uuid";
 
 export default class GroceryList extends Component {
@@ -293,7 +294,7 @@ export default class GroceryList extends Component {
         );
         return (
             <div className="GroceryList container">
-                {this.props.user === null ? "" : loggedInData}
+                {this.props.user === null ? <SigninError /> : loggedInData}
             </div>
         );
     }
