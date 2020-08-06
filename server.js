@@ -394,7 +394,7 @@ app.post('/MapList', (req,res)=>{
 //     timesubmitted: <Time submitted>
 //      
 // }
-app.patch("/MapList/:mid", (req,res)=>{
+app.post("/MapList/:mid", (req,res)=>{
     const id = req.params.mid;
     const time = req.body.timesubmitted;
     if (!ObjectID.isValid(id)) {
@@ -456,6 +456,46 @@ app.patch("/MapList/:mid", (req,res)=>{
 	})
 
 })
+/*
+[
+  { "path": "/name", "value": "Owen" },
+  {  "path": "/decription", "value": "Jim" },
+  
+  ...
+]
+*/
+app.patch('/MapList/:mid', (req,res)=>{
+    const id = req.params.mid;
+    if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}
+
+	// Find the fields to update and their values.
+    const fieldsToUpdate = {};
+    req.body.map((change) => {
+		const propertyToChange = change.path.substr(1);
+		log(propertyToChange)
+		fieldsToUpdate[propertyToChange] = change.value
+    })
+    MapList.findByIdAndUpdate(id, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false}).then((result) =>{
+        if(!result){
+            res.status(404).send('Resource not found')
+        }else{
+            res.send(result)
+        }
+    })
+
+
+})
+
 
 /* API Routes *** */
 

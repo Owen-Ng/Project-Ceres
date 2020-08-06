@@ -1,84 +1,91 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer ,withLeaflet, Tooltip} from "react-leaflet";
+import { Map, Marker, Popup, TileLayer, withLeaflet, Tooltip } from "react-leaflet";
 import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
-import * as groceries from '../data/groceries.json'
-const someicon = new Icon ({iconUrl: "/cart.svg", iconSize:25}); 
-const active = new Icon({iconUrl:"/basket", iconSize: 20})
+// import * as groceries from '../data/groceries.json'
+import { getMap } from '../../../actions/maplist'
+const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
+const active = new Icon({ iconUrl: "/basket", iconSize: 20 })
 export default class PublicMap extends Component {
-  
-  state=null
-  data(map){
-    
-    this.props.senddata(map.properties.NAME, map.properties.ADDRESS, map.properties.OPEN, map.properties.WAIT)
+
+  state = {
+    currentstate:null,
+    groceries: null,
+  };
+
+  data(map) {
+
+    this.props.senddata(map.name, map.address, map.open, map.wait)
   }
-  selected(map){
-    return(
-    <Marker key = {map.properties.SHOP_ID} position={[
-      map.geometry.coordinates[1], 
-      map.geometry.coordinates[0]
-     
-    ]}
-    icon= {active}
-    />
+  selected(map) {
+    return (
+      <Marker key={map._id} position={[
+        map.geometry.coordinates[1],
+        map.geometry.coordinates[0]
+
+      ]}
+        icon={active}
+      />
     )
   }
- 
-  render(){
-    const SearchComponent = withLeaflet(Search);
-      return(
-        <div>
-          {/* Map api from react leaflet https://react-leaflet.js.org/ */}
-          <Map center={[this.props.city[0], this.props.city[1]]} zoom={12}>
-                <TileLayer
-              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            />
 
-          {groceries.features.map(map =>(
-            <Marker key = {map.properties.SHOP_ID} position={[
-              map.geometry.coordinates[1], 
-              map.geometry.coordinates[0]
-            
+  
+  render() {  
+   
+    return (
+      <div>
+        {/* Map api from react leaflet https://react-leaflet.js.org/ */}
+        <Map center={[this.props.city[0], this.props.city[1]]} zoom={12}>
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          />
+
+          {this.state.groceries.map(map => (
+            <Marker key={map._id} position={[
+              map.coordinates[1],
+              map.coordinates[0]
+
             ]}
-            
-       
-            onClick={()=>{this.setState(map); this.data(map);this.selected(map);
-            }}
-            icon = {someicon}>
 
-            <Tooltip className='tooltip' direction='center' offset={[-35, 0]} opacity={1} permanent>
-              <span>{map.properties.WAIT}</span>
-            </Tooltip>
-          </Marker>
-            )
-            )
+
+              onClick={() => {
+                this.setState({currentstate: map}); this.data(map); this.selected(map);
+              }}
+              icon={someicon}>
+
+              <Tooltip className='tooltip' direction='center' offset={[-35, 0]} opacity={1} permanent>
+                <span>{map.wait}</span>
+              </Tooltip>
+            </Marker>
+          )
+          )
           }
           {this.state && (
             <Popup
-            key = {this.state.properties.SHOP_ID}
+              key={this.state.currentstate._id}
               position={[
-                this.state.geometry.coordinates[1],
-                this.state.geometry.coordinates[0]
+                this.state.currentstate.coordinates[1],
+                this.state.currentstate.coordinates[0]
               ]}
-              closeButton ={false}
-              offset={[1,0]}
+              closeButton={false}
+              offset={[1, 0]}
               onClose={() => {
-                this.setState(null);
+                this.setState({currentstate:null});
               }}
             >
-            <div>
-              <h6>You are here</h6>
-            </div>
-          </Popup>
-          
-        )}
+              <div>
+                <h6>You are here</h6>
+              </div>
+            </Popup>
+
+          )}
         </Map>
 
       </div>
-  
-  )  
+
+    )
   }
 }
 
@@ -146,7 +153,7 @@ export default class PublicMap extends Component {
 //     this.olmap.setTarget("map");
 
 //     // Listen to map changes
-    
+
 //     this.olmap.on("moveend", () => {
 //       let center = this.olmap.getView().getCenter();
 //       let zoom = this.olmap.getView().getZoom();
@@ -175,14 +182,14 @@ export default class PublicMap extends Component {
 // }
 
 // export default PublicMap;
-    
-        
-    
+
+
+
 
 // import GoogleMapReact from 'google-map-react';
- 
+
 // const AnyReactComponent = ({ text }) => <div>{text}</div>;
- 
+
 // class SimpleMap extends Component {
 //   static defaultProps = {
 //     center: {
@@ -191,7 +198,7 @@ export default class PublicMap extends Component {
 //     },
 //     zoom: 11
 //   };
- 
+
 //   render() {
 //     return (
 //       // Important! Always set the container height explicitly
@@ -211,5 +218,5 @@ export default class PublicMap extends Component {
 //     );
 //   }
 // }
- 
+
 // export default SimpleMap;
