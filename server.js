@@ -107,12 +107,21 @@ app.post("/users", (req, res) => {
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
-    console.log(currentUser);
     User.findById(currentUser).then((user) => {
         if (!user) {
             res.status(404).send("Resource Not Found");
         } else {
-            res.send(user);
+            const data = {
+                id: user.id,
+                admin: user.admin,
+                tribeAdmin: user.tribeAdmin,
+                email: user.email,
+                familyID: user.familyID,
+                name: user.name,
+                familyAdmin: user.familyAdmin,
+                username: user.username,
+            };
+            res.send(data);
         }
     });
 });
@@ -303,14 +312,10 @@ app.get("/list/:fid", (req, res) => {
 });
 
 // add item to a list
-app.post("/list/:fid/:lid", (req, res) => {
-    const listID = req.params.lid;
-    const familyID = req.params.fid;
-
-    if (!ObjectID.isValid(listID)) {
-        res.status(404).send();
-        return;
-    }
+app.post("/list", (req, res) => {
+    //const listID = req.params.lid;
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
 
     if (!ObjectID.isValid(familyID)) {
         res.status(404).send();
@@ -318,27 +323,28 @@ app.post("/list/:fid/:lid", (req, res) => {
     }
 
     List.find({ familyID }).then((lists) => {
-        const item = {
-            itemname: req.body.itemname,
-            quantity: req.body.quantity,
-        };
-
         const list = lists.find((list) => {
-            return list._id == listID;
+            return list.listname === listName;
         });
 
-        list.items.push(item);
-
-        list.save()
-            .then((result) => {
-                res.send({ item, list });
+        const updatedList = list.items;
+        updatedList[req.body.itemname] = req.body.quantity;
+        list.updateOne({ items: updatedList })
+            .then(() => {
+                list.save()
+                    .then((result) => {
+                        res.send({ list });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
             })
-            .catch((error) => {
+            .catch((err) => {
                 res.status(400).send(error);
             });
     });
 });
-
+//TODO create a delete path for items and lists
 /* API Routes *** */
 
 /* Webpage routes *** */

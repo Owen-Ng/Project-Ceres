@@ -19,34 +19,14 @@ export default class GroceryList extends Component {
         // This data will all be pulled from a server
 
         this.state = {
-            familyLists: {
-                "List 1": { carrot: 10, apple: 32 },
-                "List 2": { "dog food": 1, "cat food": 12 },
-            },
-
-            tribeLists: {
-                "Tribe 1": {
-                    "List 1": { carrot: 10, apple: 32 },
-                    "List 2": { "dog food": 1, "cat food": 12 },
-                },
-                "Tribe 2": {
-                    "List 3": { pear: 10, grapes: 32 },
-                    "List 4": { "fish food": 1, "bird food": 12 },
-                },
-                "Tribe 3": {
-                    "List 5": { potato: 10, soup: 32 },
-                    "List 6": { carrot: 1, lettuce: 12 },
-                },
-                "Tribe 4": {
-                    "List 7": { gin: 10, rum: 32 },
-                    "List 8": { pop: 1, beer: 12 },
-                },
-            },
-
+            //make sure data is this format {list1: {obj1: quantity, obj2: quantity}, list2:...}
+            familyLists: {},
+            user: this.props.user,
             currentList: "No list selected",
-            currentTribe: "Tribe 4",
+            currentTribe: "",
             alphabeticallyOrdered: false,
             listEditMode: false,
+            isLoaded: false,
         };
         this.addItem = this.addItem.bind(this);
         this.renderCurrentList = this.renderCurrentList.bind(this);
@@ -58,7 +38,7 @@ export default class GroceryList extends Component {
         this.updateState = this.updateState.bind(this);
         this.deleteList = this.deleteList.bind(this);
     }
-
+    /* Not sure if we need this
     static getDerivedStateFromProps(props, state) {
         let currentTribe = props.location;
         if (currentTribe === undefined) {
@@ -68,7 +48,7 @@ export default class GroceryList extends Component {
 
         return tribeLists;
     }
-
+*/
     async componentDidMount() {
         const user = this.props.user;
         if (user !== null) {
@@ -86,17 +66,26 @@ export default class GroceryList extends Component {
                         referrerPolicy: "no-referrer",
                     }
                 );
-                const res = await response.json();
-                console.log(res);
+                const groceryLists = await response.json();
+                let updatedList = {};
+
+                groceryLists.forEach((list) => {
+                    updatedList[list.listname] = list.items;
+                });
+
+                await this.setState({ familyLists: updatedList });
+                const intialList = Object.keys(this.state.familyLists);
+
+                if (intialList.length > 0) {
+                    this.setState({
+                        currentList: intialList[0],
+                        isLoaded: true,
+                    });
+                }
             } catch (err) {
                 console.log(err);
             }
         }
-        //const { currentTribe } = this.props.location;
-        const intialList = Object.keys(this.state.familyLists);
-        this.setState({
-            currentList: intialList[0],
-        });
     }
 
     updateState(updateObj) {
@@ -127,14 +116,36 @@ export default class GroceryList extends Component {
         the appropriate list is appended the new item. Later on this will call the server to hand over the new 
         set of lists and items.
     */
-    addItem(newItem) {
+    async addItem(newItem) {
         const currentList = this.state.currentList;
-        if (currentList !== "No list selected") {
-            let updatedList = this.state.familyLists;
-            updatedList[currentList][newItem.newItem] = newItem.newItemQuantity;
-            this.setState({ familyLists: updatedList });
-        } else {
-            alert("Please make/select a list before inserting an item.");
+
+        try {
+            await fetch(`http://localhost:5000/list/`, {
+                method: "POST",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    listname: currentList,
+                    fid: this.state.user.familyID,
+                    itemname: newItem.newItem,
+                    quantity: newItem.newItemQuantity,
+                }),
+                referrerPolicy: "no-referrer",
+            });
+            if (currentList !== "No list selected") {
+                let updatedList = this.state.familyLists;
+                updatedList[currentList][newItem.newItem] =
+                    newItem.newItemQuantity;
+                this.setState({ familyLists: updatedList });
+            } else {
+                alert("Please make/select a list before inserting an item.");
+            }
+        } catch (err) {
+            console.log(err);
         }
     }
     /*
@@ -226,11 +237,7 @@ export default class GroceryList extends Component {
         );
         return (
             <div className="GroceryList container">
-                {this.props.user === null ? (
-                    <Redirect to="/map" />
-                ) : (
-                    loggedInData
-                )}
+                {this.props.user === null ? "" : loggedInData}
             </div>
         );
     }

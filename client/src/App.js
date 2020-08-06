@@ -134,16 +134,32 @@ export default class App extends Component {
                     )}
                 />
 
-                <Route path="/map" exact component={Maps} />
-                <Route path="/tribe" exact component={Tribe} />
+                <Route
+                    path="/map"
+                    exact
+                    render={() => <Maps user={this.state.user} />}
+                />
+                <Route
+                    path="/tribe"
+                    exact
+                    render={() => <Tribe user={this.state.user} />}
+                />
                 <Route
                     path="/grocerylists"
                     exact
                     render={() => <GroceryList user={this.state.user} />}
                 />
 
-                <Route path="/admin" exact component={AdminSettings} />
-                <Route path="/profile" exact component={Profile} />
+                <Route
+                    path="/admin"
+                    exact
+                    render={() => <AdminSettings user={this.state.user} />}
+                />
+                <Route
+                    path="/profile"
+                    exact
+                    render={() => <Profile user={this.state.user} />}
+                />
             </Router>
         );
     }
