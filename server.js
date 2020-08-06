@@ -328,7 +328,7 @@ app.post("/list", (req, res) => {
         });
 
         const updatedList = list.items;
-        updatedList[req.body.itemname] = req.body.quantity;
+        updatedList[req.body.itemname] = Number(req.body.quantity);
         list.updateOne({ items: updatedList })
             .then(() => {
                 list.save()
@@ -344,7 +344,28 @@ app.post("/list", (req, res) => {
             });
     });
 });
-//TODO create a delete path for items and lists
+//delete list
+app.delete("/list", (req, res) => {
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
+
+    if (!ObjectID.isValid(familyID)) {
+        res.status(404).send();
+        return;
+    }
+
+    List.find({ familyID }).then((lists) => {
+        const list = lists.find((list) => {
+            return list.listname === listName;
+        });
+
+        list.remove()
+            .then(() => {
+                res.status(200).end();
+            })
+            .catch((err) => res.status(400));
+    });
+});
 /* API Routes *** */
 
 /* Webpage routes *** */

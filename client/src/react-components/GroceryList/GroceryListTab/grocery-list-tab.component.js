@@ -95,20 +95,22 @@ export default class GroceryListTab extends Component {
     */
     makeList(listObject) {
         const order = this.props.alphabeticallyOrdered;
-        const listKeys = !order
-            ? Object.keys(listObject).sort()
-            : Object.keys(listObject).sort().reverse();
-
-        return listKeys.map((key) => (
-            <li key={uuidv4()}>
-                <GroceryItem
-                    key={uuidv4()}
-                    editable={false}
-                    name={key}
-                    quantity={listObject[key]}
-                />
-            </li>
-        ));
+        console.log(listObject);
+        if (listObject !== undefined) {
+            const listKeys = !order
+                ? Object.keys(listObject).sort()
+                : Object.keys(listObject).sort().reverse();
+            return listKeys.map((key) => (
+                <li key={uuidv4()}>
+                    <GroceryItem
+                        key={uuidv4()}
+                        editable={false}
+                        name={key}
+                        quantity={listObject[key]}
+                    />
+                </li>
+            ));
+        }
     }
 
     render() {

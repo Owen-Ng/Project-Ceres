@@ -183,18 +183,32 @@ export default class GroceryList extends Component {
         this.setState({
             alphabeticallyOrdered: !this.state.alphabeticallyOrdered,
         });
-        console.log(e.target);
     }
     /*
     This will delete a list and later on call the server to hand over the new set of lists
     */
-    deleteList() {
+    async deleteList() {
         const oldList = this.state.currentList;
         const updatedListKeys = Object.keys(this.state.familyLists).filter(
             (list) => list !== oldList
         );
+
         let updatedList = this.state.familyLists;
         delete updatedList[oldList];
+        await fetch("http://localhost:5000/list", {
+            method: "DELETE",
+            crossDomain: true,
+            credentials: "include",
+            redirect: "follow",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify({
+                listname: this.state.currentList,
+                fid: this.props.user.familyID,
+            }),
+        });
         if (updatedListKeys.length > 0) {
             this.setState({ currentList: updatedListKeys[0] });
             this.setState((state) => updatedList);
