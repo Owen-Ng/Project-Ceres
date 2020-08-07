@@ -9,6 +9,7 @@ import "./admin-settings.css";
 import AdminSearch from "./AdminSearch/admin-search.component";
 import AdminPanel from "./AdminPanel/admin-panel.component";
 import AdminData from "./AdminDataManager/admin-data.component";
+import Unauthorized from "../Errors/Unauthorized";
 export default class AdminSettings extends Component {
     constructor(props) {
         super(props);
@@ -164,6 +165,8 @@ export default class AdminSettings extends Component {
                 </div>
             </div>
         );
-        return <div>{this.props.isAdmin ? adminSettings : "</>"}</div>;
+        return (
+            <div>{this.props.isAdmin ? adminSettings : <Unauthorized />}</div>
+        );
     }
 }
