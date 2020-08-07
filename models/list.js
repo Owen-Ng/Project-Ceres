@@ -22,6 +22,7 @@ const ListSchema = new mongoose.Schema({
     },
     items: {
         type: { ItemSchema },
+        required: true,
         default: {},
     },
     familyID: {

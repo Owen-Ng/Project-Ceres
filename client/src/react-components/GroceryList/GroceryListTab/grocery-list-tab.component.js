@@ -72,10 +72,12 @@ export default class GroceryListTab extends Component {
                     body: JSON.stringify({
                         listname: listInputBar.trim(),
                         fid: this.props.user.familyID,
+                        items: {},
                         shared: true,
                     }),
                     referrerPolicy: "no-referrer",
                 });
+                this.setState({ listInputBar: "" });
             }
         } catch (err) {
             console.log(err);
