@@ -37,17 +37,7 @@ export default class GroceryList extends Component {
         this.updateState = this.updateState.bind(this);
         this.deleteList = this.deleteList.bind(this);
     }
-    /* Not sure if we need this
-    static getDerivedStateFromProps(props, state) {
-        let currentTribe = props.location;
-        if (currentTribe === undefined) {
-            currentTribe = "Tribe 4";
-        }
-        const tribeLists = { familyLists: state.tribeLists[currentTribe] };
 
-        return tribeLists;
-    }
-*/
     async componentDidMount() {
         const user = this.props.user;
         if (user !== null) {

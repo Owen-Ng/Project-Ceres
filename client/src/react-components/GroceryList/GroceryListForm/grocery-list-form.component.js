@@ -24,6 +24,7 @@ class GroceryListForm extends Component {
     sendItem(e) {
         e.preventDefault();
         this.addItem(this.state);
+        this.setState({ newItem: "", newItemQuantity: 1 });
     }
 
     render() {
