@@ -142,7 +142,16 @@ export default class App extends Component {
                     render={() => <GroceryList user={this.state.user} />}
                 />
 
-                <Route path="/admin" exact component={AdminSettings} />
+                <Route
+                    path="/admin"
+                    exact
+                    render={() => (
+                        <AdminSettings
+                            user={this.state.user}
+                            isAdmin={this.state.isAdmin}
+                        />
+                    )}
+                />
                 <Route path="/profile" exact component={Profile} />
             </Router>
         );
