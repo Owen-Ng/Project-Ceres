@@ -1,25 +1,28 @@
 const log = console.log
-export const getMap = (groceries) =>{
+export const getMap = (gross) =>{
     const url = "/MapList";
-    fetch(url).then(res => {
+   fetch(url).then(res => {
         if(res.status ===200){
-            log(res.json()) ;
+            return res.json() ;
 
         }else{
             log("Could not get data");
         }
     }).then(json => {
-        groceries.setState({groceries: json});
+        console.log(json)
+        
+        gross.setState({groceries: json.groceries});
+        console.log(gross.state);
 
     }).catch(error => {
         log(error)
     })
 }
 export const addtime = (time, id) =>{
-    const url = "/MapList" + id;
+    const url = "/MapList/" + id;
     const request = new Request(url,{
         method:"post",
-        body: JSON.stringify({"timesubmitted": time}),
+        body: JSON.stringify({"timesubmitted": parseInt(time)}),
         headers:{
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json"
@@ -31,7 +34,7 @@ export const addtime = (time, id) =>{
         }else{
             log("failed")
         }
-    }) .catch(error => {
+    }).catch(error => {
         console.log(error);
     });
 }

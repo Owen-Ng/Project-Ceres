@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./map.css";
 import Map from './Map.item/Mapapi'
+import { addtime } from '../../actions/maplist'
 export default class Maps extends Component {
   constructor(props) {
     super(props)
@@ -15,36 +16,63 @@ export default class Maps extends Component {
           Wait_time:"",
         },
        
-        Lists:{ "List 1" : {Store:"Winners", Address:"MISSI RD", Hours:"8am-9pm", Wait_time:"20min"},
-        "List 2": {Store:"Loblaws", Address:"Port RD", Hours:"8am-9pm", Wait_time:"20min"},
-        "List 3": {Store:"Plavc", Address:"A ro RD", Hours:"8am-9pm", Wait_time:"20min"}},
+      
         City:{mississauga:[43.587684, -79.646186,],etobicoke:[43.618470, -79.514554],
            toronto:[43.651717, -79.383545], scarborough:[43.774614, -79.259978],
           york: [43.694012, -79.450578]}
         ,citystate:"",
         currentcity:"etobicoke",
+        timesubmitted:null,
+
       }
-    this.change = this.change.bind(this);
+ 
     this.getdata= this.getdata.bind(this);
     this.changecity = this.changecity.bind(this);
     this.Keypress = this.Keypress.bind(this);
+    this.changetimesubmitted = this.changetimesubmitted.bind(this);
+    this.timesubmit = this.timesubmit.bind(this);
+    // this.addtime = addtime.bind(this);
   }
-  getdata(info, address, hour, wait){
-    const something ={Store:info,Address:address,Hours:hour,
+  getdata(id,info, address, hour, wait){
+    const something ={id:id,Store:info,Address:address,Hours:hour,
       Wait_time:wait,
     } 
     this.setState({currentstate:something})
   }
-  change(item){
-    const something= this.state.Lists[item];
-
-    this.setState({currentstate:something});
+  changetimesubmitted(event){
+    console.log(event)
+    const target = event.target;
+    const value = target.value;
+    this.setState({timesubmitted: value});
   }
   changecity(event){
     console.log(event)
     const target = event.target;
     const value = target.value;
     this.setState({citystate: value});
+  }
+  timesubmit(event){
+    const key = event.Keycode || event.which;
+    if (key === 13){
+      if(!isNaN(this.state.timesubmitted)){
+          addtime(this.state.timesubmitted, this.state.currentstate.id);
+           window.location.reload(true)
+          //console.log(this.state.timesubmitted)
+    //
+    setTimeout(function(){
+      this.setState({timesubmitted:""})
+    }.bind(this),1000)
+    }
+    else{
+      this.setState({timesubmitted: "Input should be a number"});
+      setTimeout(function(){
+        this.setState({timesubmitted:""})
+      }.bind(this),1000)
+      //alert("Does not exist")
+    }
+    
+  }
+
   }
   Keypress(event){
     const key = event.Keycode || event.which;
@@ -102,7 +130,8 @@ export default class Maps extends Component {
             </div>
             <div className="bottomtext">
               <span> Report how long your visit took</span>
-              <input id= "report" type= "text" className="waitTime" placeholder="Enter time taken"></input>
+              <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
+               onKeyUp={this.timesubmit} type= "text" className="waitTime" placeholder="Enter time taken"></input>
             </div>
           </div>
           </div>

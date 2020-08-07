@@ -4,35 +4,69 @@ import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
 // import * as groceries from '../data/groceries.json'
-import { getMap } from '../../../actions/maplist'
+//import { getMap } from '../../../actions/maplist'
 const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
 const active = new Icon({ iconUrl: "/basket", iconSize: 20 })
+const log = console.log
 export default class PublicMap extends Component {
+  constructor(props) {
+    super(props)
 
-  state = {
+  this.state = {
     currentstate:null,
-    groceries: null,
+    groceries: [],
   };
+  this.data = this.data.bind(this);
+  this.selected = this.selected.bind(this);
+  //this.componentWillMount = this.componentWillMount.bind(this)
+}
 
   data(map) {
 
-    this.props.senddata(map.name, map.address, map.open, map.wait)
+    this.props.senddata(map._id,map.name, map.address, map.open, map.wait)
   }
   selected(map) {
     return (
       <Marker key={map._id} position={[
-        map.geometry.coordinates[1],
-        map.geometry.coordinates[0]
+        map.coordinates[1],
+        map.coordinates[0]
 
       ]}
         icon={active}
       />
     )
   }
+  componentDidMount(){
+          const url = "/MapList";
+        fetch(url,{
+          method: "GET"
+      }).then(res => {
+              if(res.status ===200){
+                  return res.json() ;
 
+              }else{
+                  log("Could not get data");
+              }
+          }).then(function(json){
+              console.log(json)
+              
+              this.setState({groceries: json.groceries});
+              // console.log(this.state);
+
+          }.bind(this)).catch(error => {
+              log(error)
+          })
+      }
+  //   getMap(this);
+  //   console.log(this.state)
+  // }
   
   render() {  
-   
+  //  console.log("F")
+  //  getMap(this)
+  //  this.setState({groceries:[12,5]})
+  //  console.log(this.state)
+  console.log(this.state);
     return (
       <div>
         {/* Map api from react leaflet https://react-leaflet.js.org/ */}
@@ -55,14 +89,14 @@ export default class PublicMap extends Component {
               }}
               icon={someicon}>
 
-              <Tooltip className='tooltip' direction='center' offset={[-35, 0]} opacity={1} permanent>
+              <Tooltip className='tooltip' direction='center' offset={[-90, 0]} opacity={1} permanent>
                 <span>{map.wait}</span>
               </Tooltip>
             </Marker>
           )
           )
           }
-          {this.state && (
+          {this.state.currentstate && (
             <Popup
               key={this.state.currentstate._id}
               position={[

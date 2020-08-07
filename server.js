@@ -357,7 +357,7 @@ app.get("/MapList",(req,res) =>{
 		return;
 	} 
     MapList.find().then((groceries)=>{
-        res.send(groceries);
+        res.send({groceries});
     })
     .catch((error) =>{
         res.status(500).send("Internal Server Error");
@@ -418,7 +418,7 @@ app.post("/MapList/:mid", (req,res)=>{
                     return a+b
                 }, 0)
                 const timeav = timesum/result.timesubmitted.length;
-                const fieldstoupdate ={"wait": timeav + 'min'};
+                const fieldstoupdate ={"wait": parseInt(timeav) + 'min'};
                 MapList.findByIdAndUpdate(id, {$set: fieldstoupdate}, {new:true, useFindAndModify:false}).then((groceries)=>{
                     if (!groceries){
                         res.status(404).send()
