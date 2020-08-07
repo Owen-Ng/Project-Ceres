@@ -98,7 +98,7 @@ export default class App extends Component {
 
     async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        const response = await fetch("http://localhost:5000/users/logout", {
+        await fetch("http://localhost:5000/users/logout", {
             method: "GET",
             crossDomain: true,
             credentials: "include",
@@ -134,8 +134,16 @@ export default class App extends Component {
                     )}
                 />
 
-                <Route path="/map" exact component={Maps} />
-                <Route path="/tribe" exact component={Tribe} />
+                <Route
+                    path="/map"
+                    exact
+                    render={() => <Maps user={this.state.user} />}
+                />
+                <Route
+                    path="/tribe"
+                    exact
+                    render={() => <Tribe user={this.state.user} />}
+                />
                 <Route
                     path="/grocerylists"
                     exact
@@ -152,7 +160,11 @@ export default class App extends Component {
                         />
                     )}
                 />
-                <Route path="/profile" exact component={Profile} />
+                <Route
+                    path="/profile"
+                    exact
+                    render={() => <Profile user={this.state.user} />}
+                />
             </Router>
         );
     }

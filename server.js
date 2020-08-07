@@ -107,12 +107,21 @@ app.post("/users", (req, res) => {
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
-    console.log(currentUser);
     User.findById(currentUser).then((user) => {
         if (!user) {
             res.status(404).send("Resource Not Found");
         } else {
-            res.send(user);
+            const data = {
+                id: user.id,
+                admin: user.admin,
+                tribeAdmin: user.tribeAdmin,
+                email: user.email,
+                familyID: user.familyID,
+                name: user.name,
+                familyAdmin: user.familyAdmin,
+                username: user.username,
+            };
+            res.send(data);
         }
     });
 });
@@ -258,9 +267,8 @@ app.patch("/tribe/join/:tid", (req, res) => {
 });
 
 // Create new list
-app.post("/list/:fid", (req, res) => {
-    const fid = req.params.fid;
-
+app.post("/list", (req, res) => {
+    const fid = req.body.fid;
     if (!ObjectID.isValid(fid)) {
         res.status(404).send();
         return;
@@ -272,7 +280,8 @@ app.post("/list/:fid", (req, res) => {
         } else {
             const list = new List({
                 listname: req.body.listname,
-                familyID: fid,
+                familyID: req.body.fid,
+                items: {},
                 shared: req.body.shared,
             });
 
@@ -301,16 +310,35 @@ app.get("/list/:fid", (req, res) => {
         res.send(lists);
     });
 });
+//delete list
+app.delete("/list", (req, res) => {
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
 
-// add item to a list
-app.post("/list/:fid/:lid", (req, res) => {
-    const listID = req.params.lid;
-    const familyID = req.params.fid;
-
-    if (!ObjectID.isValid(listID)) {
+    if (!ObjectID.isValid(familyID)) {
         res.status(404).send();
         return;
     }
+
+    List.find({ familyID })
+        .then((lists) => {
+            const list = lists.find((list) => {
+                return list.listname === listName;
+            });
+
+            list.remove()
+                .then(() => {
+                    res.status(200).end();
+                })
+                .catch((err) => res.status(400));
+        })
+        .catch((err) => res.end());
+});
+
+// add item to a list
+app.post("/item", (req, res) => {
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
 
     if (!ObjectID.isValid(familyID)) {
         res.status(404).send();
@@ -318,25 +346,78 @@ app.post("/list/:fid/:lid", (req, res) => {
     }
 
     List.find({ familyID }).then((lists) => {
-        const item = {
-            itemname: req.body.itemname,
-            quantity: req.body.quantity,
-        };
-
         const list = lists.find((list) => {
-            return list._id == listID;
+            return list.listname === listName;
         });
 
-        list.items.push(item);
+        if (list.items !== undefined) {
+            const updatedList = list.items;
 
-        list.save()
-            .then((result) => {
-                res.send({ item, list });
-            })
-            .catch((error) => {
-                res.status(400).send(error);
-            });
+            updatedList[req.body.itemname] = Number(req.body.quantity);
+            list.updateOne({ items: updatedList })
+                .then(() => {
+                    list.save()
+                        .then((result) => {
+                            res.send({ list });
+                        })
+                        .catch((error) => {
+                            res.status(400).send(error);
+                        });
+                })
+                .catch((err) => {
+                    res.status(400).send(error);
+                });
+        }
     });
+});
+app.patch("/item", (req, res) => {
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
+    const prevName = req.body.prevName;
+    const newName = req.body.newName;
+    const quantity = req.body.quantity;
+    if (!ObjectID.isValid(familyID)) {
+        res.status(404).send();
+        return;
+    }
+    List.find({ familyID })
+        .then((lists) => {
+            const list = lists.find((list) => {
+                return list.listname === listName;
+            });
+
+            const items = list.items;
+            delete items[prevName];
+            items[newName] = quantity;
+            list.updateOne({ items })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch((err) => res.status(400).end());
+});
+
+//delete item from a list
+app.delete("/item", (req, res) => {
+    const listName = req.body.listname;
+    const familyID = req.body.fid;
+    const itemName = req.body.itemname;
+    if (!ObjectID.isValid(familyID)) {
+        res.status(404).send();
+        return;
+    }
+    List.find({ familyID })
+        .then((lists) => {
+            const list = lists.find((list) => {
+                return list.listname === listName;
+            });
+
+            const items = list.items;
+            delete items[itemName];
+            list.updateOne({ items })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch((err) => res.status(400).end());
 });
 
 /* API Routes *** */
