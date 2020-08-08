@@ -9,6 +9,7 @@ import GroceryListForm from "./GroceryListForm/grocery-list-form.component";
 import GroceryItem from "./GroceryItem/grocery-item.component";
 import GroceryListTab from "./GroceryListTab/grocery-list-tab.component";
 import SigninError from "../Errors/SigninError";
+import FamilyError from "../Errors/FamilyError";
 import { v4 as uuidv4 } from "uuid";
 
 export default class GroceryList extends Component {
@@ -36,6 +37,7 @@ export default class GroceryList extends Component {
         this.deleteItem = this.deleteItem.bind(this);
         this.updateState = this.updateState.bind(this);
         this.deleteList = this.deleteList.bind(this);
+        this.isValidUser = this.isValidUser.bind(this);
     }
 
     async componentDidMount() {
@@ -249,6 +251,12 @@ export default class GroceryList extends Component {
         }
     }
 
+    isValidUser(content) {
+        if (this.props.user === null) return <SigninError />;
+        if (this.props.user.familyID === null) return <FamilyError />;
+        return content;
+    }
+
     render() {
         const listDeleteButton = (
             <button
@@ -284,7 +292,7 @@ export default class GroceryList extends Component {
         );
         return (
             <div className="GroceryList container">
-                {this.props.user === null ? <SigninError /> : loggedInData}
+                {this.isValidUser(loggedInData)}
             </div>
         );
     }
