@@ -15,13 +15,7 @@ export default class AdminSettings extends Component {
         super(props);
 
         this.state = {
-            /* 
-        Alot of this data will be imported from the database in phase 2 
-        Namely membersLists, tribeList, unassigned, and storeList.
-
-        As updates happen to the above list we will have to call the database again to update them
-        */
-            membersLists: {
+            membersDUMMYLists: {
                 UofT: ["Bob", "Karen"],
                 Laurier: ["James", "Debbie"],
                 McMaster: ["Scott", "Barry"],
@@ -29,7 +23,7 @@ export default class AdminSettings extends Component {
                 York: ["Christine", "Valerie"],
                 Guelph: ["Stephen", "Joanne", "Kia"],
             },
-            tribeList: {
+            tribeDUMMYList: {
                 Toronto: ["UofT", "Laurier", "York"],
                 Hamilton: ["Laurier", "McMaster"],
                 Scarbourgh: ["Brock", "York"],
