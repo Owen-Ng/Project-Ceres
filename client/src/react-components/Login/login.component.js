@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./login.component.css";
+import { Router, Route, Redirect } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 //import Map from "../Maps/maps.component.js";
 export default class Login extends Component {
@@ -99,8 +100,8 @@ export default class Login extends Component {
                         <p className="Login-register">
                             Don't have an account?{" "}
                         </p>
-                        <a className="Login-register" href="/">
-                            {" "}
+                        <a className="Login-register" href="/register">
+                            {<Route exact to="/register" />}
                             Click to register
                         </a>
                     </div>
