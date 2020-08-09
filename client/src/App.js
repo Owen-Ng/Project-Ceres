@@ -12,6 +12,7 @@ import Tribe from "./react-components/Tribe/tribe.component";
 import GroceryList from "./react-components/GroceryList/grocery-list.component";
 import AdminSettings from "./react-components/AdminSettings/admin-settings.component";
 import Profile from "./react-components/Profile/profile.component";
+import Register from "./react-components/Register/Register";
 
 export default class App extends Component {
     constructor(props) {
@@ -116,6 +117,7 @@ export default class App extends Component {
             <Router>
                 {this.state.loggedIn ? <Redirect to="/map" /> : ""}
                 <Navbar
+                    user={this.state.user}
                     isAdmin={this.state.isAdmin}
                     loggedIn={this.state.loggedIn}
                     logout={this.logout}
@@ -133,7 +135,7 @@ export default class App extends Component {
                         />
                     )}
                 />
-
+                <Route path="/register" exact component={Register} />
                 <Route
                     path="/map"
                     exact
