@@ -9,11 +9,11 @@ export default class Register extends Component {
         super(props);
 
         this.state = {
-            email: "user1@user1.com",
-            username: "user1",
-            name: "user",
-            password: "pppppppp",
-            passwordRetyped: "pppppppp",
+            email: "",
+            username: "",
+            name: "",
+            password: "",
+            passwordRetyped: "",
             isUserNameError: false,
             isUserEmailError: false,
             isUserPasswordError: false,
