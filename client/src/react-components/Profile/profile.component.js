@@ -5,7 +5,6 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.user,
       newFamilyName: "",
       input: {
         email: "",
@@ -26,7 +25,6 @@ export default class Profile extends Component {
   };
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.user)
     this.setState(({ input }) => ({
       current: input,
       input: { email: "", password: "" },
@@ -71,10 +69,8 @@ export default class Profile extends Component {
 
   render() {
 
-    const userFamily = this.state.user.familyID;
-    let form;
-    if (userFamily) {
-      form = (
+    const userFamily = this.props.user ? this.props.user.familyID : null;
+    const form = userFamily ? (
         <div className=" stylechanges col-md  ">
         <div className="list">
             <li > <strong>Create New Tribe:</strong></li>
@@ -94,9 +90,7 @@ export default class Profile extends Component {
       
             </form>
           </div>
-        )
-    } else {
-      form = (
+        ) : (
         <div className=" stylechanges col-md  ">
               <div className="list">
                   <li > <strong>Create New Family:</strong></li>
@@ -117,7 +111,6 @@ export default class Profile extends Component {
                 </form>
               </div>
       )
-    }
 
     return (
 
