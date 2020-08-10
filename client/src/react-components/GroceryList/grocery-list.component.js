@@ -20,7 +20,6 @@ export default class GroceryList extends Component {
 
         this.state = {
             //make sure data is this format {list1: {obj1: quantity, obj2: quantity}, list2:...}
-            user: null,
             familyLists: {},
             currentList: "No list selected",
             currentTribe: "",
@@ -38,12 +37,11 @@ export default class GroceryList extends Component {
         this.updateState = this.updateState.bind(this);
         this.deleteList = this.deleteList.bind(this);
         this.isValidUser = this.isValidUser.bind(this);
-        this.getLists = this.getLists.bind(this);
     }
-    async getLists() {
-        const user = await this.props.getUser();
-        this.setState({ user });
-        if (user) {
+
+    async componentDidMount() {
+        const user = this.props.user;
+        if (user !== null) {
             try {
                 const response = await fetch(
                     `http://localhost:5000/list/${user.familyID}`,
@@ -69,20 +67,14 @@ export default class GroceryList extends Component {
                 const intialList = Object.keys(this.state.familyLists);
 
                 if (intialList.length > 0) {
-                    return intialList;
+                    this.setState({
+                        currentList: intialList[0],
+                        isLoaded: true,
+                    });
                 }
             } catch (err) {
                 console.log(err);
             }
-        }
-    }
-    async componentDidMount() {
-        const list = await this.getLists();
-        if (list) {
-            this.setState({
-                currentList: list[0],
-                isLoaded: true,
-            });
         }
     }
 
@@ -143,10 +135,8 @@ export default class GroceryList extends Component {
                 }),
                 referrerPolicy: "no-referrer",
             });
-            console.log(updatedList);
             delete updatedList[currentList][itemName];
-            console.log(updatedList);
-            this.setState({ familyLists: updatedList });
+            this.setState({ familLists: updatedList });
         } catch (err) {
             console.log(err);
         }
@@ -181,10 +171,6 @@ export default class GroceryList extends Component {
             });
             if (currentList !== "No list selected") {
                 const updatedList = this.state.familyLists;
-
-                if (updatedList[currentList] === undefined) {
-                    updatedList[currentList] = {};
-                }
                 updatedList[currentList][newItem.newItem] =
                     newItem.newItemQuantity;
                 this.setState({ familyLists: updatedList });
@@ -253,7 +239,7 @@ export default class GroceryList extends Component {
             referrerPolicy: "no-referrer",
             body: JSON.stringify({
                 listname: this.state.currentList,
-                fid: this.state.user.familyID,
+                fid: this.props.user.familyID,
             }),
         });
         if (updatedListKeys.length > 0) {
@@ -265,8 +251,8 @@ export default class GroceryList extends Component {
     }
 
     isValidUser(content) {
-        if (!this.state.user) return <SigninError />;
-        if (!this.state.user.familyID) return <FamilyError />;
+        if (this.props.user === null) return <SigninError />;
+        if (this.props.user.familyID === null) return <FamilyError />;
         return content;
     }
 
@@ -299,7 +285,7 @@ export default class GroceryList extends Component {
                     updateState={this.updateState}
                     currentList={this.state.currentList}
                     alphabeticallyOrdered={this.state.alphabeticallyOrdered}
-                    user={this.state.user}
+                    user={this.props.user}
                 />
             </div>
         );

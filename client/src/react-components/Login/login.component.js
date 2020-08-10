@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Maps from "../Maps/maps.component";
 import "./login.component.css";
 import { Router, Route, Redirect } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
@@ -9,15 +8,13 @@ export default class Login extends Component {
         super(props);
 
         this.state = {
-            username: "user",
-            password: "user",
+            username: "admin",
+            password: "admin",
             isError: false,
-            isLoggedIn: false,
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.redirect = this.redirect.bind(this);
     }
     /*
     This function will have to contact the server to recieve information about the users credentials.
@@ -42,10 +39,9 @@ export default class Login extends Component {
                 }),
             });
             if (response.status < 400) {
-                this.setState({ isError: false }); // removes error message
+                this.state.isError = false; // removes error message
                 const user = await response.json();
                 await this.props.determinePermissions(user); // Update the App()
-                this.setState({ isLoggedIn: true });
             }
         } catch (err) {
             console.log(err);
@@ -54,14 +50,10 @@ export default class Login extends Component {
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
-    redirect() {
-        return <Redirect to="/map" />;
-    }
+
     render() {
         return (
             <div className="container-xl">
-                {this.state.isLoggedIn ? this.redirect() : ""}
-
                 <p>
                     <strong>Welcome to Project Ceres </strong>
                 </p>
