@@ -29,8 +29,9 @@ export default class App extends Component {
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
         this.logout = this.logout.bind(this);
+        this.getUser = this.getUser.bind(this);
     }
-    async componentDidMount() {
+    async getUser() {
         try {
             const response = await fetch("http://localhost:5000/users", {
                 method: "GET",
@@ -45,14 +46,17 @@ export default class App extends Component {
             if (response.status < 400) {
                 const user = await response.json();
                 if (!user) {
-                    return;
+                    return null;
                 }
-                this.setState({ user });
                 this.determinePermissions(user);
+                return user;
             }
         } catch (err) {
             console.log(err);
         }
+    }
+    async componentDidMount() {
+        this.setState({ user: this.getUser() });
     }
     setPermissions(permissionString, username) {
         if (permissionString === "user") {
@@ -115,12 +119,12 @@ export default class App extends Component {
     render() {
         return (
             <Router>
-                {this.state.loggedIn ? <Redirect to="/map" /> : ""}
                 <Navbar
                     user={this.state.user}
                     isAdmin={this.state.isAdmin}
                     loggedIn={this.state.loggedIn}
                     logout={this.logout}
+                    getUser={this.getUser}
                 />
                 <br />
                 <Route path="/" exact component={Maps} />
@@ -132,24 +136,39 @@ export default class App extends Component {
                             determinePermissions={this.determinePermissions}
                             loggedIn={this.state.loggedIn}
                             user={this.state.user}
+                            getUser={this.getUser}
                         />
                     )}
                 />
-                <Route path="/register" exact component={Register} />
+                <Route
+                    path="/register"
+                    exact
+                    component={Register}
+                    getUser={this.getUser}
+                />
                 <Route
                     path="/map"
                     exact
-                    render={() => <Maps user={this.state.user} />}
+                    render={() => (
+                        <Maps user={this.state.user} getUser={this.getUser} />
+                    )}
                 />
                 <Route
                     path="/tribe"
                     exact
-                    render={() => <Tribe user={this.state.user} />}
+                    render={() => (
+                        <Tribe user={this.state.user} getUser={this.getUser} />
+                    )}
                 />
                 <Route
                     path="/grocerylists"
                     exact
-                    render={() => <GroceryList user={this.state.user} />}
+                    render={() => (
+                        <GroceryList
+                            user={this.state.user}
+                            getUser={this.getUser}
+                        />
+                    )}
                 />
 
                 <Route
