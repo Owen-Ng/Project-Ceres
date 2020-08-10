@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./map.css";
 import Map from './Map.item/Mapapi'
 import { addtime } from '../../actions/maplist'
+const log = console.log
 export default class Maps extends Component {
   constructor(props) {
     super(props)
@@ -56,7 +57,26 @@ export default class Maps extends Component {
     if (key === 13){
       if(!isNaN(this.state.timesubmitted)){
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-           window.location.reload(true)
+          const url = "/MapList";
+          fetch(url,{
+            method: "GET"
+        }).then(res => {
+                if(res.status ===200){
+                    return res.json() ;
+  
+                }else{
+                    log("Could not get data");
+                }
+            }).then(function(json){
+                console.log(json)
+                
+                this.setState({groceries: json.groceries});
+                // console.log(this.state);
+  
+            }.bind(this)).catch(error => {
+                log(error)
+            })
+        
           //console.log(this.state.timesubmitted)
     //
     setTimeout(function(){
