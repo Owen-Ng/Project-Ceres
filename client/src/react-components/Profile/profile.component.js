@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import "./profile.css"
+import { createFamily, createTribe } from "../../actions/profile"
 export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.user,
+      newFamilyName: "",
       input: {
         email: "",
         password: ""
@@ -15,10 +18,15 @@ export default class Profile extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
+    this.handleChangeNewFamily = this.handleChangeNewFamily.bind(this);
+    this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
+    this.handleChangeNewTribe = this.handleChangeNewTribe.bind(this);
     // this.handleChangepass = this.handleChangepass.bind(this);
   };
   handleSubmit(e) {
     e.preventDefault();
+    console.log(this.state.user)
     this.setState(({ input }) => ({
       current: input,
       input: { email: "", password: "" },
@@ -26,6 +34,7 @@ export default class Profile extends Component {
     }));
 
   }
+
   handleChange(e) {
     e.preventDefault();
     const newb = { ...this.state.input, [e.target.name]: e.target.value };
@@ -33,8 +42,86 @@ export default class Profile extends Component {
 
   }
 
+
+  handleChangeNewFamily(e) {
+    e.preventDefault();
+    const fName = e.target.value;
+    this.setState({ newFamilyName: fName });
+  }
+
+  handleSubmitNewFamily(e) {
+    e.preventDefault();
+    createFamily(this.state.newFamilyName);
+    this.setState({ newFamilyName: "" });
+
+  }
+
+
+  handleChangeNewTribe(e) {
+    e.preventDefault();
+    const tName = e.target.value;
+    this.setState({ newTribeName: tName });
+  }
+
+  handleSubmitNewTribe(e) {
+    e.preventDefault();
+    createTribe(this.state.newTribeName);
+    this.setState({ newTribeName: "" });
+  }
+
   render() {
+
+    const userFamily = this.state.user.familyID;
+    let form;
+    if (userFamily) {
+      form = (
+        <div className=" stylechanges col-md  ">
+        <div className="list">
+            <li > <strong>Create New Tribe:</strong></li>
+          </div>
+          <form onSubmit={this.handleSubmitNewTribe}>
+            <input
+      
+              type="name"
+              name="name"
+              placeholder="Tribe Name"
+              value = {this.state.newTribeName}
+              onChange={this.handleChangeNewTribe}
+              required
+            />
+            <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Add Tribe</button>
+      
+            </form>
+          </div>
+        )
+    } else {
+      form = (
+        <div className=" stylechanges col-md  ">
+              <div className="list">
+                  <li > <strong>Create New Family:</strong></li>
+                </div>
+                <form onSubmit={this.handleSubmitNewFamily}>
+                  <input
+    
+                    type="name"
+                    name="name"
+                    placeholder="Family Name"
+                    value = {this.state.newFamilyName}
+                    onChange={this.handleChangeNewFamily}
+                    required
+                  />
+                  <br />
+                  <button className="buttonsubmit btn btn-primary btn-add" type="submit">Add Family</button>
+    
+                </form>
+              </div>
+      )
+    }
+
     return (
+
+      
 
       <div className="box container-lg">
         <div className="row">
@@ -69,25 +156,36 @@ export default class Profile extends Component {
 
           </form>
         </div>
-        <div className=" stylechanges col-md  ">
+        {form }
+        </div>
+
+        <div className="stylechanges col-lg">
         <div className="list">
-            <li > <strong>Create New Family:</strong></li>
+            <li><strong>Join Family:</strong></li>
           </div>
           <form>
             <input
-
               type="name"
               name="name"
               placeholder="Family Name"
-              // value = {}
-              // onChange={}
               required
-            />
-            <br />
-            <button className="buttonsubmit btn btn-primary btn-add" type="submit">Add Family</button>
-
+              />
+              <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Family</button>
           </form>
-        </div>
+        <div className="list">
+            <li><strong>Join Tribe:</strong></li>
+          </div>
+          <form>
+            <input
+              type="name"
+              name="name"
+              placeholder="Tribe Name"
+              required
+              />
+              <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Tribe</button>
+          </form>
         </div>
       </div>
     )

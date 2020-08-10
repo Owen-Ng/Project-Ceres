@@ -1,0 +1,61 @@
+const log = console.log
+
+export const createFamily = (name) =>{
+    const url = "/family";
+    log("got here")
+    const request = new Request(url,{
+        method:"post",
+        body: JSON.stringify({"familyName": name}),
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }) .catch(error => {
+        console.log(error);
+    });
+}
+
+export const createTribe = (name) =>{
+    const url = "/tribe";
+    const request = new Request(url,{
+        method:"post",
+        body: JSON.stringify({"tribeName": name}),
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }) .catch(error => {
+        console.log(error);
+    });
+}
+
+// export const createFamily = (name) =>{
+//     const url = "/family";
+//     fetch(url).then(res => {
+//         if(res.status === 200){
+//             log(res.json());
+
+//         }else{
+//             log("Could not get data");
+//         }
+//     }).then(json => {
+//         name.setState({name: json});
+
+//     }).catch(error => {
+//         log(error)
+//     })
+// }

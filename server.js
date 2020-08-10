@@ -126,13 +126,25 @@ app.get("/users", (req, res) => {
 
 // Create a new family
 app.post("/family", (req, res) => {
+    const currentUser = req.session.user;
     const family = new Family({
         familyName: req.body.familyName,
     });
 
     family.save().then(
         (family) => {
-            res.send(family);
+            User.findById(currentUser).then((user) => {
+                user.familyID = family._id;
+                user.familyAdmin = true;
+
+                user.save()
+                    .then((result) => {
+                        res.send({ user: result, family });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+            });
         },
         (error) => {
             res.status(400).send(error);
@@ -186,13 +198,32 @@ app.patch("/family/join/:fid", (req, res) => {
 
 // Create a new tribe
 app.post("/tribe", (req, res) => {
+    const currentUser = req.session.user;
     const tribe = new Tribe({
         tribeName: req.body.tribeName,
     });
 
     tribe.save().then(
         (tribe) => {
-            res.send(tribe);
+            User.findById(currentUser).then((user) => {
+                Family.findById(user.familyID).then((family) => {
+                    log(currentUser)
+                    user.tribeAdmin.push(tribe._id);
+                    family.tribes.push(tribe._id);
+                    user.save()
+                    .then((resU) => {
+                        family.save()
+                        .then((result) => {
+                            res.send({ user: resU, family: result, tribe });
+                        }).catch((error) => {
+                            res.status(400).send(error);
+                        });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+                })
+            })
         },
         (error) => {
             res.status(400).send(error);
