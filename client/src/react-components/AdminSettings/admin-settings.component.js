@@ -13,8 +13,12 @@ import Unauthorized from "../Errors/Unauthorized";
 export default class AdminSettings extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
+            allUsers: {},
+            allFamilies: {},
+            allTribes: {},
+            membersLists: {},
+            tribeLists: {},
             membersDUMMYLists: {
                 UofT: ["Bob", "Karen"],
                 Laurier: ["James", "Debbie"],
@@ -28,8 +32,15 @@ export default class AdminSettings extends Component {
                 Hamilton: ["Laurier", "McMaster"],
                 Scarbourgh: ["Brock", "York"],
             },
-            unassigned: ["Jake", "Betty", "Alice"],
+            unassigned: { Jake: {}, Betty: {}, Alice: {} },
             storeList: {
+                "444 Yonge St, Toronto": { name: "Metro", "line-size": 10 },
+                "531 Adelaide St W, Toronto": {
+                    name: "Walmart",
+                    "line-size": 32,
+                },
+            },
+            storeDUMMYList: {
                 "444 Yonge St, Toronto": { name: "Metro", "line-size": 10 },
                 "531 Adelaide St W, Toronto": {
                     name: "Walmart",
@@ -40,13 +51,106 @@ export default class AdminSettings extends Component {
             selectedItem: "",
             selectedObj: {},
         };
+        this.parseUserData = this.parseUserData.bind(this);
         this.showOnPanel = this.showOnPanel.bind(this);
         this.deleteObj = this.deleteObj.bind(this);
         this.addNewData = this.addNewData.bind(this);
     }
 
-    async componentDidMount() {}
-
+    async componentDidMount() {
+        if (this.props.user !== null) {
+            try {
+                //Getting all users
+                const response = await fetch(
+                    `http://localhost:5000/users/all`,
+                    {
+                        method: "GET",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                    }
+                );
+                if (response.status < 400) {
+                    const allUsers = await response.json();
+                    this.setState({ allUsers });
+                    this.parseUserData();
+                    /*
+                    
+                    */
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            //Getting all families
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/family/all`,
+                    {
+                        method: "GET",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                    }
+                );
+                if (response.status < 400) {
+                    const allFamilies = await response.json();
+                    this.setState({ allFamilies });
+                    this.parseUserData();
+                    /*
+                    
+                    */
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            // Getting all tribes
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/tribe/all`,
+                    {
+                        method: "GET",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                    }
+                );
+                if (response.status < 400) {
+                    const allTribes = await response.json();
+                    this.setState({ allTribes });
+                    this.parseUserData();
+                    /*
+                    
+                    */
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+    parseUserData() {
+        const users = this.state.allUsers;
+        const newUserData = {};
+        for (let key in users) {
+            //this is how we'll adjust if the schema changes
+            //newUserData[users[key][username]] = users[key][username];
+            let thisUserName = users[key]["username"];
+            newUserData[thisUserName] = users[key];
+        }
+        console.log(newUserData);
+        this.setState({ allUsers: newUserData });
+    }
     /*
     Recieves the item that needs to be displayed from AdminResults and displays it.
     */
@@ -58,6 +162,13 @@ export default class AdminSettings extends Component {
                 selectedItem: selectedItem,
                 displayType: "family",
                 selectedObj: family,
+            });
+        } else if (displayType === "user") {
+            const user = this.state.allUsers[selectedItem];
+            this.setState({
+                selectedItem: selectedItem,
+                displayType: "user",
+                selectedObj: user,
             });
         } else if (displayType === "store") {
             const store = this.state.storeList[selectedItem];
@@ -81,8 +192,17 @@ export default class AdminSettings extends Component {
     */
     deleteObj(selectedItem, displayType) {
         let updatedList;
-
-        if (displayType === "family") {
+        if (displayType === "user") {
+            updatedList = this.state.user;
+            delete updatedList[selectedItem];
+            const newFamilyList = Object.keys(this.state.membersLists);
+            this.setState({
+                selectedItem: "",
+                selectedObj: [],
+                familyList: newFamilyList,
+                membersLists: updatedList,
+            });
+        } else if (displayType === "family") {
             updatedList = this.state.membersLists;
             delete updatedList[selectedItem];
             const newFamilyList = Object.keys(this.state.membersLists);
@@ -119,9 +239,11 @@ export default class AdminSettings extends Component {
     addNewData(newData, dataType) {
         if (dataType === "family") {
             this.setState({ membersLists: newData });
-        } else if (dataType === " store") {
+        } else if (dataType === "user") {
+            this.setState({ allUsers: newData });
+        } else if (dataType === "store") {
             this.setState({ storeList: newData });
-        } else if (dataType === " tribe") {
+        } else if (dataType === "tribe") {
             this.setState({ tribeList: newData });
         }
     }
@@ -132,6 +254,7 @@ export default class AdminSettings extends Component {
                 <div className="row">
                     <div className="col-sm search">
                         <AdminSearch
+                            allUsers={this.state.allUsers}
                             familyList={this.state.membersLists}
                             storeList={this.state.storeList}
                             tribeList={this.state.tribeList}
@@ -140,6 +263,7 @@ export default class AdminSettings extends Component {
                     </div>
                     <div className="col-sm data">
                         <AdminData
+                            allUsers={this.state.allUsers}
                             familyList={this.state.membersLists}
                             storeList={this.state.storeList}
                             tribeList={this.state.tribeList}
