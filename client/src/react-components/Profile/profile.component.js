@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import "./profile.css"
-import { createFamily, createTribe } from "../../actions/profile"
+import { createFamily, createTribe, getFamilyName } from "../../actions/profile"
+
+const log = console.log
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       newFamilyName: "",
+      newTribeName: "",
+      pendingFamily: "",
+      user: undefined,
       input: {
         email: "",
         password: ""
@@ -15,6 +21,7 @@ export default class Profile extends Component {
         password: "123456"
       }
     }
+    this.getFamily = this.getFamily.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
@@ -23,6 +30,40 @@ export default class Profile extends Component {
     this.handleChangeNewTribe = this.handleChangeNewTribe.bind(this);
     // this.handleChangepass = this.handleChangepass.bind(this);
   };
+
+  async componentDidMount() {
+    try {
+        const response = await fetch("http://localhost:5000/users", {
+            method: "GET",
+            crossDomain: true,
+            credentials: "include",
+            redirect: "follow",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+        });
+        if (response.status < 400) {
+            const user = await response.json();
+            if (!user) {
+                return;
+            }
+            this.setState({ user });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+  getFamily(e) {
+    const name = getFamilyName(this.state.user);
+    name.then((res => {
+      log(res)
+    }))
+
+    return "Smith"
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     this.setState(({ input }) => ({
@@ -69,8 +110,10 @@ export default class Profile extends Component {
 
   render() {
 
-    const userFamily = this.props.user ? this.props.user.familyID : null;
-    const form = userFamily ? (
+    const userFamily = this.state.user ? this.state.user.familyID : null;
+    const familyName = this.getFamily();
+    const isFamilyAdmin = this.state.user ? this.state.user.familyAdmin : false;
+    const newForm = userFamily ? (
         <div className=" stylechanges col-md  ">
         <div className="list">
             <li > <strong>Create New Tribe:</strong></li>
@@ -112,6 +155,36 @@ export default class Profile extends Component {
               </div>
       )
 
+      const joinFamilyForm = familyName ? (
+        <div>
+          <div className="list">
+            <li><strong>Join Family: { familyName }</strong></li>
+          </div>
+          <form>
+              <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Family</button>
+          </form>
+        </div>
+      ) : (<div></div>);
+
+      const joinTribeForm = isFamilyAdmin ? (
+        <div>
+          <div className="list">
+            <li><strong>Join Tribe:</strong></li>
+          </div>
+          <form>
+            <input
+              type="name"
+              name="name"
+              placeholder="Tribe Name"
+              required
+              />
+              <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Tribe</button>
+          </form>
+        </div>
+      ) : (<div></div>);
+
     return (
 
       
@@ -149,36 +222,12 @@ export default class Profile extends Component {
 
           </form>
         </div>
-        {form }
+        { newForm }
         </div>
 
         <div className="stylechanges col-lg">
-        <div className="list">
-            <li><strong>Join Family:</strong></li>
-          </div>
-          <form>
-            <input
-              type="name"
-              name="name"
-              placeholder="Family Name"
-              required
-              />
-              <br />
-              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Family</button>
-          </form>
-        <div className="list">
-            <li><strong>Join Tribe:</strong></li>
-          </div>
-          <form>
-            <input
-              type="name"
-              name="name"
-              placeholder="Tribe Name"
-              required
-              />
-              <br />
-              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Tribe</button>
-          </form>
+        { joinFamilyForm }
+        { joinTribeForm }
         </div>
       </div>
     )

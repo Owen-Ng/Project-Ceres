@@ -1,8 +1,32 @@
 const log = console.log
 
+export const getFamilyName = async (user) => {
+    if (!user) {
+        return null;
+    }
+    if (!user.pending) {
+        return null;
+    } else {
+        const fid = user.pending;
+        const url = `/family/${fid}`
+        const request = new Request(url,{
+            method:"get",
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const response = await fetch(request, {});
+        const json = await response.json();
+        const name = json.familyName;
+
+        return name;
+
+    }
+}
+
 export const createFamily = (name) =>{
     const url = "/family";
-    log("got here")
     const request = new Request(url,{
         method:"post",
         body: JSON.stringify({"familyName": name}),
