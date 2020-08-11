@@ -20,6 +20,7 @@ const { ObjectID } = require("mongodb");
 
 // body-parser middleware
 const bodyParser = require("body-parser");
+const datetime = require('date-and-time');
 app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // express-session for user sessions
@@ -355,11 +356,35 @@ app.get("/MapList",(req,res) =>{
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
 		return;
-	} 
+    } 
+    // const newtime = new Date();
+    // MapList.find().then((groceries) => {
+    //     groceries.map((obj) => {
+    //         const newtimearray = obj.timesubmitted.filter((time) => {
+    //             datetime.subtract(newtime, time.time).toHours() < 2
+    //         })
+    //         obj.timesubmitted = newtimearray;
+    //     })
+    //     groceries.save().then((result) => {
+    //         console.log(result)
+    //     })
+    //         .catch((error) => {
+    //             if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+    //                 res.status(500).send('Internal server error')
+    //             } else {
+    //                 log(error)
+    //                 res.status(400).send('Bad Request') // bad request for changing the student.
+    //             }
+    //         });
+    // }).catch((error) => {
+    //     res.status(500).send("Internal Server Error");
+    // })
+    
     MapList.find().then((groceries)=>{
         res.send({groceries});
     })
     .catch((error) =>{
+        log(error);
         res.status(500).send("Internal Server Error");
     })
 
@@ -396,7 +421,7 @@ app.post('/MapList', (req,res)=>{
 // }
 app.post("/MapList/:mid", (req,res)=>{
     const id = req.params.mid;
-    const time = req.body.timesubmitted;
+    const timesubmitted = req.body.timesubmitted;
     if (!ObjectID.isValid(id)) {
 		res.status(404).send()  
 		return;  
@@ -407,15 +432,20 @@ app.post("/MapList/:mid", (req,res)=>{
 		res.status(500).send('Internal server error')
 		return;
     } 
+    const time = {
+        date: new Date(),
+        time: timesubmitted,
+
+    }
     MapList.findById(id).then((result) =>{
         if(!result){
             res.status(404).send('Resource not found')  
         }else{
             result.timesubmitted.push(time)
             result.save().then((result) =>{
-                log(result.wait);
-                const timesum = result.timesubmitted.reduce(function(a,b){
-                    return a+b
+              
+                const timesum = result.timesubmitted.reduce(function(sum,b){
+                    return sum + b.time
                 }, 0)
                 const timeav = timesum/result.timesubmitted.length;
                 const fieldstoupdate ={"wait": parseInt(timeav) + 'min'};
@@ -482,7 +512,7 @@ app.patch('/MapList/:mid', (req,res)=>{
     const fieldsToUpdate = {};
     req.body.map((change) => {
 		const propertyToChange = change.path.substr(1);
-		log(propertyToChange)
+		// log(propertyToChange)
 		fieldsToUpdate[propertyToChange] = change.value
     })
     MapList.findByIdAndUpdate(id, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false}).then((result) =>{
@@ -495,6 +525,36 @@ app.patch('/MapList/:mid', (req,res)=>{
 
 
 })
+// app.delete('/MapList', (req,res)=>{
+//     if (mongoose.connection.readyState != 1) {
+// 		log('Issue with mongoose connection')
+// 		res.status(500).send('Internal server error')
+// 		return;
+//     } 
+//     const newtime = new Date();
+//     MapList.find().then((groceries) => {
+//         groceries.map((obj) => {
+//             const newtimearray = obj.timesubmitted.filter((time) => {
+//                 datetime.subtract(newtime, time.time).toHours() < 2
+//             })
+//             obj.timesubmitted = newtimearray;
+//         })
+//         groceries.save().then((result) => {
+//             console.log(result)
+//         })
+//             .catch((error) => {
+//                 if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+//                     res.status(500).send('Internal server error')
+//                 } else {
+//                     log(error)
+//                     res.status(400).send('Bad Request') // bad request for changing the student.
+//                 }
+//             });
+//     }).catch((error) => {
+//         res.status(500).send("Internal Server Error");
+//     })
+
+// });
 
 
 /* API Routes *** */

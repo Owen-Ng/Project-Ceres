@@ -4,9 +4,10 @@ import { Icon } from "leaflet";
 import './Mapapi.css'
 import Search from "react-leaflet-search/lib/Search-v1";
 // import * as groceries from '../data/groceries.json'
-//import { getMap } from '../../../actions/maplist'
+import { removedexpired} from '../../../actions/maplist'
 const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
 const active = new Icon({ iconUrl: "/basket", iconSize: 20 })
+const datetime = require('date-and-time');
 const log = console.log
 export default class PublicMap extends Component {
   constructor(props) {
@@ -18,12 +19,18 @@ export default class PublicMap extends Component {
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
+  // this.intervalupdate = this.intervalupdate.bind(this);
+  // this.updatestate = this.updatestate.bind(this);
   //this.componentWillMount = this.componentWillMount.bind(this)
 }
 
   data(map) {
-
-    this.props.senddata(map._id,map.name, map.address, map.open, map.wait)
+    if(map){
+      this.props.senddata(map._id,map.name, map.address, map.open, map.wait)
+    }else{
+      this.props.senddata("","","","","")
+    }
+    
   }
   selected(map) {
     return (
@@ -37,28 +44,54 @@ export default class PublicMap extends Component {
     )
   }
   componentDidMount(){
-          const url = "/MapList";
-        fetch(url,{
-          method: "GET"
-      }).then(res => {
-              if(res.status ===200){
-                  return res.json() ;
+    this.intervalupdate = setInterval(()=>{
+    
+    const url = "/MapList";
+    fetch(url, {
+      method: "GET"
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
 
-              }else{
-                  log("Could not get data");
-              }
-          }).then(function(json){
-              console.log(json)
-              
-              this.setState({groceries: json.groceries});
-              // console.log(this.state);
-
-          }.bind(this)).catch(error => {
-              log(error)
-          })
+      } else {
+        log("Could not get data");
       }
+    }).then(function (json) {
+      
+
+      this.setState({ groceries: json.groceries });
+      // console.log(this.state);
+
+    }.bind(this)).catch(error => {
+      log(error)
+    })
+    setTimeout(function(){
+      const newtime = new Date();
+      if (this.state.groceries !==[]){
+          this.state.groceries.map((obj) => {
+              const newtimearray = obj.timesubmitted.filter((time) => 
+                  datetime.subtract(newtime, new Date(time.date)).toHours() < 2
+              )
+              removedexpired(obj._id, newtimearray);
+          })
+          
+        }
+    }.bind(this),50);
+   
+  },1500)
+  }
+
+  componentWillMount(){
+    clearInterval(this.intervalupdate);
+  }
   //   getMap(this);
   //   console.log(this.state)
+  // }
+  // updatestate(){
+  //    if (this.props.updatedgroceries){
+  //       this.setState({groceries: this.props.updatedgroceries})
+  //       this.props.updatedgroceries = null;
+  //    }
   // }
   
   render() {  
@@ -66,7 +99,8 @@ export default class PublicMap extends Component {
   //  getMap(this)
   //  this.setState({groceries:[12,5]})
   //  console.log(this.state)
-  console.log(this.state);
+  // this.updatestate();
+
     return (
       <div>
         {/* Map api from react leaflet https://react-leaflet.js.org/ */}
@@ -107,6 +141,7 @@ export default class PublicMap extends Component {
               offset={[1, 0]}
               onClose={() => {
                 this.setState({currentstate:null});
+                this.data(null)
               }}
             >
               <div>

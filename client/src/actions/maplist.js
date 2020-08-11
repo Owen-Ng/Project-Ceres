@@ -38,3 +38,35 @@ export const addtime = (time, id) =>{
         console.log(error);
     });
 }
+export const removedexpired = (id, array) =>{
+    const url = '/MapList/' + id;
+    const averagetime = parseInt(array.reduce(function(sum, n){
+        return sum + n.time
+    },0)/array.length);
+    // log(array)
+    // log(averagetime)
+    // if(!isNaN(averagetime)){
+
+    // }
+    const waitstring = !isNaN(averagetime)? (averagetime + "min"):"Unavailable"; 
+    const request = new Request(url,{
+        method:"PATCH",
+        body: JSON.stringify([{  "path": "/timesubmitted", "value": array}, 
+        {"path":"/wait", "value": waitstring}]),
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    })
+    // log(JSON.stringify([{  "path": "/timesubmitted", "value": array}, 
+    // {"path":"/wait", "value": waitstring}]))
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+}

@@ -11,6 +11,7 @@ export default class Maps extends Component {
     // This data will all be pulled from a server
     this.state = {
         currentstate:{
+          id: "",
           Store:"",
           Address:"",
           Hours:"",
@@ -24,6 +25,7 @@ export default class Maps extends Component {
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
+        //groceries: null,
 
       }
  
@@ -41,13 +43,11 @@ export default class Maps extends Component {
     this.setState({currentstate:something})
   }
   changetimesubmitted(event){
-    console.log(event)
     const target = event.target;
     const value = target.value;
     this.setState({timesubmitted: value});
   }
   changecity(event){
-    console.log(event)
     const target = event.target;
     const value = target.value;
     this.setState({citystate: value});
@@ -55,39 +55,27 @@ export default class Maps extends Component {
   timesubmit(event){
     const key = event.Keycode || event.which;
     if (key === 13){
-      if(!isNaN(this.state.timesubmitted)){
-          addtime(this.state.timesubmitted, this.state.currentstate.id);
-          const url = "/MapList";
-          fetch(url,{
-            method: "GET"
-        }).then(res => {
-                if(res.status ===200){
-                    return res.json() ;
-  
-                }else{
-                    log("Could not get data");
-                }
-            }).then(function(json){
-                console.log(json)
-                
-                this.setState({groceries: json.groceries});
-                // console.log(this.state);
-  
-            }.bind(this)).catch(error => {
-                log(error)
-            })
+      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id != ""){
         
-          //console.log(this.state.timesubmitted)
-    //
-    setTimeout(function(){
-      this.setState({timesubmitted:""})
-    }.bind(this),1000)
-    }
-    else{
-      this.setState({timesubmitted: "Input should be a number"});
-      setTimeout(function(){
-        this.setState({timesubmitted:""})
-      }.bind(this),1000)
+          addtime(this.state.timesubmitted, this.state.currentstate.id);
+  
+        setTimeout(function () {
+          this.setState({ timesubmitted: "" })
+        }.bind(this), 1000)
+      }
+      else {
+        if (this.state.currentstate.id === "") {
+          this.setState({ timesubmitted: "Please select a store" });
+          setTimeout(function () {
+            this.setState({ timesubmitted: "" })
+          }.bind(this), 1000)
+        } else {
+          this.setState({ timesubmitted: "Input should be a number" });
+          setTimeout(function () {
+            this.setState({ timesubmitted: "" })
+          }.bind(this), 1000)
+        }
+      
       //alert("Does not exist")
     }
     
@@ -129,7 +117,7 @@ export default class Maps extends Component {
       <div className='mapcenter container-xl' >
         <div className="row">
           <div className="mapcolor p-1 m-0 col-lg-9 border border-dark">
-            <Map name = {this.state.currentcity}  city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
+            <Map name = {this.state.currentcity} city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
           </div>
           <div className="backcolor p-0 m-0 col-3 border border-dark " >
             <div className="mapborderbottom" >

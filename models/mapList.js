@@ -1,8 +1,12 @@
 
 const mongoose = require('mongoose');
 
+const time = new mongoose.Schema({
+    date: Date,
+    time: Number,
+})
 
-const MapList =  mongoose.model('MapList', {
+const MapListSchema =  new mongoose.Schema( {
     name:{
         type:String,
         required: true,
@@ -17,7 +21,7 @@ const MapList =  mongoose.model('MapList', {
         type: String,
         required: true
     },
-    timesubmitted:[],
+    timesubmitted:[time],
   
     wait:{
         type: String,
@@ -28,5 +32,6 @@ const MapList =  mongoose.model('MapList', {
 
 });
 
+const MapList = mongoose.model('MapList', MapListSchema);
 
 module.exports = {MapList}
