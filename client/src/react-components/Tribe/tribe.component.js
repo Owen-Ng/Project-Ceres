@@ -28,7 +28,6 @@ export default class Tribe extends Component {
 
     this.renderLists = this.renderLists.bind(this);
     this.renderCurrentList = this.renderCurrentList.bind(this);
-    this.changeFamily = this.changeFamily.bind(this);
     this.selectList = this.selectList.bind(this);
   }
 
@@ -105,36 +104,9 @@ export default class Tribe extends Component {
     )
   }
 
-  // This function works with the 'Change Family' button and will be removed
-  changeFamily() {
-    const family = this.state.currentFamily
-    const familyList = this.state.membersLists
-    const lists = Object.keys(familyList)
-    
-    let i = 0
-    
-    while (i < lists.length) {
-      if (lists[i] === family) {
-        break
-      }
-      i++
-    }
-
-    i++
-
-    if (i === lists.length) {
-      i = 0
-    }
-
-    this.setState({currentFamily : lists[i]})
-  }
-
   render() {
     return (
       <div className="FamilyTribe container">
-        
-        { /* This button is for testing purposes only and will be removed */ }
-        <button className="btn btn-primary" onClick={this.changeFamily}>Change Family</button>
         <div className="row">
           <div className="Family-list col-lg">
 

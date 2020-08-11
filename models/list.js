@@ -1,37 +1,41 @@
 /* List and Item models */
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ItemSchema = new mongoose.Schema({
     itemname: {
         type: String,
         minlength: 1,
-        required: true
+        required: true,
     },
     quantity: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const ListSchema = new mongoose.Schema({
     listname: {
         type: String,
         minlength: 1,
-        required: true
+        required: true,
     },
-    items: [ItemSchema],
+    items: {
+        type: { ItemSchema },
+        required: true,
+        default: {},
+    },
     familyID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Family',
-        required: true
+        ref: "Family",
+        required: true,
     },
     shared: {
         type: Boolean,
-        required: true
-    }
+        required: true,
+    },
 });
 
-const List = mongoose.model('List', ListSchema);
+const List = mongoose.model("List", ListSchema);
 
 module.exports = { List };

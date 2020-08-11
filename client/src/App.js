@@ -12,6 +12,7 @@ import Tribe from "./react-components/Tribe/tribe.component";
 import GroceryList from "./react-components/GroceryList/grocery-list.component";
 import AdminSettings from "./react-components/AdminSettings/admin-settings.component";
 import Profile from "./react-components/Profile/profile.component";
+import Register from "./react-components/Register/Register";
 
 export default class App extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ export default class App extends Component {
             isTribeAdmin: false,
             loggedIn: false,
             username: "",
+            user: null,
         };
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
@@ -40,11 +42,14 @@ export default class App extends Component {
                 },
                 referrerPolicy: "no-referrer",
             });
-            const user = await response.json();
-            if (!user) {
-                return;
+            if (response.status < 400) {
+                const user = await response.json();
+                if (!user) {
+                    return;
+                }
+                this.setState({ user });
+                this.determinePermissions(user);
             }
-            this.determinePermissions(user);
         } catch (err) {
             console.log(err);
         }
@@ -73,6 +78,7 @@ export default class App extends Component {
                 loggedIn: true,
                 username,
             });
+
             return <Redirect to="/map" />;
         } else {
             alert("Unable to establish permissions");
@@ -88,11 +94,12 @@ export default class App extends Component {
         } else if (!user.admin || !user.tribeAdmin || !user.familyAdmin) {
             this.setPermissions("user", user.name);
         }
+        this.setState({ user });
     }
 
     async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        const response = await fetch("http://localhost:5000/users/logout", {
+        await fetch("http://localhost:5000/users/logout", {
             method: "GET",
             crossDomain: true,
             credentials: "include",
@@ -110,6 +117,7 @@ export default class App extends Component {
             <Router>
                 {this.state.loggedIn ? <Redirect to="/map" /> : ""}
                 <Navbar
+                    user={this.state.user}
                     isAdmin={this.state.isAdmin}
                     loggedIn={this.state.loggedIn}
                     logout={this.logout}
@@ -123,16 +131,37 @@ export default class App extends Component {
                         <Login
                             determinePermissions={this.determinePermissions}
                             loggedIn={this.state.loggedIn}
+                            user={this.state.user}
                         />
                     )}
                 />
+                <Route path="/register" exact component={Register} />
+                <Route
+                    path="/map"
+                    exact
+                    render={() => <Maps user={this.state.user} />}
+                />
+                <Route
+                    path="/tribe"
+                    exact
+                    render={() => <Tribe user={this.state.user} />}
+                />
+                <Route
+                    path="/grocerylists"
+                    exact
+                    render={() => <GroceryList user={this.state.user} />}
+                />
 
-                <Route path="/map" exact component={Maps} />
-                <Route path="/tribe" exact component={Tribe} />
-                <Route path="/grocerylists" exact component={GroceryList} />
-
-                <Route path="/admin" exact component={AdminSettings} />
-                <Route path="/profile" exact component={Profile} />
+                <Route
+                    path="/admin"
+                    exact
+                    render={() => <AdminSettings user={this.state.user} />}
+                />
+                <Route
+                    path="/profile"
+                    exact
+                    render={() => <Profile user={this.state.user} />}
+                />
             </Router>
         );
     }

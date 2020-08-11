@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "setup": "npm install && cd client && npm install && cd ..",
-    "build-run": "cd client && npm run build && cd .. && node server.js",
+    "build-run": "cd client && npm run build && cd .. && nodemon server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "dbserver": "mongod --dbpath ./mongo-data &",
     "killdb": "kill $(lsof -t -i:27017)",
-    "local": "npm run dbserver && nodemon server.js"
+    "local": "npm run dbserver && npm run build-run"
   },
   "repository": {
     "type": "git",
