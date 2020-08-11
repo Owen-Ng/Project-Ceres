@@ -152,8 +152,22 @@ app.post("/family", (req, res) => {
     );
 });
 
-// Returns all users in an array belonging to family fid
+// Returns a family 
 app.get("/family/:fid", (req, res) => {
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+        res.status(404).send();
+        return;
+    }
+
+    Family.findById(fid).then((family) => {
+        res.send(family);
+    });
+});
+
+// Returns all users in an array belonging to family fid
+app.get("/family/users/:fid", (req, res) => {
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
@@ -182,15 +196,60 @@ app.patch("/family/join/:fid", (req, res) => {
             const currentUser = req.session.user;
 
             User.findById(currentUser).then((user) => {
-                user.familyID = fid;
+                log(user.pending, fid)
+                if (user.pending == fid) {
+                    user.familyID = fid;
+                    user.pending = "";
 
-                user.save()
+                    user.save()
                     .then((result) => {
                         res.send({ user: result, family });
                     })
                     .catch((error) => {
                         res.status(400).send(error);
                     });
+                } else {
+                    res.status(400).send("User not invited to Family");
+                }
+            });
+        }
+    });
+});
+
+// Invite a user to join family
+app.patch("/family/invite/:uid", (req, res) => {
+    const uid = req.params.uid;
+
+    if (!ObjectID.isValid(uid)) {
+        res.status(404).send();
+        return;
+    }
+
+    User.findById(uid).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource not found");
+        } else {
+            const currentUser = req.session.user;
+
+            User.findById(currentUser).then((adminUser) => {
+                if (adminUser.familyAdmin === true) {
+                    const currentFamily = adminUser.familyID;
+                    Family.findById(currentFamily).then((family) => {
+                        family.offers.push(uid);
+                        user.pending = currentFamily;
+                        user.save();
+
+                        family.save()
+                        .then((result) => {
+                            res.send({ family: result, user });
+                        })
+                        .catch((error) => {
+                            res.status(400).send(error);
+                        });
+                    })
+                } else {
+                    res.status(400).send("Not an admin")
+                }
             });
         }
     });
