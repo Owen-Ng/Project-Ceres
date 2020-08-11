@@ -136,7 +136,7 @@ export default class Profile extends Component {
     const userFamily = this.state.user ? this.state.user.familyID : null;
     const familyName = this.state.user ? this.state.pendingFamily : null;
     const isFamilyAdmin = this.state.user ? this.state.user.familyAdmin : false;
-    const newForm = userFamily ? (
+    const newForm = userFamily ? isFamilyAdmin ? (
         <div className=" stylechanges col-md  ">
         <div className="list">
             <li > <strong>Create New Tribe:</strong></li>
@@ -156,7 +156,7 @@ export default class Profile extends Component {
       
             </form>
           </div>
-        ) : (
+        ) : (<div></div>) : (
         <div className=" stylechanges col-md  ">
               <div className="list">
                   <li > <strong>Create New Family:</strong></li>
