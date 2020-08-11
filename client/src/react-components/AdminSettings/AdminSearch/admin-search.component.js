@@ -12,7 +12,7 @@ export default class AdminSearch extends Component {
             storeName: "",
             tribeName: "",
             searchType: "user",
-
+            allUsers: this.props.allUsers,
             familyList: this.props.familyList,
             storeList: this.props.storeList,
             tribeList: this.props.tribeList,
@@ -51,19 +51,19 @@ export default class AdminSearch extends Component {
     familyMode() {
         this.setState({
             searchType: "family",
-            autoSuggestList: Object.keys(this.props.familyList).sort(),
+            autoSuggestList: Object.keys(this.props.allFamilies).sort(),
         });
     }
     storeMode() {
         this.setState({
             searchType: "store",
-            autoSuggestList: Object.keys(this.props.storeList).sort(),
+            autoSuggestList: Object.keys(this.props.allStores).sort(),
         });
     }
     tribeMode() {
         this.setState({
             searchType: "tribe",
-            autoSuggestList: Object.keys(this.props.tribeList).sort(),
+            autoSuggestList: Object.keys(this.props.allTribes).sort(),
         });
     }
     autoSuggestUser(e) {
@@ -79,7 +79,7 @@ export default class AdminSearch extends Component {
     }
     autoSuggestFamily(e) {
         this.setState({ [e.target.name]: e.target.value });
-        const list = this.props.familyList;
+        const list = this.props.allFamilies;
         const currentText = e.target.value.toLowerCase();
         const matches = Object.keys(list).filter(
             (listItem) =>
@@ -91,7 +91,7 @@ export default class AdminSearch extends Component {
 
     autoSuggestStore(e) {
         this.setState({ [e.target.name]: e.target.value });
-        const list = this.props.storeList;
+        const list = this.props.allStores;
         const currentText = e.target.value.toLowerCase();
         const matches = Object.keys(list).filter(
             (listItem) =>
@@ -104,7 +104,7 @@ export default class AdminSearch extends Component {
 
     autoSuggestTribe(e) {
         this.setState({ [e.target.name]: e.target.value });
-        const list = this.props.tribeList;
+        const list = this.props.allTribes;
         const currentText = e.target.value.toLowerCase();
         const matches = Object.keys(list).filter(
             (listItem) =>
@@ -130,7 +130,7 @@ export default class AdminSearch extends Component {
                     />
                 </form>
                 <AdminResults
-                    searchableObject={this.state.familyList}
+                    searchableObject={this.state.allFamilies}
                     list={this.state.autoSuggestList}
                     searchType="family"
                     showPanel={this.showPanel}
@@ -151,9 +151,9 @@ export default class AdminSearch extends Component {
                     />
                 </form>
                 <AdminResults
-                    searchableObject={this.state.familyList}
+                    searchableObject={this.props.allUsers}
                     list={this.state.autoSuggestList}
-                    searchType="family"
+                    searchType="user"
                     showPanel={this.showPanel}
                 />
             </div>
@@ -197,8 +197,8 @@ export default class AdminSearch extends Component {
                 <AdminResults
                     searchableObject={this.state.tribeList}
                     list={this.state.autoSuggestList}
-                    searchType="tribe"
                     showPanel={this.showPanel}
+                    searchType="tribe"
                 />
             </div>
         );

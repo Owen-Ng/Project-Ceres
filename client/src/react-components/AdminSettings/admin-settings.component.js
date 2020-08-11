@@ -16,6 +16,7 @@ export default class AdminSettings extends Component {
         this.state = {
             allUsers: {},
             allFamilies: {},
+            allStores: {},
             allTribes: {},
             membersLists: {},
             tribeLists: {},
@@ -52,6 +53,8 @@ export default class AdminSettings extends Component {
             selectedObj: {},
         };
         this.parseUserData = this.parseUserData.bind(this);
+        this.parseFamilyData = this.parseFamilyData.bind(this);
+        this.parseTribeData = this.parseTribeData.bind(this);
         this.showOnPanel = this.showOnPanel.bind(this);
         this.deleteObj = this.deleteObj.bind(this);
         this.addNewData = this.addNewData.bind(this);
@@ -103,7 +106,8 @@ export default class AdminSettings extends Component {
                 if (response.status < 400) {
                     const allFamilies = await response.json();
                     this.setState({ allFamilies });
-                    this.parseUserData();
+                    console.log(allFamilies);
+                    this.parseFamilyData();
                     /*
                     
                     */
@@ -129,7 +133,7 @@ export default class AdminSettings extends Component {
                 if (response.status < 400) {
                     const allTribes = await response.json();
                     this.setState({ allTribes });
-                    this.parseUserData();
+                    this.parseTribeData();
                     /*
                     
                     */
@@ -151,13 +155,39 @@ export default class AdminSettings extends Component {
 
         this.setState({ allUsers: newUserData });
     }
+    parseFamilyData() {
+        const families = this.state.allFamilies;
+        const newUserData = {};
+        for (let key in families) {
+            //this is how we'll adjust if the schema changes
+            //newUserData[users[key][username]] = users[key][username];
+            let thisFamilyName = families[key]["familyName"];
+            newUserData[thisFamilyName] = families[key];
+        }
+
+        this.setState({ allFamilies: newUserData });
+    }
+    parseStoreData() {}
+    parseTribeData() {
+        const tribes = this.state.allTribes;
+        const newUserData = {};
+        for (let key in tribes) {
+            //this is how we'll adjust if the schema changes
+            //newUserData[users[key][username]] = users[key][username];
+            let thisTribeName = tribes[key]["tribeName"];
+            newUserData[thisTribeName] = tribes[key];
+        }
+
+        this.setState({ allTribes: newUserData });
+    }
+
     /*
     Recieves the item that needs to be displayed from AdminResults and displays it.
     */
 
     showOnPanel(selectedItem, displayType) {
         if (displayType === "family") {
-            const family = this.state.membersLists[selectedItem];
+            const family = this.state.allFamilies[selectedItem];
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "family",
@@ -165,21 +195,21 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "user") {
             const user = this.state.allUsers[selectedItem];
-            console.log("user", user);
+            //console.log("user", user);
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "user",
                 selectedObj: user,
             });
         } else if (displayType === "store") {
-            const store = this.state.storeList[selectedItem];
+            const store = this.state.allStores[selectedItem];
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "store",
                 selectedObj: store,
             });
         } else if (displayType === "tribe") {
-            const tribe = this.state.tribeList[selectedItem];
+            const tribe = this.state.allTribes[selectedItem];
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "tribe",
@@ -194,17 +224,16 @@ export default class AdminSettings extends Component {
     deleteObj(selectedItem, displayType) {
         let updatedList;
         if (displayType === "user") {
-            updatedList = this.state.user;
+            updatedList = this.state.allUsers;
             delete updatedList[selectedItem];
-            const newFamilyList = Object.keys(this.state.membersLists);
+            const allUsers = Object.keys(this.state.allUsers);
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                familyList: newFamilyList,
-                membersLists: updatedList,
+                allUsers,
             });
         } else if (displayType === "family") {
-            updatedList = this.state.membersLists;
+            updatedList = this.state.allFamilies;
             delete updatedList[selectedItem];
             const newFamilyList = Object.keys(this.state.membersLists);
             this.setState({
@@ -214,7 +243,7 @@ export default class AdminSettings extends Component {
                 membersLists: updatedList,
             });
         } else if (displayType === "store") {
-            updatedList = this.state.storeList;
+            updatedList = this.state.allStores;
             delete updatedList[selectedItem];
             this.setState({
                 selectedItem: "",
@@ -222,7 +251,7 @@ export default class AdminSettings extends Component {
                 storeList: updatedList,
             });
         } else if (displayType === "tribe") {
-            updatedList = this.state.tribeList;
+            updatedList = this.state.allTribes;
             delete updatedList[selectedItem];
             this.setState({
                 selectedItem: "",
@@ -256,18 +285,18 @@ export default class AdminSettings extends Component {
                     <div className="col-sm search">
                         <AdminSearch
                             allUsers={this.state.allUsers}
-                            familyList={this.state.membersLists}
-                            storeList={this.state.storeList}
-                            tribeList={this.state.tribeList}
+                            allFamilies={this.state.allFamilies}
+                            allStores={this.state.allStores}
+                            allTribes={this.state.allTribes}
                             showPanel={this.showOnPanel}
                         />
                     </div>
                     <div className="col-sm data">
                         <AdminData
                             allUsers={this.state.allUsers}
-                            familyList={this.state.membersLists}
-                            storeList={this.state.storeList}
-                            tribeList={this.state.tribeList}
+                            familyList={this.state.allFamilies}
+                            storeList={this.state.allStores}
+                            tribeList={this.state.allTribes}
                             addNewData={this.addNewData}
                         />
                     </div>

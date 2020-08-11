@@ -21,7 +21,7 @@ export default class AdminResults extends Component {
     */
     renderResults() {
         const list = this.props.list;
-        console.log(list);
+
         return list.map((item) => (
             <h5
                 className="AdminResults-results"

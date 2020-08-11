@@ -122,7 +122,19 @@ app.post("/users", (req, res) => {
             res.status(400).send(error.keyValue);
         });
 });
-
+// Edit a user
+app.patch("/users", (req, res) => {
+    const userID = req.body.userID;
+    const changes = req.body.change;
+    console.log(changes);
+    User.findById(userID)
+        .then((user) => {
+            user.updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
+});
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
@@ -159,6 +171,19 @@ app.post("/family", (req, res) => {
             res.status(400).send(error);
         }
     );
+});
+app.patch("/family", (req, res) => {
+    const familyID = req.body.familyID;
+    const changes = req.body.change;
+    console.log(changes);
+    Family.findById(familyID)
+        .then((family) => {
+            family
+                .updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
 });
 // Get all users - to be used by admin (verification performed)
 app.get("/family/all", (req, res) => {
@@ -224,7 +249,26 @@ app.patch("/family/join/:fid", (req, res) => {
         }
     });
 });
+app.get("/family/all", (req, res) => {
+    const currentUser = req.session.user;
 
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Family.find()
+                .then((allFamilies) => res.status(200).send(allFamilies))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Create a new tribe
 app.post("/tribe", (req, res) => {
     const tribe = new Tribe({
@@ -259,6 +303,19 @@ app.get("/tribe/all", (req, res) => {
             });
         }
     });
+});
+app.patch("/tribe", (req, res) => {
+    const tribeID = req.body.tribeID;
+    const changes = req.body.change;
+    console.log(changes);
+    Tribe.findById(tribeID)
+        .then((tribe) => {
+            tribe
+                .updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
 });
 //List Families in a tribe
 app.get("/tribe/:tid", (req, res) => {
@@ -323,7 +380,26 @@ app.patch("/tribe/join/:tid", (req, res) => {
         }
     });
 });
+app.get("/tribe/all", (req, res) => {
+    const currentUser = req.session.user;
 
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Tribe.find()
+                .then((allTribes) => res.status(200).send(allTribes))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Create new list
 app.post("/list", (req, res) => {
     const fid = req.body.fid;
