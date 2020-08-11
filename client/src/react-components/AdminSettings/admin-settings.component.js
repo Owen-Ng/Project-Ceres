@@ -148,7 +148,7 @@ export default class AdminSettings extends Component {
             let thisUserName = users[key]["username"];
             newUserData[thisUserName] = users[key];
         }
-        console.log(newUserData);
+
         this.setState({ allUsers: newUserData });
     }
     /*
@@ -165,6 +165,7 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "user") {
             const user = this.state.allUsers[selectedItem];
+            console.log("user", user);
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "user",
