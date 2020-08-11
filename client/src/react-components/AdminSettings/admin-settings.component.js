@@ -106,7 +106,7 @@ export default class AdminSettings extends Component {
                 if (response.status < 400) {
                     const allFamilies = await response.json();
                     this.setState({ allFamilies });
-                    console.log(allFamilies);
+
                     this.parseFamilyData();
                     /*
                     
@@ -195,7 +195,7 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "user") {
             const user = this.state.allUsers[selectedItem];
-            //console.log("user", user);
+
             this.setState({
                 selectedItem: selectedItem,
                 displayType: "user",

@@ -126,7 +126,7 @@ app.post("/users", (req, res) => {
 app.patch("/users", (req, res) => {
     const userID = req.body.userID;
     const changes = req.body.change;
-    console.log(changes);
+
     User.findById(userID)
         .then((user) => {
             user.updateOne({ [changes[0]]: changes[1] })
@@ -175,7 +175,7 @@ app.post("/family", (req, res) => {
 app.patch("/family", (req, res) => {
     const familyID = req.body.familyID;
     const changes = req.body.change;
-    console.log(changes);
+
     Family.findById(familyID)
         .then((family) => {
             family
@@ -307,7 +307,6 @@ app.get("/tribe/all", (req, res) => {
 app.patch("/tribe", (req, res) => {
     const tribeID = req.body.tribeID;
     const changes = req.body.change;
-    console.log(changes);
     Tribe.findById(tribeID)
         .then((tribe) => {
             tribe

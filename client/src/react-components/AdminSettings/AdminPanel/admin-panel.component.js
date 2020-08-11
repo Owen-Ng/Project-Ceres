@@ -52,7 +52,7 @@ export default class AdminPanel extends Component {
 
     async editDB(e) {
         e.preventDefault();
-        console.log(e.target.childNodes[1].name);
+
         const param = e.target.childNodes[1].name;
         const value = e.target.childNodes[1].value;
 
@@ -154,7 +154,6 @@ export default class AdminPanel extends Component {
                         <div className="AdminPanel-tribe-members">
                             {Object.keys(families).map((key) => (
                                 <div className="info" key={key}>
-                                    {console.log(key, family[key])}
                                     <form onSubmit={this.editDB}>
                                         <p>{key}</p>
                                         <input
@@ -186,8 +185,6 @@ export default class AdminPanel extends Component {
 
             if (users !== undefined) {
                 for (let key in users) {
-                    //console.log(key);
-
                     return (
                         <div>
                             <div className="AdminPanel-tribe-members">
@@ -244,7 +241,6 @@ export default class AdminPanel extends Component {
                         <div className="AdminPanel-tribe-members">
                             {Object.keys(tribes).map((key) => (
                                 <div className="info" key={key}>
-                                    {console.log(key, tribe[key])}
                                     <form onSubmit={this.editDB}>
                                         <p>{key}</p>
                                         <input
