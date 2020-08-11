@@ -21,7 +21,6 @@ export default class GroceryList extends Component {
         this.state = {
             //make sure data is this format {list1: {obj1: quantity, obj2: quantity}, list2:...}
             familyLists: {},
-            user: this.props.user,
             currentList: "No list selected",
             currentTribe: "",
             alphabeticallyOrdered: false,
