@@ -200,7 +200,7 @@ app.patch("/family/join/:fid", (req, res) => {
                 log(user.pending, fid)
                 if (user.pending == fid) {
                     user.familyID = fid;
-                    user.pending = "";
+                    user.pending = undefined;
 
                     user.save()
                     .then((result) => {

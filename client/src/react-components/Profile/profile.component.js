@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./profile.css"
-import { createFamily, createTribe, getFamilyName } from "../../actions/profile"
+import { createFamily, createTribe, joinFamily } from "../../actions/profile"
 
 const log = console.log
 
@@ -21,9 +21,9 @@ export default class Profile extends Component {
         password: "123456"
       }
     }
-    this.getFamily = this.getFamily.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleJoinFamily = this.handleJoinFamily.bind(this);
     this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
     this.handleChangeNewFamily = this.handleChangeNewFamily.bind(this);
     this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
@@ -53,16 +53,34 @@ export default class Profile extends Component {
     } catch (err) {
         console.log(err);
     }
+
+    try {
+      if (!this.state.user) {
+        return;
+    }
+    if (!this.state.user.pending) {
+        return;
+    } else {
+        const fid = this.state.user.pending;
+        const url = `/family/${fid}`
+        const request = new Request(url,{
+            method:"GET",
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const response = await fetch(request, {});
+        const json = await response.json();
+        const name = await json.familyName;
+
+        this.setState({ pendingFamily: name });
+
+    }
+    } catch (err) {
+      console.log(err);
+    }
 }
-
-  getFamily(e) {
-    const name = getFamilyName(this.state.user);
-    name.then((res => {
-      log(res)
-    }))
-
-    return "Smith"
-  }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -81,6 +99,11 @@ export default class Profile extends Component {
 
   }
 
+  handleJoinFamily(e) {
+    e.preventDefault();
+    joinFamily(this.state.user.pending);
+    this.setState({ pendingFamily: "" })
+  }
 
   handleChangeNewFamily(e) {
     e.preventDefault();
@@ -111,7 +134,7 @@ export default class Profile extends Component {
   render() {
 
     const userFamily = this.state.user ? this.state.user.familyID : null;
-    const familyName = this.getFamily();
+    const familyName = this.state.user ? this.state.pendingFamily : null;
     const isFamilyAdmin = this.state.user ? this.state.user.familyAdmin : false;
     const newForm = userFamily ? (
         <div className=" stylechanges col-md  ">
@@ -160,7 +183,7 @@ export default class Profile extends Component {
           <div className="list">
             <li><strong>Join Family: { familyName }</strong></li>
           </div>
-          <form>
+          <form onSubmit={this.handleJoinFamily}>
               <br />
               <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Family</button>
           </form>
