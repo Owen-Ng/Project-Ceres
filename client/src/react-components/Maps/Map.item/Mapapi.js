@@ -19,9 +19,7 @@ export default class PublicMap extends Component {
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
-  // this.intervalupdate = this.intervalupdate.bind(this);
-  // this.updatestate = this.updatestate.bind(this);
-  //this.componentWillMount = this.componentWillMount.bind(this)
+
 }
 
   data(map) {
@@ -84,22 +82,8 @@ export default class PublicMap extends Component {
   componentWillMount(){
     clearInterval(this.intervalupdate);
   }
-  //   getMap(this);
-  //   console.log(this.state)
-  // }
-  // updatestate(){
-  //    if (this.props.updatedgroceries){
-  //       this.setState({groceries: this.props.updatedgroceries})
-  //       this.props.updatedgroceries = null;
-  //    }
-  // }
-  
+ 
   render() {  
-  //  console.log("F")
-  //  getMap(this)
-  //  this.setState({groceries:[12,5]})
-  //  console.log(this.state)
-  // this.updatestate();
 
     return (
       <div>
