@@ -118,6 +118,7 @@ app.get("/users", (req, res) => {
                 name: user.name,
                 familyAdmin: user.familyAdmin,
                 username: user.username,
+                pending: user.pending
             };
             res.send(data);
         }
