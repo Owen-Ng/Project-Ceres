@@ -23,6 +23,7 @@ export default class Maps extends Component {
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
+        toggle: false,
 
       }
  
@@ -40,6 +41,7 @@ export default class Maps extends Component {
     this.setState({currentstate:something})
   }
   changetimesubmitted(event){
+    console.log(this.props.user);
     
     const target = event.target;
     const value = target.value;
@@ -58,8 +60,9 @@ export default class Maps extends Component {
       if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id != ""){
         
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-  
+          
         setTimeout(function () {
+          this.setState({toggle:!this.state.toggle});
           this.setState({ timesubmitted: "" })
         }.bind(this), 1000)
       }
@@ -139,7 +142,7 @@ export default class Maps extends Component {
       <div className='mapcenter container-xl' >
         <div className="row">
           <div className="mapcolor p-1 m-0 col-lg-9 border border-dark">
-            <Map name = {this.state.currentcity} city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
+            <Map name = {this.state.currentcity} toggle={this.state.toggle} city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
           </div>
           <div className="backcolor p-0 m-0 col-3 border border-dark " >
             <div className="mapborderbottom" >
@@ -158,11 +161,11 @@ export default class Maps extends Component {
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time}</strong> </p>
             </div>
-            {this.state.user?this.state.user.familyAdmin? <div className="bottomtext">
+            {this.props.user?this.props.user.familyAdmin?<div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
                onKeyUp={this.timesubmit} type= "text" className="waitTime" placeholder="Enter time taken"></input>
-            </div>:<div></div>: <div></div>}
+            </div>: <div></div>:<div></div>}
           </div>
           </div>
         </div>
