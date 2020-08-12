@@ -41,6 +41,7 @@ export default class Maps extends Component {
     this.setState({currentstate:something})
   }
   changetimesubmitted(event){
+    console.log(this.props.user);
     
     const target = event.target;
     const value = target.value;
@@ -160,11 +161,11 @@ export default class Maps extends Component {
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time}</strong> </p>
             </div>
-            <div className="bottomtext">
+            {this.props.user?this.props.user.familyAdmin?<div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
                onKeyUp={this.timesubmit} type= "text" className="waitTime" placeholder="Enter time taken"></input>
-            </div>
+            </div>: <div></div>:<div></div>}
           </div>
           </div>
         </div>
