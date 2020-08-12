@@ -15,6 +15,7 @@ const { Family } = require("./models/family");
 const { List } = require("./models/list");
 const { Tribe } = require("./models/tribe");
 const { MapList } = require("./models/mapList")
+const { City } = require("./models/city");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
@@ -694,28 +695,7 @@ app.get("/MapList",(req,res) =>{
 		res.status(500).send('Internal server error')
 		return;
     } 
-    // const newtime = new Date();
-    // MapList.find().then((groceries) => {
-    //     groceries.map((obj) => {
-    //         const newtimearray = obj.timesubmitted.filter((time) => {
-    //             datetime.subtract(newtime, time.time).toHours() < 2
-    //         })
-    //         obj.timesubmitted = newtimearray;
-    //     })
-    //     groceries.save().then((result) => {
-    //         console.log(result)
-    //     })
-    //         .catch((error) => {
-    //             if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-    //                 res.status(500).send('Internal server error')
-    //             } else {
-    //                 log(error)
-    //                 res.status(400).send('Bad Request') // bad request for changing the student.
-    //             }
-    //         });
-    // }).catch((error) => {
-    //     res.status(500).send("Internal Server Error");
-    // })
+  
     
     MapList.find().then((groceries)=>{
         res.send({groceries});
@@ -862,36 +842,56 @@ app.patch('/MapList/:mid', (req,res)=>{
 
 
 })
-// app.delete('/MapList', (req,res)=>{
-//     if (mongoose.connection.readyState != 1) {
-// 		log('Issue with mongoose connection')
-// 		res.status(500).send('Internal server error')
-// 		return;
-//     } 
-//     const newtime = new Date();
-//     MapList.find().then((groceries) => {
-//         groceries.map((obj) => {
-//             const newtimearray = obj.timesubmitted.filter((time) => {
-//                 datetime.subtract(newtime, time.time).toHours() < 2
-//             })
-//             obj.timesubmitted = newtimearray;
-//         })
-//         groceries.save().then((result) => {
-//             console.log(result)
-//         })
-//             .catch((error) => {
-//                 if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-//                     res.status(500).send('Internal server error')
-//                 } else {
-//                     log(error)
-//                     res.status(400).send('Bad Request') // bad request for changing the student.
-//                 }
-//             });
-//     }).catch((error) => {
-//         res.status(500).send("Internal Server Error");
-//     })
 
-// });
+app.get("/City", (req,res)=>{
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+    } 
+  
+    
+    City.find().then((City)=>{
+        const obj = {}
+        City.map((item) => obj[item.name] = item.coordinate)
+        res.send(obj);
+    })
+    .catch((error) =>{
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+})
+/*
+ {"name": "missi",
+    coordinate: [1,2] }
+*/
+app.post('/City', (req,res)=>{
+    
+    const coordinate = req.body.coordinate;
+    const name = req.body.names;
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+    }  
+    const city = new City({
+        name: name,
+        coordinate: coordinate 
+    })
+    city.save().then((result) =>{
+        res.send(result);
+    }).catch((error)=>{
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			log(error) // log server error to the console, not to the client.
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+
+    })
+
+})
+
 
 
 /* API Routes *** */
