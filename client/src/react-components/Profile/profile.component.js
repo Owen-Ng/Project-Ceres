@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./profile.css"
-import { createFamily, createTribe, joinFamily } from "../../actions/profile"
+import { createFamily, createTribe, joinFamily, declineFamily } from "../../actions/profile"
 
 const log = console.log
 
@@ -24,6 +24,7 @@ export default class Profile extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleJoinFamily = this.handleJoinFamily.bind(this);
+    this.handleDeclineFamily = this.handleDeclineFamily.bind(this)
     this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
     this.handleChangeNewFamily = this.handleChangeNewFamily.bind(this);
     this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
@@ -102,6 +103,12 @@ export default class Profile extends Component {
   handleJoinFamily(e) {
     e.preventDefault();
     joinFamily(this.state.user.pending);
+    this.setState({ pendingFamily: "" })
+  }
+
+  handleDeclineFamily(e) {
+    e.preventDefault();
+    declineFamily(this.state.user.pending);
     this.setState({ pendingFamily: "" })
   }
 
@@ -186,6 +193,10 @@ export default class Profile extends Component {
           <form onSubmit={this.handleJoinFamily}>
               <br />
               <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Family</button>
+          </form>
+          <form onSubmit={this.handleDeclineFamily}>
+              <br />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Decline</button>
           </form>
         </div>
       ) : (<div></div>);

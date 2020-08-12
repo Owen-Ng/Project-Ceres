@@ -220,6 +220,44 @@ app.patch("/family/join/:fid", (req, res) => {
     });
 });
 
+// Current user declines invite to family fid
+app.patch("/family/decline/:fid", (req, res) => {
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+        res.status(404).send();
+        return;
+    }
+
+    Family.findById(fid).then((family) => {
+        if (!family) {
+            res.status(404).send("Resource not found");
+        } else {
+            const currentUser = req.session.user;
+
+            User.findById(currentUser).then((user) => {
+                log(user.pending, fid)
+                if (user.pending == fid) {
+                    user.pending = undefined;
+
+                    user.save()
+                    .then((result) => {
+                        const index = family.offers.indexOf(user._id);
+                        family.offers.splice(index, 1);
+                        family.save();
+                        res.send({ user: result, family });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+                } else {
+                    res.status(400).send("User not invited to Family");
+                }
+            });
+        }
+    });
+});
+
 // Invite a user to join family
 app.patch("/family/invite/:uid", (req, res) => {
     const uid = req.params.uid;
