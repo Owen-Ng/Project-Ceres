@@ -42,7 +42,8 @@ const UserSchema = new mongoose.Schema({
         default: null
     },
     pending: {
-        type: Boolean,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Family",
         default: undefined
     },
     admin: {

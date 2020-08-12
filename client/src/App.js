@@ -19,10 +19,10 @@ export default class App extends Component {
         super(props);
 
         this.state = {
-            isAdmin: false,
+            isAdmin: false, // set to false when deployed
             isFamilyAdmin: false,
             isTribeAdmin: false,
-            loggedIn: false,
+            loggedIn: false, // set to false when deployed
             username: "",
             user: null,
         };
@@ -155,7 +155,12 @@ export default class App extends Component {
                 <Route
                     path="/admin"
                     exact
-                    render={() => <AdminSettings user={this.state.user} />}
+                    render={() => (
+                        <AdminSettings
+                            user={this.state.user}
+                            isAdmin={this.state.isAdmin}
+                        />
+                    )}
                 />
                 <Route
                     path="/profile"

@@ -77,6 +77,27 @@ app.get("/users/logout", (req, res) => {
     });
 });
 
+// Get all users - to be used by admin (verification performed)
+app.get("/users/all", (req, res) => {
+    const currentUser = req.session.user;
+
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            User.find()
+                .then((allUsers) => res.status(200).send(allUsers))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Checks the current user
 app.get("/users/check-session", (req, res) => {
     if (req.session.user) {
@@ -102,7 +123,19 @@ app.post("/users", (req, res) => {
             res.status(400).send(error.keyValue);
         });
 });
+// Edit a user
+app.patch("/users", (req, res) => {
+    const userID = req.body.userID;
+    const changes = req.body.change;
 
+    User.findById(userID)
+        .then((user) => {
+            user.updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
+});
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
@@ -119,6 +152,7 @@ app.get("/users", (req, res) => {
                 name: user.name,
                 familyAdmin: user.familyAdmin,
                 username: user.username,
+                pending: user.pending
             };
             res.send(data);
         }
@@ -127,22 +161,81 @@ app.get("/users", (req, res) => {
 
 // Create a new family
 app.post("/family", (req, res) => {
+    const currentUser = req.session.user;
     const family = new Family({
         familyName: req.body.familyName,
     });
 
     family.save().then(
         (family) => {
-            res.send(family);
+            User.findById(currentUser).then((user) => {
+                user.familyID = family._id;
+                user.familyAdmin = true;
+
+                user.save()
+                    .then((result) => {
+                        res.send({ user: result, family });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+            });
         },
         (error) => {
             res.status(400).send(error);
         }
     );
 });
+app.patch("/family", (req, res) => {
+    const familyID = req.body.familyID;
+    const changes = req.body.change;
 
+    Family.findById(familyID)
+        .then((family) => {
+            family
+                .updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
+});
+// Get all users - to be used by admin (verification performed)
+app.get("/family/all", (req, res) => {
+    const currentUser = req.session.user;
+
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Family.find()
+                .then((allFamilies) => res.status(200).send(allFamilies))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Returns all users in an array belonging to family fid
 app.get("/family/:fid", (req, res) => {
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+        res.status(404).send();
+        return;
+    }
+
+    Family.findById(fid).then((family) => {
+        res.send(family);
+    });
+});
+
+// Returns all users in an array belonging to family fid
+app.get("/family/users/:fid", (req, res) => {
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
@@ -171,36 +264,191 @@ app.patch("/family/join/:fid", (req, res) => {
             const currentUser = req.session.user;
 
             User.findById(currentUser).then((user) => {
-                user.familyID = fid;
+                log(user.pending, fid)
+                if (user.pending == fid) {
+                    user.familyID = fid;
+                    user.pending = undefined;
 
-                user.save()
+                    user.save()
                     .then((result) => {
+                        const index = family.offers.indexOf(user._id);
+                        family.offers.splice(index, 1);
+                        family.save();
                         res.send({ user: result, family });
                     })
                     .catch((error) => {
                         res.status(400).send(error);
                     });
+                } else {
+                    res.status(400).send("User not invited to Family");
+                }
             });
         }
     });
 });
 
+// Current user declines invite to family fid
+app.patch("/family/decline/:fid", (req, res) => {
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+        res.status(404).send();
+        return;
+    }
+
+    Family.findById(fid).then((family) => {
+        if (!family) {
+            res.status(404).send("Resource not found");
+        } else {
+            const currentUser = req.session.user;
+
+            User.findById(currentUser).then((user) => {
+                log(user.pending, fid)
+                if (user.pending == fid) {
+                    user.pending = undefined;
+
+                    user.save()
+                    .then((result) => {
+                        const index = family.offers.indexOf(user._id);
+                        family.offers.splice(index, 1);
+                        family.save();
+                        res.send({ user: result, family });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+                } else {
+                    res.status(400).send("User not invited to Family");
+                }
+            });
+        }
+    });
+});
+
+// Invite a user to join family
+app.patch("/family/invite/:uid", (req, res) => {
+    const uid = req.params.uid;
+
+    if (!ObjectID.isValid(uid)) {
+        res.status(404).send();
+        return;
+    }
+
+    User.findById(uid).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource not found");
+        } else {
+            const currentUser = req.session.user;
+
+            User.findById(currentUser).then((adminUser) => {
+                if (adminUser.familyAdmin === true) {
+                    const currentFamily = adminUser.familyID;
+                    Family.findById(currentFamily).then((family) => {
+                        family.offers.push(uid);
+                        user.pending = currentFamily;
+                        user.save();
+
+                        family.save()
+                        .then((result) => {
+                            res.send({ family: result, user });
+                        })
+                        .catch((error) => {
+                            res.status(400).send(error);
+                        });
+                    })
+                } else {
+                    res.status(400).send("Not an admin")
+                }
+            });
+        }
+    });
+});
+app.get("/family/all", (req, res) => {
+    const currentUser = req.session.user;
+
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Family.find()
+                .then((allFamilies) => res.status(200).send(allFamilies))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Create a new tribe
 app.post("/tribe", (req, res) => {
+    const currentUser = req.session.user;
     const tribe = new Tribe({
         tribeName: req.body.tribeName,
     });
 
     tribe.save().then(
         (tribe) => {
-            res.send(tribe);
+            User.findById(currentUser).then((user) => {
+                Family.findById(user.familyID).then((family) => {
+                    log(currentUser)
+                    user.tribeAdmin.push(tribe._id);
+                    family.tribes.push(tribe._id);
+                    user.save()
+                    .then((resU) => {
+                        family.save()
+                        .then((result) => {
+                            res.send({ user: resU, family: result, tribe });
+                        }).catch((error) => {
+                            res.status(400).send(error);
+                        });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+                })
+            })
         },
         (error) => {
             res.status(400).send(error);
         }
     );
 });
+app.get("/tribe/all", (req, res) => {
+    const currentUser = req.session.user;
 
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Tribe.find()
+                .then((allTribes) => res.status(200).send(allTribes))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
+app.patch("/tribe", (req, res) => {
+    const tribeID = req.body.tribeID;
+    const changes = req.body.change;
+    Tribe.findById(tribeID)
+        .then((tribe) => {
+            tribe
+                .updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
+});
 //List Families in a tribe
 app.get("/tribe/:tid", (req, res) => {
     const tid = req.params.tid;
@@ -264,7 +512,26 @@ app.patch("/tribe/join/:tid", (req, res) => {
         }
     });
 });
+app.get("/tribe/all", (req, res) => {
+    const currentUser = req.session.user;
 
+    User.findById(currentUser).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource Not Found");
+        } else if (user.admin) {
+            Tribe.find()
+                .then((allTribes) => res.status(200).send(allTribes))
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send({});
+                });
+        } else {
+            res.status(404).send({
+                error: "Not authorized to perform this function",
+            });
+        }
+    });
+});
 // Create new list
 app.post("/list", (req, res) => {
     const fid = req.body.fid;
