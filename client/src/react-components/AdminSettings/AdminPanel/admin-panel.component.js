@@ -46,6 +46,7 @@ export default class AdminPanel extends Component {
             }
         }
     }
+
     deleteObj() {
         this.props.deleteObj(this.props.selectedItem, this.props.displayType);
     }
