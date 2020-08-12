@@ -14,14 +14,14 @@ const { User } = require("./models/user");
 const { Family } = require("./models/family");
 const { List } = require("./models/list");
 const { Tribe } = require("./models/tribe");
-const { MapList } = require("./models/mapList")
+const { MapList } = require("./models/mapList");
 const { City } = require("./models/city");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
 // body-parser middleware
 const bodyParser = require("body-parser");
-const datetime = require('date-and-time');
+const datetime = require("date-and-time");
 app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // express-session for user sessions
@@ -107,11 +107,19 @@ app.post("/users", (req, res) => {
 });
 
 app.delete("/users", (req, res) => {
+    const currentUser = req.session.user;
     const userID = req.body.userID;
-    console.log(userID);
-    User.findByIdAndDelete(userID)
-        .then(() => res.status(200).end())
-        .catch((err) => res.status(400).end());
+    User.findById(currentUser)
+        .then((user) => {
+            if (!user) {
+                res.status(404).send("Insufficient privileges");
+            } else {
+                User.findByIdAndDelete(userID)
+                    .then(() => res.status(200).end())
+                    .catch((err) => res.status(400).end());
+            }
+        })
+        .catch((err) => res.status(500).end);
 });
 
 // Edit a user
@@ -132,7 +140,7 @@ app.get("/users", (req, res) => {
     const currentUser = req.session.user;
     User.findById(currentUser).then((user) => {
         if (!user) {
-            res.status(404).send("Resource Not Found");
+            res.status(404).send("Insufficient privileges");
         } else {
             const data = {
                 id: user.id,
@@ -474,6 +482,11 @@ app.patch("/tribe/join/:tid", (req, res) => {
 
 // Create new list
 app.post("/list", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const fid = req.body.fid;
     if (!ObjectID.isValid(fid)) {
         res.status(404).send();
@@ -505,6 +518,11 @@ app.post("/list", (req, res) => {
 
 // Returns all lists in an array belonging to family fid
 app.get("/list/:fid", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
@@ -518,6 +536,11 @@ app.get("/list/:fid", (req, res) => {
 });
 //delete list
 app.delete("/list", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const listName = req.body.listname;
     const familyID = req.body.fid;
 
@@ -543,6 +566,11 @@ app.delete("/list", (req, res) => {
 
 // add item to a list
 app.post("/item", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const listName = req.body.listname;
     const familyID = req.body.fid;
 
@@ -577,6 +605,11 @@ app.post("/item", (req, res) => {
     });
 });
 app.patch("/item", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const listName = req.body.listname;
     const familyID = req.body.fid;
     const prevName = req.body.prevName;
@@ -604,6 +637,11 @@ app.patch("/item", (req, res) => {
 
 //delete item from a list
 app.delete("/item", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     const listName = req.body.listname;
     const familyID = req.body.fid;
     const itemName = req.body.itemname;
@@ -625,6 +663,268 @@ app.delete("/item", (req, res) => {
         })
         .catch((err) => res.status(400).end());
 });
+
+//Map database
+app.get("/MapList", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+
+    MapList.find()
+        .then((groceries) => {
+            res.send({ groceries });
+        })
+        .catch((error) => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        });
+});
+app.post("/MapList", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+    const groceries = new MapList({
+        name: req.body.name,
+        address: req.body.address,
+        open: req.body.open,
+        wait: req.body.wait,
+        coordinates: req.body.coordinates,
+    });
+    groceries
+        .save()
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((error) => {
+            if (isMongoError(error)) {
+                // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send("Internal server error");
+            } else {
+                log(error); // log server error to the console, not to the client.
+                res.status(400).send("Bad Request"); // 400 for bad request gets sent to client.
+            }
+        });
+});
+app.patch("/MapList", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+    const storeID = req.body.storeID;
+    const changes = req.body.change;
+    MapList.findById(storeID)
+        .then((store) => {
+            store
+                .updateOne({ [changes[0]]: changes[1] })
+                .then(() => res.status(200).end())
+                .catch((err) => res.status(400).end());
+        })
+        .catch(() => res.status(400).end());
+});
+
+app.delete("/MapList", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+    const currentUser = req.session.user;
+    const storeID = req.body.storeID;
+    User.findById(currentUser)
+        .then((user) => {
+            if (!user) {
+                res.status(404).send("Insufficient privileges");
+            } else {
+                MapList.findByIdAndDelete(storeID)
+                    .then(() => res.status(200).end())
+                    .catch((err) => res.status(400).end());
+            }
+        })
+        .catch((err) => res.status(500).end);
+});
+// {
+//     timesubmitted: <Time submitted>
+//
+// }
+app.post("/MapList/:mid", (req, res) => {
+    const id = req.params.mid;
+    const timesubmitted = req.body.timesubmitted;
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send();
+        return;
+    }
+
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+    const time = {
+        date: new Date(),
+        time: timesubmitted,
+    };
+    MapList.findById(id)
+        .then((result) => {
+            if (!result) {
+                res.status(404).send("Resource not found");
+            } else {
+                result.timesubmitted.push(time);
+                result
+                    .save()
+                    .then((result) => {
+                        const timesum = result.timesubmitted.reduce(function (
+                            sum,
+                            b
+                        ) {
+                            return sum + b.time;
+                        },
+                        0);
+                        const timeav = timesum / result.timesubmitted.length;
+                        const fieldstoupdate = {
+                            wait: parseInt(timeav) + "min",
+                        };
+                        MapList.findByIdAndUpdate(
+                            id,
+                            { $set: fieldstoupdate },
+                            { new: true, useFindAndModify: false }
+                        )
+                            .then((groceries) => {
+                                if (!groceries) {
+                                    res.status(404).send();
+                                } else {
+                                    res.send(groceries);
+                                }
+                            })
+                            .catch((error) => {
+                                if (isMongoError(error)) {
+                                    // check for if mongo server suddenly dissconnected before this request.
+                                    res.status(500).send(
+                                        "Internal server error"
+                                    );
+                                } else {
+                                    log(error);
+                                    res.status(400).send("Bad Request"); // bad request for changing the student.
+                                }
+                            });
+                    })
+                    .catch((error) => {
+                        if (isMongoError(error)) {
+                            // check for if mongo server suddenly dissconnected before this request.
+                            res.status(500).send("Internal server error");
+                        } else {
+                            log(error);
+                            res.status(400).send("Bad Request"); // bad request for changing the student.
+                        }
+                    });
+            }
+        })
+        .catch((error) => {
+            if (isMongoError(error)) {
+                // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send("Internal server error");
+            } else {
+                log(error);
+                res.status(400).send("Bad Request"); // bad request for changing the student.
+            }
+        });
+});
+/*
+[
+  { "path": "/name", "value": "Owen" },
+  {  "path": "/decription", "value": "Jim" },
+  
+  ...
+]
+*/
+app.patch("/MapList/:mid", (req, res) => {
+    const id = req.params.mid;
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send();
+        return; // so that we don't run the rest of the handler.
+    }
+
+    // check mongoose connection established.
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+
+    // Find the fields to update and their values.
+    const fieldsToUpdate = {};
+    req.body.map((change) => {
+        const propertyToChange = change.path.substr(1);
+        // log(propertyToChange)
+        fieldsToUpdate[propertyToChange] = change.value;
+    });
+    MapList.findByIdAndUpdate(
+        id,
+        { $set: fieldsToUpdate },
+        { new: true, useFindAndModify: false }
+    ).then((result) => {
+        if (!result) {
+            res.status(404).send("Resource not found");
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+app.get("/City", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+
+    City.find()
+        .then((City) => {
+            const obj = {};
+            City.map((item) => (obj[item.name] = item.coordinate));
+            res.send(obj);
+        })
+        .catch((error) => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        });
+});
+/*
+ {"name": "missi",
+    coordinate: [1,2] }
+*/
+app.post("/City", (req, res) => {
+    const coordinate = req.body.coordinate;
+    const name = req.body.names;
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+    const city = new City({
+        name: name,
+        coordinate: coordinate,
+    });
+    city.save()
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((error) => {
+            if (isMongoError(error)) {
+                // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send("Internal server error");
+            } else {
+                log(error); // log server error to the console, not to the client.
+                res.status(400).send("Bad Request"); // 400 for bad request gets sent to client.
+            }
+        });
+});
+
+/* API Routes *** */
 app.get("/all", (req, res) => {
     const currentUser = req.session.user;
 
@@ -685,214 +985,6 @@ app.get("/all/family", (req, res) => {
     });
 });
 
-//Map database
-app.get("/MapList",(req,res) =>{
-
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-    } 
-  
-    
-    MapList.find().then((groceries)=>{
-        res.send({groceries});
-    })
-    .catch((error) =>{
-        log(error);
-        res.status(500).send("Internal Server Error");
-    })
-
-})
-app.post('/MapList', (req,res)=>{
-    if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-	}  
-    const groceries = new MapList({
-        name: req.body.name,
-        address: req.body.address,
-        open: req.body.open,
-        wait: req.body.wait,
-        coordinates: req.body.coordinates,
-        
-    })
-    groceries.save().then((result) =>{
-        res.send(result);
-    }).catch((error)=>{
-        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			log(error) // log server error to the console, not to the client.
-			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
-		}
-
-    })
-})
-// {
-//     timesubmitted: <Time submitted>
-//      
-// }
-app.post("/MapList/:mid", (req,res)=>{
-    const id = req.params.mid;
-    const timesubmitted = req.body.timesubmitted;
-    if (!ObjectID.isValid(id)) {
-		res.status(404).send()  
-		return;  
-	}
-
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-    } 
-    const time = {
-        date: new Date(),
-        time: timesubmitted,
-
-    }
-    MapList.findById(id).then((result) =>{
-        if(!result){
-            res.status(404).send('Resource not found')  
-        }else{
-            result.timesubmitted.push(time)
-            result.save().then((result) =>{
-              
-                const timesum = result.timesubmitted.reduce(function(sum,b){
-                    return sum + b.time
-                }, 0)
-                const timeav = timesum/result.timesubmitted.length;
-                const fieldstoupdate ={"wait": parseInt(timeav) + 'min'};
-                MapList.findByIdAndUpdate(id, {$set: fieldstoupdate}, {new:true, useFindAndModify:false}).then((groceries)=>{
-                    if (!groceries){
-                        res.status(404).send()
-                    }else{
-                        res.send(groceries)
-                    }
-                }).catch((error) => {
-                    if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-                        res.status(500).send('Internal server error')
-                    } else {
-                        log(error)
-                        res.status(400).send('Bad Request') // bad request for changing the student.
-                    }
-                })
-
-
-            }).catch((error) => {
-                if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-                    res.status(500).send('Internal server error')
-                } else {
-                    log(error)
-                    res.status(400).send('Bad Request') // bad request for changing the student.
-                }
-            });
-         
-
-        }
-    }).catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			log(error)
-			res.status(400).send('Bad Request') // bad request for changing the student.
-		}
-	})
-
-})
-/*
-[
-  { "path": "/name", "value": "Owen" },
-  {  "path": "/decription", "value": "Jim" },
-  
-  ...
-]
-*/
-app.patch('/MapList/:mid', (req,res)=>{
-    const id = req.params.mid;
-    if (!ObjectID.isValid(id)) {
-		res.status(404).send()
-		return;  // so that we don't run the rest of the handler.
-	}
-
-	// check mongoose connection established.
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-	}
-
-	// Find the fields to update and their values.
-    const fieldsToUpdate = {};
-    req.body.map((change) => {
-		const propertyToChange = change.path.substr(1);
-		// log(propertyToChange)
-		fieldsToUpdate[propertyToChange] = change.value
-    })
-    MapList.findByIdAndUpdate(id, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false}).then((result) =>{
-        if(!result){
-            res.status(404).send('Resource not found')
-        }else{
-            res.send(result)
-        }
-    })
-
-
-})
-
-app.get("/City", (req,res)=>{
-    if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-    } 
-  
-    
-    City.find().then((City)=>{
-        const obj = {}
-        City.map((item) => obj[item.name] = item.coordinate)
-        res.send(obj);
-    })
-    .catch((error) =>{
-        log(error);
-        res.status(500).send("Internal Server Error");
-    })
-})
-/*
- {"name": "missi",
-    coordinate: [1,2] }
-*/
-app.post('/City', (req,res)=>{
-    
-    const coordinate = req.body.coordinate;
-    const name = req.body.names;
-    if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-    }  
-    const city = new City({
-        name: name,
-        coordinate: coordinate 
-    })
-    city.save().then((result) =>{
-        res.send(result);
-    }).catch((error)=>{
-        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			log(error) // log server error to the console, not to the client.
-			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
-		}
-
-    })
-
-})
-
-
-
-/* API Routes *** */
 // Get all families - to be used by admin (verification performed)
 app.post("/admin/family", (req, res) => {
     const currentUser = req.session.user;

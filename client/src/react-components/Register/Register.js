@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import "./Register.css";
-import Login from "../Login/login.component";
+//import Login from "../Login/login.component";
 //import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 //import Map from "../Maps/maps.component.js";
 export default class Register extends Component {

@@ -12,10 +12,6 @@ export default class AdminSearch extends Component {
             storeName: "",
             tribeName: "",
             searchType: "user",
-            allUsers: this.props.allUsers,
-            familyList: this.props.familyList,
-            storeList: this.props.storeList,
-            tribeList: this.props.tribeList,
 
             autoSuggestList: [],
         };
@@ -31,7 +27,10 @@ export default class AdminSearch extends Component {
         this.autoSuggestStore = this.autoSuggestStore.bind(this);
         this.autoSuggestTribe = this.autoSuggestTribe.bind(this);
     }
-
+    componentDidUpdate(prevProps, newState) {
+        if (prevProps !== this.props) {
+        }
+    }
     componentDidMount() {
         this.setState({ searchType: "family" });
         this.familyMode();

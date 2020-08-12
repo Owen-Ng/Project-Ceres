@@ -20,41 +20,15 @@ export default class AdminSettings extends Component {
             allTribes: {},
             membersLists: {},
             tribeLists: {},
-            membersDUMMYLists: {
-                UofT: ["Bob", "Karen"],
-                Laurier: ["James", "Debbie"],
-                McMaster: ["Scott", "Barry"],
-                Brock: ["Doug"],
-                York: ["Christine", "Valerie"],
-                Guelph: ["Stephen", "Joanne", "Kia"],
-            },
-            tribeDUMMYList: {
-                Toronto: ["UofT", "Laurier", "York"],
-                Hamilton: ["Laurier", "McMaster"],
-                Scarbourgh: ["Brock", "York"],
-            },
-            unassigned: { Jake: {}, Betty: {}, Alice: {} },
-            storeList: {
-                "444 Yonge St, Toronto": { name: "Metro", "line-size": 10 },
-                "531 Adelaide St W, Toronto": {
-                    name: "Walmart",
-                    "line-size": 32,
-                },
-            },
-            storeDUMMYList: {
-                "444 Yonge St, Toronto": { name: "Metro", "line-size": 10 },
-                "531 Adelaide St W, Toronto": {
-                    name: "Walmart",
-                    "line-size": 32,
-                },
-            },
             displayType: "",
             selectedItem: "",
             selectedObj: {},
         };
         this.parseUserData = this.parseUserData.bind(this);
         this.parseFamilyData = this.parseFamilyData.bind(this);
+        this.parseStoreData = this.parseStoreData.bind(this);
         this.parseTribeData = this.parseTribeData.bind(this);
+
         this.showOnPanel = this.showOnPanel.bind(this);
         this.deleteObj = this.deleteObj.bind(this);
         this.addNewData = this.addNewData.bind(this);
@@ -63,90 +37,13 @@ export default class AdminSettings extends Component {
 
     async componentDidMount() {
         if (this.props.user !== null) {
-            try {
-                //Getting all users
-                const response = await fetch(`http://localhost:5000/all`, {
-                    method: "GET",
-                    crossDomain: true,
-                    credentials: "include",
-                    redirect: "follow",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    referrerPolicy: "no-referrer",
-                });
-                if (response.status < 400) {
-                    const allUsers = await response.json();
-                    this.setState({ allUsers });
-                    this.parseUserData();
-                    /*
-                    
-                    */
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            //Getting all families
-            try {
-                const response = await fetch(
-                    `http://localhost:5000/all/family`,
-                    {
-                        method: "GET",
-                        crossDomain: true,
-                        credentials: "include",
-                        redirect: "follow",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        referrerPolicy: "no-referrer",
-                    }
-                );
-                if (response.status < 400) {
-                    const allFamilies = await response.json();
-                    this.setState({ allFamilies });
-
-                    this.parseFamilyData();
-                    /*
-                    
-                    */
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            // Getting all tribes
-            try {
-                const response = await fetch(
-                    `http://localhost:5000/all/tribe`,
-                    {
-                        method: "GET",
-                        crossDomain: true,
-                        credentials: "include",
-                        redirect: "follow",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        referrerPolicy: "no-referrer",
-                    }
-                );
-                if (response.status < 400) {
-                    const allTribes = await response.json();
-                    this.setState({ allTribes });
-                    this.parseTribeData();
-                    /*
-                    
-                    */
-                }
-            } catch (err) {
-                console.log(err);
-            }
+            this.getAllData();
         }
     }
     parseUserData() {
         const users = this.state.allUsers;
         const newUserData = {};
         for (let key in users) {
-            //this is how we'll adjust if the schema changes
-            //newUserData[users[key][username]] = users[key][username];
             let thisUserName = users[key]["username"];
             newUserData[thisUserName] = users[key];
         }
@@ -155,28 +52,36 @@ export default class AdminSettings extends Component {
     }
     parseFamilyData() {
         const families = this.state.allFamilies;
-        const newUserData = {};
+        const newFamilyData = {};
         for (let key in families) {
-            //this is how we'll adjust if the schema changes
-            //newUserData[users[key][username]] = users[key][username];
             let thisFamilyName = families[key]["familyName"];
-            newUserData[thisFamilyName] = families[key];
+            newFamilyData[thisFamilyName] = families[key];
         }
 
-        this.setState({ allFamilies: newUserData });
+        this.setState({ allFamilies: newFamilyData });
     }
-    parseStoreData() {}
+    parseStoreData() {
+        const stores = this.state.allStores;
+        console.log(stores);
+        const newStoreData = {};
+        for (let key in stores) {
+            let thisStoreName = stores[key]["address"];
+            newStoreData[thisStoreName] = stores[key];
+        }
+
+        this.setState({ allStores: newStoreData });
+    }
     parseTribeData() {
         const tribes = this.state.allTribes;
-        const newUserData = {};
+        const newTribeName = {};
         for (let key in tribes) {
             //this is how we'll adjust if the schema changes
             //newUserData[users[key][username]] = users[key][username];
             let thisTribeName = tribes[key]["tribeName"];
-            newUserData[thisTribeName] = tribes[key];
+            newTribeName[thisTribeName] = tribes[key];
         }
 
-        this.setState({ allTribes: newUserData });
+        this.setState({ allTribes: newTribeName });
     }
 
     /*
@@ -285,7 +190,30 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "store") {
             updatedList = this.state.allStores;
+            updatedList = this.state.allFamilies;
             delete updatedList[selectedItem];
+            const allFamilies = Object.keys(this.state.allFamilies);
+            try {
+                const response = await fetch("http://localhost:5000/MapList", {
+                    method: "DELETE",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        storeID: this.state.selectedObj["_id"],
+                    }),
+                });
+
+                if (response.status < 400) {
+                    alert("Deleted!");
+                }
+            } catch (err) {
+                console.log(err);
+            }
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
@@ -359,6 +287,26 @@ export default class AdminSettings extends Component {
                 const allUsers = await response.json();
                 this.setState({ allUsers });
                 this.parseUserData();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        try {
+            //Getting all Stores
+            const response = await fetch(`http://localhost:5000/MapList`, {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            if (response.status < 500) {
+                const allStores = await response.json();
+                this.setState({ allStores: allStores.groceries });
+                this.parseStoreData();
             }
         } catch (err) {
             console.log(err);
