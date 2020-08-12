@@ -204,6 +204,9 @@ app.patch("/family/join/:fid", (req, res) => {
 
                     user.save()
                     .then((result) => {
+                        const index = family.offers.indexOf(user._id);
+                        family.offers.splice(index, 1);
+                        family.save();
                         res.send({ user: result, family });
                     })
                     .catch((error) => {
