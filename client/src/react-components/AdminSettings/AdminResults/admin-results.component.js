@@ -20,8 +20,7 @@ export default class AdminResults extends Component {
     Generates components for the list of obtained results
     */
     renderResults() {
-        const list = this.props.list;
-
+        const list = Object.keys(this.props.searchableObject);
         return list.map((item) => (
             <h5
                 className="AdminResults-results"

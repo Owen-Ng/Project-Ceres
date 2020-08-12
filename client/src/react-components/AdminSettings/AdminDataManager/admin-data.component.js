@@ -111,7 +111,7 @@ export default class AdminData extends Component {
                 );
 
                 if (response.status < 400) {
-                    alert(`Added ${this.state.familyName}`);
+                    //alert(`Added ${this.state.familyName}`);
                 }
             } catch (err) {
                 console.log(err);
