@@ -23,6 +23,7 @@ export default class Maps extends Component {
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
+        toggle: false,
 
       }
  
@@ -58,8 +59,9 @@ export default class Maps extends Component {
       if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id != ""){
         
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-  
+          
         setTimeout(function () {
+          this.setState({toggle:!this.state.toggle});
           this.setState({ timesubmitted: "" })
         }.bind(this), 1000)
       }
@@ -139,7 +141,7 @@ export default class Maps extends Component {
       <div className='mapcenter container-xl' >
         <div className="row">
           <div className="mapcolor p-1 m-0 col-lg-9 border border-dark">
-            <Map name = {this.state.currentcity} city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
+            <Map name = {this.state.currentcity} toggle={this.state.toggle} city = {this.state.City[this.state.currentcity]} senddata= {this.getdata}/>
           </div>
           <div className="backcolor p-0 m-0 col-3 border border-dark " >
             <div className="mapborderbottom" >

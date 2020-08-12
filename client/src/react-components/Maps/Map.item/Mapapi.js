@@ -16,7 +16,8 @@ export default class PublicMap extends Component {
   this.state = {
     currentstate:null,
     groceries: [],
-    oldstate: null,
+    toggle: false,
+    oldtoggle: false
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
@@ -41,6 +42,9 @@ export default class PublicMap extends Component {
         icon={active}
       />
     )
+  }
+  componentWillReceiveProps(){
+    this.setState({toggle: this.props.toggle})
   }
   componentDidMount(){
     // this.intervalupdate = setInterval(()=>{
@@ -80,10 +84,10 @@ export default class PublicMap extends Component {
   // },1500)
   }
   componentDidUpdate(){
-    console.log(1)
-    if (this.state.oldstate !== this.state.currentstate){
-      this.setState({oldstate: this.state.currentstate});
-    console.log("Awdw");
+    
+    if (this.state.oldtoggle !== this.state.toggle){
+      this.setState({oldtoggle: this.state.toggle});
+  
     const url = "/MapList";
     fetch(url, {
       method: "GET"
