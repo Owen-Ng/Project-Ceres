@@ -25,7 +25,6 @@ export default class Maps extends Component {
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
-        //groceries: null,
 
       }
  
@@ -43,16 +42,19 @@ export default class Maps extends Component {
     this.setState({currentstate:something})
   }
   changetimesubmitted(event){
+    
     const target = event.target;
     const value = target.value;
     this.setState({timesubmitted: value});
   }
   changecity(event){
+    
     const target = event.target;
     const value = target.value;
     this.setState({citystate: value});
   }
   timesubmit(event){
+    
     const key = event.Keycode || event.which;
     if (key === 13){
       if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id != ""){
@@ -108,7 +110,6 @@ export default class Maps extends Component {
    
 
   }
-    
 
   
   
@@ -136,11 +137,11 @@ export default class Maps extends Component {
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time}</strong> </p>
             </div>
-            <div className="bottomtext">
+            {this.state.user?this.state.user.familyAdmin? <div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
                onKeyUp={this.timesubmit} type= "text" className="waitTime" placeholder="Enter time taken"></input>
-            </div>
+            </div>:<div></div>: <div></div>}
           </div>
           </div>
         </div>
