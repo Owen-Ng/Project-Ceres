@@ -15,7 +15,7 @@ const { Family } = require("./models/family");
 const { List } = require("./models/list");
 const { Tribe } = require("./models/tribe");
 const { MapList } = require("./models/mapList")
-const { City } = require("./models/City");
+const { City } = require("./models/city");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
@@ -576,7 +576,7 @@ app.patch('/MapList/:mid', (req,res)=>{
 
 })
 
-app.get("/City", (res,req)=>{
+app.get("/City", (req,res)=>{
     if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
@@ -594,9 +594,14 @@ app.get("/City", (res,req)=>{
         res.status(500).send("Internal Server Error");
     })
 })
-app.post("/City", (res,req)=>{
-    const name = req.body.name;
+/*
+ {"name": "missi",
+    coordinate: [1,2] }
+*/
+app.post('/City', (req,res)=>{
+    
     const coordinate = req.body.coordinate;
+    const name = req.body.names;
     if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')

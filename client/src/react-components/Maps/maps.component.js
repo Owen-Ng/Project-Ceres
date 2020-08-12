@@ -19,9 +19,7 @@ export default class Maps extends Component {
         },
        
       
-        City:{mississauga:[43.587684, -79.646186,],etobicoke:[43.618470, -79.514554],
-           toronto:[43.651717, -79.383545], scarborough:[43.774614, -79.259978],
-          york: [43.694012, -79.450578]}
+        City:{etobicoke:[43.618470, -79.514554],}
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
@@ -84,19 +82,42 @@ export default class Maps extends Component {
   }
 
   }
+  componentDidMount(){
+    const url = "/City";
+    fetch(url, {
+      method: "GET"
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
+
+      } else {
+        log("Could not get data");
+      }
+    }).then(function (json) {
+      
+
+      this.setState({ City: json});
+      // console.log(this.state);
+
+    }.bind(this)).catch(error => {
+      log(error)
+    })
+  }
   Keypress(event){
     const key = event.Keycode || event.which;
     
           if (key === 13){
-            if(this.state.citystate in this.state.City){
-            this.setState(({citystate}) => ({
+            
+            if(this.state.citystate.toLowerCase() in this.state.City){
+              
+              
+              this.setState(({citystate}) => ({
               citystate: "",
-              currentcity: citystate,
+              currentcity: citystate.toLowerCase(),
             
             
-          }));
-          
-      
+            }));
+    
           }
           else{
             this.setState({citystate: "City does not exist"});
