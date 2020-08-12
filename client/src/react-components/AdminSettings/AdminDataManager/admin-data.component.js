@@ -5,19 +5,28 @@ export default class AdminData extends Component {
         super(props);
 
         this.state = {
-            dataType: "family",
+            dataType: "user",
             dataName: "",
             familyName: "",
             storeAddress: "",
             families: "",
             users: "",
+            username: "",
+            name: "",
+            password: "",
+            email: "",
+            tribeName: "",
         };
         this.familyMode = this.familyMode.bind(this);
         this.storeMode = this.storeMode.bind(this);
         this.tribeMode = this.tribeMode.bind(this);
+        this.userMode = this.userMode.bind(this);
 
         this.onInputChange = this.onInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    userMode() {
+        this.setState({ dataType: "user" });
     }
     familyMode() {
         this.setState({ dataType: "family" });
@@ -28,7 +37,6 @@ export default class AdminData extends Component {
     tribeMode() {
         this.setState({ dataType: "tribe" });
     }
-
     onInputChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -36,85 +44,184 @@ export default class AdminData extends Component {
         Creates a new list of what needs to be updated and then pushes it up to the admin settings (parent) for
         universal changes including the database.
     */
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        if (
+        if (this.state.dataType === "user" && this.state.dataType.length > 0) {
+            let allUsers = this.props.allUsers;
+
+            if (allUsers[this.state.username] === undefined) {
+                allUsers[this.state.username] = this.state.allUsers;
+                try {
+                    const response = await fetch(
+                        "http://localhost:5000/users",
+                        {
+                            method: "POST",
+                            crossDomain: true,
+                            credentials: "include",
+                            redirect: "follow",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            referrerPolicy: "no-referrer",
+                            body: JSON.stringify({
+                                username: this.state.username,
+                                password: this.state.password,
+                                name: this.state.name,
+                                email: this.state.email,
+                            }),
+                        }
+                    );
+
+                    if (response.status < 400) {
+                        alert(`Added ${this.state.username}`);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+            }
+        } else if (
             this.state.dataType === "family" &&
             this.state.dataType.length > 0
         ) {
-            let familyList = this.props.familyList;
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/admin/family",
+                    {
+                        method: "POST",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                        body: JSON.stringify({
+                            familyName: this.state.familyName,
+                        }),
+                    }
+                );
 
-            if (familyList[this.state.dataName] === undefined) {
-                familyList[this.state.dataName] = this.state.users.split(" ");
-                this.props.addNewData(familyList, this.state.dataType);
-                alert(`Added  ${this.state.dataName}`);
-            } else {
+                if (response.status < 400) {
+                    alert(`Added ${this.state.familyName}`);
+                }
+            } catch (err) {
+                console.log(err);
             }
+            //this.props.addNewData(allUsers, this.state.dataType);
         } else if (this.state.dataType === "store") {
-            let storeList = this.props.storeList;
+            let allStores = this.props.allStores;
             if (
-                storeList[this.state.storeAddress] === undefined &&
+                allStores[this.state.storeAddress] === undefined &&
                 this.state.storeAddress.length > 0
             ) {
-                storeList[this.state.storeAddress] = {
+                allStores[this.state.storeAddress] = {
                     name: this.state.dataName,
                     "line-size": 0,
                 };
-                this.props.addNewData(storeList, this.state.dataType);
-                alert(`Added  ${this.state.dataName}`);
+                this.props.addNewData(allStores, this.state.dataType);
+                alert(`Added ${this.state.dataName}`);
             } else
                 alert(
                     "A store with that address already exists (or it's too short)"
                 );
         } else if (this.state.dataType === "tribe") {
-            let tribeList = this.props.tribeList;
+            let allTribes = this.props.allTribes;
             if (
-                tribeList[this.state.dataName] === undefined &&
+                allTribes[this.state.dataName] === undefined &&
                 this.state.dataType.length > 0
             ) {
-                const families = this.state.families.split(" ");
-                tribeList[this.state.dataName] = families;
-                this.props.addNewData(tribeList, this.state.dataType);
-                alert(`Added  ${this.state.dataName}`);
+                try {
+                    const response = await fetch(
+                        "http://localhost:5000/admin/tribe",
+                        {
+                            method: "POST",
+                            crossDomain: true,
+                            credentials: "include",
+                            redirect: "follow",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            referrerPolicy: "no-referrer",
+                            body: JSON.stringify({
+                                tribeName: this.state.tribeName,
+                            }),
+                        }
+                    );
+
+                    if (response.status < 400) {
+                        alert(`Added ${this.state.tribeName}`);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+                //this.props.addNewData(allUsers, this.state.dataType);
             } else
                 alert(
                     "A tribe with that name already exists (or it's too short)"
                 );
         }
+        this.props.getAllData();
     }
 
     render() {
+        const userData = (
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <input
+                        className="AdminData-input"
+                        name="username"
+                        type="text"
+                        placeholder="Enter username"
+                        onChange={this.onInputChange}
+                        value={this.state.username}
+                        autoComplete="off"
+                    />
+                    <input
+                        className="AdminData-input"
+                        name="email"
+                        type="text"
+                        placeholder="Enter email"
+                        onChange={this.onInputChange}
+                        value={this.state.email}
+                        autoComplete="off"
+                    />
+                    <input
+                        className="AdminData-input"
+                        name="name"
+                        type="text"
+                        placeholder="Enter a name"
+                        onChange={this.onInputChange}
+                        value={this.state.name}
+                        autoComplete="off"
+                    />
+                    <input
+                        className="AdminData-input"
+                        name="password"
+                        type="password"
+                        placeholder="Enter a password"
+                        onChange={this.onInputChange}
+                        value={this.state.password}
+                        autoComplete="off"
+                    />
+
+                    <button className="btn btn-primary btn-add">
+                        Add User
+                    </button>
+                </form>
+            </div>
+        );
+
         const familyData = (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <p>
-                        (Note: All "users" entries must be seperated by a space)
-                    </p>
-                    <input
-                        className="AdminData-input"
-                        name="dataName"
-                        type="text"
-                        placeholder="Enter family's name"
-                        onChange={this.onInputChange}
-                        value={this.state.dataName}
-                        autoComplete="off"
-                    />
                     <input
                         className="AdminData-input"
                         name="familyName"
                         type="text"
-                        placeholder="Enter family's tribe"
+                        placeholder="Enter family's name"
                         onChange={this.onInputChange}
                         value={this.state.familyName}
-                        autoComplete="off"
-                    />
-                    <input
-                        className="AdminData-input"
-                        name="users"
-                        type="text"
-                        placeholder="Enter users"
-                        onChange={this.onInputChange}
-                        value={this.state.users}
                         autoComplete="off"
                     />
                     <button className="btn btn-primary btn-add">
@@ -123,7 +230,7 @@ export default class AdminData extends Component {
                 </form>
             </div>
         );
-
+        /*
         const storeData = (
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -136,46 +243,26 @@ export default class AdminData extends Component {
                         value={this.state.dataName}
                         autoComplete="off"
                     />
-                    <input
-                        className="AdminData-input"
-                        name="storeAddress"
-                        type="text"
-                        placeholder="Enter store address"
-                        onChange={this.onInputChange}
-                        value={this.state.storeAddress}
-                        autoComplete="off"
-                    />
                     <button className="btn btn-primary btn-add">
                         Add Store
                     </button>
                 </form>
             </div>
         );
-
+            */
         const tribeData = (
             <div>
-                <p>
-                    (Note: All "families" entries must be seperated by a space)
-                </p>
                 <form onSubmit={this.handleSubmit}>
                     <input
                         className="AdminData-input"
-                        name="dataName"
+                        name="tribeName"
                         type="text"
                         placeholder="Enter tribe name"
                         onChange={this.onInputChange}
-                        value={this.state.dataName}
+                        value={this.state.tribeName}
                         autoComplete="off"
                     />
-                    <input
-                        className="AdminData-input"
-                        name="families"
-                        type="text"
-                        placeholder="Enter all families"
-                        onChange={this.onInputChange}
-                        value={this.state.families}
-                        autoComplete="off"
-                    />
+
                     <button className="btn btn-primary btn-add">
                         Add Tribe
                     </button>
@@ -186,6 +273,13 @@ export default class AdminData extends Component {
             <div className="AdminData">
                 <p>Add data</p>
                 <div className="btn-group" role="group">
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={this.userMode}
+                    >
+                        User
+                    </button>
                     <button
                         type="button"
                         className="btn btn-secondary"
@@ -208,11 +302,11 @@ export default class AdminData extends Component {
                         Tribe
                     </button>
                 </div>
-
+                {this.state.dataType === "user" ? userData : ""}
                 {this.state.dataType === "family" ? familyData : ""}
-                {this.state.dataType === "store" ? storeData : ""}
                 {this.state.dataType === "tribe" ? tribeData : ""}
             </div>
+            //{this.state.dataType === "store" ? storeData : ""}
         );
     }
 }

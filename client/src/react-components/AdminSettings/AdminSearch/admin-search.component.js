@@ -134,6 +134,7 @@ export default class AdminSearch extends Component {
                     list={this.state.autoSuggestList}
                     searchType="family"
                     showPanel={this.showPanel}
+                    getAllData={this.props.getAllData}
                 />
             </div>
         );
@@ -155,6 +156,7 @@ export default class AdminSearch extends Component {
                     list={this.state.autoSuggestList}
                     searchType="user"
                     showPanel={this.showPanel}
+                    getAllData={this.props.getAllData}
                 />
             </div>
         );
@@ -173,10 +175,11 @@ export default class AdminSearch extends Component {
                     />
                 </form>
                 <AdminResults
-                    searchableObject={this.state.storeList}
+                    searchableObject={this.state.allStores}
                     list={this.state.autoSuggestList}
                     searchType="store"
                     showPanel={this.showPanel}
+                    getAllData={this.props.getAllData}
                 />
             </div>
         );
@@ -195,10 +198,11 @@ export default class AdminSearch extends Component {
                     />
                 </form>
                 <AdminResults
-                    searchableObject={this.state.tribeList}
+                    searchableObject={this.state.allTribes}
                     list={this.state.autoSuggestList}
                     showPanel={this.showPanel}
                     searchType="tribe"
+                    getAllData={this.props.getAllData}
                 />
             </div>
         );

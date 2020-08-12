@@ -58,25 +58,23 @@ export default class AdminSettings extends Component {
         this.showOnPanel = this.showOnPanel.bind(this);
         this.deleteObj = this.deleteObj.bind(this);
         this.addNewData = this.addNewData.bind(this);
+        this.getAllData = this.getAllData.bind(this);
     }
 
     async componentDidMount() {
         if (this.props.user !== null) {
             try {
                 //Getting all users
-                const response = await fetch(
-                    `http://localhost:5000/users/all`,
-                    {
-                        method: "GET",
-                        crossDomain: true,
-                        credentials: "include",
-                        redirect: "follow",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        referrerPolicy: "no-referrer",
-                    }
-                );
+                const response = await fetch(`http://localhost:5000/all`, {
+                    method: "GET",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                });
                 if (response.status < 400) {
                     const allUsers = await response.json();
                     this.setState({ allUsers });
@@ -91,7 +89,7 @@ export default class AdminSettings extends Component {
             //Getting all families
             try {
                 const response = await fetch(
-                    `http://localhost:5000/family/all`,
+                    `http://localhost:5000/all/family`,
                     {
                         method: "GET",
                         crossDomain: true,
@@ -118,7 +116,7 @@ export default class AdminSettings extends Component {
             // Getting all tribes
             try {
                 const response = await fetch(
-                    `http://localhost:5000/tribe/all`,
+                    `http://localhost:5000/all/tribe`,
                     {
                         method: "GET",
                         crossDomain: true,
@@ -221,12 +219,34 @@ export default class AdminSettings extends Component {
     Goes into the selected list and removes the instance. Updates the state with the new list. This function
     will call the server to handover the new update.
     */
-    deleteObj(selectedItem, displayType) {
+    async deleteObj(selectedItem, displayType) {
         let updatedList;
         if (displayType === "user") {
             updatedList = this.state.allUsers;
             delete updatedList[selectedItem];
             const allUsers = Object.keys(this.state.allUsers);
+            try {
+                const response = await fetch("http://localhost:5000/users", {
+                    method: "DELETE",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        userID: this.state.selectedObj["_id"],
+                    }),
+                });
+
+                if (response.status < 400) {
+                    alert("Deleted!");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
@@ -235,12 +255,33 @@ export default class AdminSettings extends Component {
         } else if (displayType === "family") {
             updatedList = this.state.allFamilies;
             delete updatedList[selectedItem];
-            const newFamilyList = Object.keys(this.state.membersLists);
+            const allFamilies = Object.keys(this.state.allFamilies);
+            try {
+                const response = await fetch("http://localhost:5000/family", {
+                    method: "DELETE",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        familyID: this.state.selectedObj["_id"],
+                    }),
+                });
+
+                if (response.status < 400) {
+                    alert("Deleted!");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                familyList: newFamilyList,
-                membersLists: updatedList,
+                allFamilies,
             });
         } else if (displayType === "store") {
             updatedList = this.state.allStores;
@@ -248,19 +289,42 @@ export default class AdminSettings extends Component {
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                storeList: updatedList,
+                allStores: updatedList,
             });
         } else if (displayType === "tribe") {
             updatedList = this.state.allTribes;
             delete updatedList[selectedItem];
+            try {
+                const response = await fetch("http://localhost:5000/tribe", {
+                    method: "DELETE",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        tribeID: this.state.selectedObj["_id"],
+                    }),
+                });
+
+                if (response.status < 400) {
+                    alert("Deleted!");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                tribeList: updatedList,
+                allTribes: updatedList,
             });
         } else {
             alert("Something went wrong");
         }
+        this.getAllData();
     }
     /* 
     Simply gets a new list and then updates the state. This function
@@ -268,13 +332,77 @@ export default class AdminSettings extends Component {
     */
     addNewData(newData, dataType) {
         if (dataType === "family") {
-            this.setState({ membersLists: newData });
+            this.setState({ allFamilies: newData });
         } else if (dataType === "user") {
             this.setState({ allUsers: newData });
         } else if (dataType === "store") {
-            this.setState({ storeList: newData });
+            this.setState({ allStores: newData });
         } else if (dataType === "tribe") {
-            this.setState({ tribeList: newData });
+            this.setState({ allTribes: newData });
+        }
+    }
+
+    async getAllData() {
+        try {
+            //Getting all users
+            const response = await fetch(`http://localhost:5000/all`, {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            if (response.status < 400) {
+                const allUsers = await response.json();
+                this.setState({ allUsers });
+                this.parseUserData();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        try {
+            //Getting all families
+            const response = await fetch(`http://localhost:5000/all/family`, {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            if (response.status < 400) {
+                const allFamilies = await response.json();
+                this.setState({ allFamilies });
+                this.parseFamilyData();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+        try {
+            //Getting all users
+            const response = await fetch(`http://localhost:5000/all/tribe`, {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            if (response.status < 400) {
+                const allTribes = await response.json();
+                this.setState({ allTribes });
+                this.parseTribeData();
+            }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -289,15 +417,17 @@ export default class AdminSettings extends Component {
                             allStores={this.state.allStores}
                             allTribes={this.state.allTribes}
                             showPanel={this.showOnPanel}
+                            getAllData={this.getAllData}
                         />
                     </div>
                     <div className="col-sm data">
                         <AdminData
                             allUsers={this.state.allUsers}
-                            familyList={this.state.allFamilies}
-                            storeList={this.state.allStores}
-                            tribeList={this.state.allTribes}
+                            allFamilies={this.state.allFamilies}
+                            allStores={this.state.allStores}
+                            allTribes={this.state.allTribes}
                             addNewData={this.addNewData}
+                            getAllData={this.getAllData}
                         />
                     </div>
                 </div>
@@ -308,6 +438,7 @@ export default class AdminSettings extends Component {
                             selectedObj={this.state.selectedObj}
                             displayType={this.state.displayType}
                             deleteObj={this.deleteObj}
+                            getAllData={this.getAllData}
                         />
                     </div>
                 </div>
