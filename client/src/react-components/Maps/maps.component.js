@@ -57,7 +57,7 @@ export default class Maps extends Component {
     
     const key = event.Keycode || event.which;
     if (key === 13){
-      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id != ""){
+      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== ""){
         
           addtime(this.state.timesubmitted, this.state.currentstate.id);
           
