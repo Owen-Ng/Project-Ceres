@@ -42,7 +42,7 @@ export default class PublicMap extends Component {
     )
   }
   componentDidMount(){
-    this.intervalupdate = setInterval(()=>{
+    // this.intervalupdate = setInterval(()=>{
     
     const url = "/MapList";
     fetch(url, {
@@ -63,25 +63,25 @@ export default class PublicMap extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
-    setTimeout(function(){
-      const newtime = new Date();
-      if (this.state.groceries !==[]){
-          this.state.groceries.map((obj) => {
-              const newtimearray = obj.timesubmitted.filter((time) => 
-                  datetime.subtract(newtime, new Date(time.date)).toHours() < 2
-              )
-              removedexpired(obj._id, newtimearray);
-          })
+    // setTimeout(function(){
+    //   const newtime = new Date();
+    //   if (this.state.groceries !==[]){
+    //       this.state.groceries.map((obj) => {
+    //           const newtimearray = obj.timesubmitted.filter((time) => 
+    //               datetime.subtract(newtime, new Date(time.date)).toHours() < 2
+    //           )
+    //           removedexpired(obj._id, newtimearray);
+    //       })
           
-        }
-    }.bind(this),50);
+    //     }
+    // }.bind(this),50);
    
-  },1500)
+  //},1500)
   }
 
-  componentWillMount(){
-    clearInterval(this.intervalupdate);
-  }
+  // componentWillMount(){
+  //   clearInterval(this.intervalupdate);
+  // }
  
   render() {  
 

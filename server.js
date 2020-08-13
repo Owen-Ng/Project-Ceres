@@ -408,8 +408,26 @@ app.patch("/tribe", (req, res) => {
         .catch(() => res.status(400).end());
 });
 
-//List Families in a tribe
+//Get tribe info
 app.get("/tribe/:tid", (req, res) => {
+    const tid = req.params.tid;
+
+    if (!ObjectID.isValid(tid)) {
+        res.status(404).send();
+        return;
+    }
+
+    Tribe.findById(tid).then((tribe) => {
+        if (!tribe) {
+            res.status(404).send("Resource not found");
+        } else {
+            res.send(tribe);
+        }
+    });
+});
+
+//List Families in a tribe
+app.get("/tribe/families/:tid", (req, res) => {
     const tid = req.params.tid;
 
     if (!ObjectID.isValid(tid)) {
@@ -468,6 +486,86 @@ app.patch("/tribe/join/:tid", (req, res) => {
                     }
                 });
             }
+        }
+    });
+});
+
+// Current user declines invite to tribe tid
+app.patch("/tribe/decline/:tid", (req, res) => {
+    const tid = req.params.tid;
+
+    if (!ObjectID.isValid(tid)) {
+        res.status(404).send();
+        return;
+    }
+
+    // Family.findById(fid).then((family) => {
+    //     if (!family) {
+    //         res.status(404).send("Resource not found");
+    //     } else {
+    //         const currentUser = req.session.user;
+
+    //         User.findById(currentUser).then((user) => {
+    //             log(user.pending, fid);
+    //             if (user.pending == fid) {
+    //                 user.pending = undefined;
+
+    //                 user.save()
+    //                     .then((result) => {
+    //                         const index = family.offers.indexOf(user._id);
+    //                         family.offers.splice(index, 1);
+    //                         family.save();
+    //                         res.send({ user: result, family });
+    //                     })
+    //                     .catch((error) => {
+    //                         res.status(400).send(error);
+    //                     });
+    //             } else {
+    //                 res.status(400).send("User not invited to Family");
+    //             }
+    //         });
+    //     }
+    // });
+});
+
+// Invite a users family to join a tribe
+app.patch("/tribe/invite/:uid", (req, res) => {
+    const uid = req.params.uid;
+    const tid = req.body.tribeid;
+
+    if (!ObjectID.isValid(uid)) {
+        res.status(404).send();
+        return;
+    }
+
+    User.findById(uid).then((user) => {
+        if (!user) {
+            res.status(404).send("Resource not found");
+        } else if (!user.familyID) {
+            res.status(404).send("User does not belong to a family");
+        } else {
+            const currentFamily = user.familyID;
+
+            Tribe.findById(tid).then((tribe) => {
+                if (!tribe) {
+                    res.statusMessage(404).send("Resource not found")
+                } else {
+                    Family.findById(currentFamily).then((family) => {
+                        family.pending.push(tid);
+                        tribe.offers = currentFamily;
+                        family.save();
+
+                        tribe
+                            .save()
+                            .then((result) => {
+                                res.send({ tribe: result, family });
+                            })
+                            .catch((error) => {
+                                res.status(400).send(error);
+                            });
+                    });
+                } 
+            });
         }
     });
 });
