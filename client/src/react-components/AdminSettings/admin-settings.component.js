@@ -37,7 +37,7 @@ export default class AdminSettings extends Component {
 
     async componentDidMount() {
         if (this.props.user !== null) {
-            this.getAllData();
+            await this.getAllData();
         }
     }
     parseUserData() {
@@ -252,7 +252,7 @@ export default class AdminSettings extends Component {
         } else {
             alert("Something went wrong");
         }
-        this.getAllData();
+        await this.getAllData();
     }
     /* 
     Simply gets a new list and then updates the state. This function

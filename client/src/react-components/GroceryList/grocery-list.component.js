@@ -37,9 +37,12 @@ export default class GroceryList extends Component {
         this.updateState = this.updateState.bind(this);
         this.deleteList = this.deleteList.bind(this);
         this.isValidUser = this.isValidUser.bind(this);
+        this.getLists = this.getLists.bind(this);
     }
-
     async componentDidMount() {
+        await this.getLists();
+    }
+    async getLists() {
         const user = this.props.user;
         if (user !== null) {
             try {
@@ -77,7 +80,6 @@ export default class GroceryList extends Component {
             }
         }
     }
-
     updateState(updateObj) {
         this.setState(updateObj);
     }
@@ -86,11 +88,12 @@ export default class GroceryList extends Component {
     */
     async editItem(item) {
         const currentList = this.state.currentList;
+        /* 
         let updatedList = this.state.familyLists;
         delete updatedList[currentList][item.prevItemName];
         updatedList[currentList][item.name] = item.quantity;
         this.setState((state) => updatedList);
-
+        */
         try {
             await fetch("http://localhost:5000/item", {
                 method: "PATCH",
@@ -112,6 +115,8 @@ export default class GroceryList extends Component {
         } catch (err) {
             console.log(err);
         }
+        this.setState({ currentList });
+        await this.getLists();
     }
     /*
         Later on this will call the server to hand over the new set of lists and items.
@@ -130,7 +135,7 @@ export default class GroceryList extends Component {
                 },
                 body: JSON.stringify({
                     listname: currentList,
-                    fid: this.state.user.familyID,
+                    fid: this.props.user.familyID,
                     itemname: itemName,
                 }),
                 referrerPolicy: "no-referrer",
@@ -140,6 +145,8 @@ export default class GroceryList extends Component {
         } catch (err) {
             console.log(err);
         }
+        await this.getLists();
+        this.setState({ currentList });
     }
     /*
         Recieves items from the GroceryListForm and is passed down as a prop. Once the new item object is recieved
@@ -148,6 +155,7 @@ export default class GroceryList extends Component {
     */
     async addItem(newItem) {
         const currentList = this.state.currentList;
+
         if (newItem.newItem.trim() === "") {
             alert("Please enter a valid name");
             return;
@@ -163,7 +171,7 @@ export default class GroceryList extends Component {
                 },
                 body: JSON.stringify({
                     listname: currentList,
-                    fid: this.state.user.familyID,
+                    fid: this.props.user.familyID,
                     itemname: newItem.newItem,
                     quantity: newItem.newItemQuantity,
                 }),
@@ -180,6 +188,8 @@ export default class GroceryList extends Component {
         } catch (err) {
             console.log(err);
         }
+        await this.getLists();
+        this.setState({ currentList });
     }
     /*
         Calls the GroceryItem component to generate a tab with all the information given for each item on 
@@ -225,9 +235,10 @@ export default class GroceryList extends Component {
         const updatedListKeys = Object.keys(this.state.familyLists).filter(
             (list) => list !== oldList
         );
-
+        /*
         let updatedList = this.state.familyLists;
         delete updatedList[oldList];
+        */
         await fetch("http://localhost:5000/list", {
             method: "DELETE",
             crossDomain: true,
@@ -242,12 +253,14 @@ export default class GroceryList extends Component {
                 fid: this.props.user.familyID,
             }),
         });
+        /*
         if (updatedListKeys.length > 0) {
             this.setState({ currentList: updatedListKeys[0] });
             this.setState((state) => updatedList);
         } else {
-            this.setState({ currentList: "No list selected" });
         }
+        */
+        this.setState({ currentList: "No list selected" });
     }
 
     isValidUser(content) {

@@ -194,7 +194,7 @@ export default class AdminData extends Component {
                 //this.props.addNewData(allUsers, this.state.dataType);
             }
         }
-        this.props.getAllData();
+        await this.props.getAllData();
     }
 
     render() {
