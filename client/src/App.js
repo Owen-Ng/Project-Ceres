@@ -29,30 +29,10 @@ export default class App extends Component {
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
         this.logout = this.logout.bind(this);
+        this.getUser = this.getUser.bind(this);
     }
     async componentDidMount() {
-        try {
-            const response = await fetch("http://localhost:5000/users", {
-                method: "GET",
-                crossDomain: true,
-                credentials: "include",
-                redirect: "follow",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                referrerPolicy: "no-referrer",
-            });
-            if (response.status < 400) {
-                const user = await response.json();
-                if (!user) {
-                    return;
-                }
-                this.setState({ user });
-                this.determinePermissions(user);
-            }
-        } catch (err) {
-            console.log(err);
-        }
+        await this.getUser();
     }
     setPermissions(permissionString, username) {
         if (permissionString === "user") {
@@ -111,7 +91,30 @@ export default class App extends Component {
         });
         return <Redirect to="/map" />;
     }
-
+    async getUser() {
+        try {
+            const response = await fetch("http://localhost:5000/users", {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
+            if (response.status < 400) {
+                const user = await response.json();
+                if (!user) {
+                    return;
+                }
+                this.setState({ user });
+                this.determinePermissions(user);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
     render() {
         return (
             <Router>
