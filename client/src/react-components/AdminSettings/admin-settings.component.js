@@ -62,7 +62,7 @@ export default class AdminSettings extends Component {
     }
     parseStoreData() {
         const stores = this.state.allStores;
-        console.log(stores);
+
         const newStoreData = {};
         for (let key in stores) {
             let thisStoreName = stores[key]["address"];
