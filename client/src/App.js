@@ -93,28 +93,52 @@ export default class App extends Component {
     }
     async getUser() {
         try {
-            const response = await fetch("http://localhost:5000/users", {
-                method: "GET",
-                crossDomain: true,
-                credentials: "include",
-                redirect: "follow",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                referrerPolicy: "no-referrer",
-            });
-            if (response.status < 400) {
-                const user = await response.json();
-                if (!user) {
-                    return;
+            const response = await fetch(
+                "http://localhost:5000/users/check-session",
+                {
+                    method: "GET",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
                 }
-                this.setState({ user });
-                this.determinePermissions(user);
+            );
+            const isSignedIn = await response.json();
+            if (isSignedIn) {
+                try {
+                    const response = await fetch(
+                        "http://localhost:5000/users",
+                        {
+                            method: "GET",
+                            crossDomain: true,
+                            credentials: "include",
+                            redirect: "follow",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            referrerPolicy: "no-referrer",
+                        }
+                    );
+                    if (response.status < 400) {
+                        const user = await response.json();
+                        if (!user) {
+                            return;
+                        }
+                        this.setState({ user });
+                        this.determinePermissions(user);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
             }
         } catch (err) {
             console.log(err);
         }
     }
+
     render() {
         return (
             <Router>

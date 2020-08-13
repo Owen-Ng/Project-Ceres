@@ -71,6 +71,11 @@ app.post("/users/login", (req, res) => {
 
 // Logout route destroys session cookie
 app.get("/users/logout", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
     req.session.destroy((error) => {
         if (error) {
             res.status(500).send(error);
@@ -83,9 +88,9 @@ app.get("/users/logout", (req, res) => {
 // Checks the current user
 app.get("/users/check-session", (req, res) => {
     if (req.session.user) {
-        res.send({ currentUser: req.session.email });
+        res.status(200).send(true);
     } else {
-        res.status(401).send();
+        res.status(200).send(false);
     }
 });
 
@@ -506,11 +511,16 @@ app.patch("/tribe/join/:tid", (req, res) => {
                                 family
                                     .save()
                                     .then((result) => {
-                                        const fIdx = tribe.offers.indexOf(familyID);
-                                        tribe.offers.splice(fIdx, 1)
-                                        tribe.save().then((resolution) => {res.send({ family, tribe: resolution });
-                                    })
-                                        
+                                        const fIdx = tribe.offers.indexOf(
+                                            familyID
+                                        );
+                                        tribe.offers.splice(fIdx, 1);
+                                        tribe.save().then((resolution) => {
+                                            res.send({
+                                                family,
+                                                tribe: resolution,
+                                            });
+                                        });
                                     })
                                     .catch((error) => {
                                         res.status(400).send(error);
@@ -557,11 +567,16 @@ app.patch("/tribe/decline/:tid", (req, res) => {
                                 family
                                     .save()
                                     .then((result) => {
-                                        const fIdx = tribe.offers.indexOf(familyID);
-                                        tribe.offers.splice(fIdx, 1)
-                                        tribe.save().then((resolution) => {res.send({ family, tribe: resolution });
-                                    })
-                                        
+                                        const fIdx = tribe.offers.indexOf(
+                                            familyID
+                                        );
+                                        tribe.offers.splice(fIdx, 1);
+                                        tribe.save().then((resolution) => {
+                                            res.send({
+                                                family,
+                                                tribe: resolution,
+                                            });
+                                        });
                                     })
                                     .catch((error) => {
                                         res.status(400).send(error);
@@ -595,7 +610,7 @@ app.patch("/tribe/invite/:uid", (req, res) => {
 
             Tribe.findById(tid).then((tribe) => {
                 if (!tribe) {
-                    res.statusMessage(404).send("Resource not found")
+                    res.statusMessage(404).send("Resource not found");
                 } else {
                     Family.findById(currentFamily).then((family) => {
                         family.pending.push(tid);
@@ -611,7 +626,7 @@ app.patch("/tribe/invite/:uid", (req, res) => {
                                 res.status(400).send(error);
                             });
                     });
-                } 
+                }
             });
         }
     });
