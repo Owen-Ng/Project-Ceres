@@ -115,8 +115,8 @@ export default class GroceryList extends Component {
         } catch (err) {
             console.log(err);
         }
-        this.setState({ currentList });
         await this.getLists();
+        this.setState({ currentList });
     }
     /*
         Later on this will call the server to hand over the new set of lists and items.
@@ -172,7 +172,7 @@ export default class GroceryList extends Component {
                 body: JSON.stringify({
                     listname: currentList,
                     fid: this.props.user.familyID,
-                    itemname: newItem.newItem,
+                    itemname: newItem.newItem.trim(),
                     quantity: newItem.newItemQuantity,
                 }),
                 referrerPolicy: "no-referrer",
@@ -253,13 +253,8 @@ export default class GroceryList extends Component {
                 fid: this.props.user.familyID,
             }),
         });
-        /*
-        if (updatedListKeys.length > 0) {
-            this.setState({ currentList: updatedListKeys[0] });
-            this.setState((state) => updatedList);
-        } else {
-        }
-        */
+
+        await this.getLists();
         this.setState({ currentList: "No list selected" });
     }
 
