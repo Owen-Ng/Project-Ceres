@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./profile.css"
-import { createFamily, createTribe, joinFamily, declineFamily } from "../../actions/profile"
+import { createFamily, createTribe, joinFamily, declineFamily, joinTribe, declineTribe } from "../../actions/profile"
 
 const log = console.log
 
@@ -12,7 +12,8 @@ export default class Profile extends Component {
       newTribeName: "",
       pendingFamily: "",
       pendingTribeID: [],
-      pendingTribes: ["Smith"],
+      pendingTribes: [],
+      joinTribe: undefined,
       user: undefined,
       input: {
         email: "",
@@ -26,7 +27,10 @@ export default class Profile extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleJoinFamily = this.handleJoinFamily.bind(this);
-    this.handleDeclineFamily = this.handleDeclineFamily.bind(this)
+    this.handleDeclineFamily = this.handleDeclineFamily.bind(this);
+    this.handleJoinTribe = this.handleJoinTribe.bind(this);
+    this.handleDeclineTribe = this.handleDeclineTribe.bind(this);
+    this.handleJoinTribeChange = this.handleJoinTribeChange.bind(this);
     this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
     this.handleChangeNewFamily = this.handleChangeNewFamily.bind(this);
     this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
@@ -151,13 +155,34 @@ export default class Profile extends Component {
   handleJoinFamily(e) {
     e.preventDefault();
     joinFamily(this.state.user.pending);
-    this.setState({ pendingFamily: "" })
+    this.setState({ pendingFamily: "" });
   }
 
   handleDeclineFamily(e) {
     e.preventDefault();
     declineFamily(this.state.user.pending);
-    this.setState({ pendingFamily: "" })
+    this.setState({ pendingFamily: "" });
+  }
+
+  handleJoinTribe(e) {
+    e.preventDefault();
+    const index = this.state.pendingTribes.indexOf(this.state.joinTribe)
+    const tribe = this.state.pendingTribeID[index]
+    joinTribe(tribe)
+    this.setState({joinTribe: undefined});
+  }
+
+  handleDeclineTribe(e) {
+    e.preventDefault();
+    const index = this.state.pendingTribes.indexOf(this.state.joinTribe)
+    const tribe = this.state.pendingTribeID[index]
+    declineTribe(tribe)
+    this.setState({joinTribe: undefined});
+  }
+
+  handleJoinTribeChange(e) {
+    e.preventDefault();
+    this.setState({joinTribe: e.target.value})
   }
 
   handleChangeNewFamily(e) {
@@ -260,6 +285,7 @@ export default class Profile extends Component {
               Choose a tribe:
               <input
                 list="tribes"
+                onChange={this.handleJoinTribeChange}
                 />
             </label>
             <datalist id="tribes">
@@ -268,8 +294,8 @@ export default class Profile extends Component {
                 )}
             </datalist>
             <br />
-            <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Tribe</button>
-            <button className="buttonsubmit btn btn-primary btn-add" type="submit">Decline Tribe</button>
+            <button className="btn btn-primary btn-add" type="button" onClick={this.handleJoinTribe}>Join Tribe</button>
+            <button className="btn btn-primary btn-add" type="button" onClick={this.handleDeclineTribe}>Decline Tribe</button>
           </form>
         </div>
       ) : (<div></div>);

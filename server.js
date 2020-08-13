@@ -479,12 +479,18 @@ app.patch("/tribe/join/:tid", (req, res) => {
                             if (!family) {
                                 res.status(404).send("Resource not found");
                             } else {
+                                const tIdx = family.pending.indexOf(tid);
+                                family.pending.splice(tIdx, 1);
                                 family.tribes.push(tid);
 
                                 family
                                     .save()
                                     .then((result) => {
-                                        res.send({ family: result, tribe });
+                                        const fIdx = tribe.offers.indexOf(familyID);
+                                        tribe.offers.splice(fIdx, 1)
+                                        tribe.save().then((resolution) => {res.send({ family, tribe: resolution });
+                                    })
+                                        
                                     })
                                     .catch((error) => {
                                         res.status(400).send(error);
@@ -507,33 +513,46 @@ app.patch("/tribe/decline/:tid", (req, res) => {
         return;
     }
 
-    // Family.findById(fid).then((family) => {
-    //     if (!family) {
-    //         res.status(404).send("Resource not found");
-    //     } else {
-    //         const currentUser = req.session.user;
+    Tribe.findById(tid).then((tribe) => {
+        if (!tribe) {
+            res.status(404).send("Resource not found");
+        } else {
+            const currentUser = req.session.user;
 
-    //         User.findById(currentUser).then((user) => {
-    //             log(user.pending, fid);
-    //             if (user.pending == fid) {
-    //                 user.pending = undefined;
+            if (!currentUser) {
+                res.status(404).send("Resource not found");
+            } else {
+                User.findById(currentUser).then((user) => {
+                    const familyID = user.familyID;
+                    if (!familyID) {
+                        res.status(404).send("Resource not found");
+                    } else {
+                        Family.findById(familyID).then((family) => {
+                            if (!family) {
+                                res.status(404).send("Resource not found");
+                            } else {
+                                const tIdx = family.pending.indexOf(tid);
+                                family.pending.splice(tIdx, 1);
 
-    //                 user.save()
-    //                     .then((result) => {
-    //                         const index = family.offers.indexOf(user._id);
-    //                         family.offers.splice(index, 1);
-    //                         family.save();
-    //                         res.send({ user: result, family });
-    //                     })
-    //                     .catch((error) => {
-    //                         res.status(400).send(error);
-    //                     });
-    //             } else {
-    //                 res.status(400).send("User not invited to Family");
-    //             }
-    //         });
-    //     }
-    // });
+                                family
+                                    .save()
+                                    .then((result) => {
+                                        const fIdx = tribe.offers.indexOf(familyID);
+                                        tribe.offers.splice(fIdx, 1)
+                                        tribe.save().then((resolution) => {res.send({ family, tribe: resolution });
+                                    })
+                                        
+                                    })
+                                    .catch((error) => {
+                                        res.status(400).send(error);
+                                    });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
 });
 
 // Invite a users family to join a tribe
