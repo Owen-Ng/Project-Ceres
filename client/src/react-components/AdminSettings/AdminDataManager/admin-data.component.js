@@ -79,6 +79,10 @@ export default class AdminData extends Component {
 
                     if (response.status < 400) {
                         alert(`Added ${this.state.username}`);
+                    } else {
+                        alert(
+                            `Failed to add make sure the email/username are unique and the password is longer than 4 characters`
+                        );
                     }
                 } catch (err) {
                     console.log(err);
@@ -112,6 +116,8 @@ export default class AdminData extends Component {
 
                 if (response.status < 400) {
                     //alert(`Added ${this.state.familyName}`);
+                } else {
+                    alert("Something went wrong!");
                 }
             } catch (err) {
                 console.log(err);
@@ -184,6 +190,8 @@ export default class AdminData extends Component {
 
                     if (response.status < 400) {
                         alert(`Added ${this.state.tribeName}`);
+                    } else {
+                        alert("Something went wrong!");
                     }
                 } catch (err) {
                     console.log(err);

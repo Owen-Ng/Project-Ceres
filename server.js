@@ -158,6 +158,26 @@ app.get("/users", (req, res) => {
     });
 });
 
+// get your family
+app.get("/family", (req, res) => {
+    const currentUser = req.session.user;
+
+    if (currentUser) {
+        User.findById(currentUser)
+            .then((user) => {
+                const familyID = user.familyID;
+                Family.findById(familyID)
+                    .then((family) => {
+                        res.status(200).send(family);
+                    })
+                    .catch((err) => res.status(400).send(err));
+            })
+            .catch((error) => res.status(404).send(error));
+    } else {
+        res.status(400).send("Invaid FamilyID");
+    }
+});
+
 // Create a new family
 app.post("/family", (req, res) => {
     const currentUser = req.session.user;

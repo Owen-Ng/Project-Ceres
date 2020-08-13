@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
+
 import "./admin-panel.css";
 
 export default class AdminPanel extends Component {
@@ -77,6 +77,8 @@ export default class AdminPanel extends Component {
                 if (response.status < 400) {
                     alert("Updated!");
                     this.setState({ [param]: value });
+                } else {
+                    alert("Something went wrong!");
                 }
             } catch (err) {
                 console.log(err);
@@ -101,6 +103,8 @@ export default class AdminPanel extends Component {
                 if (response.status < 400) {
                     alert("Updated!");
                     this.setState({ [param]: value });
+                } else {
+                    alert("Something went wrong!");
                 }
             } catch (err) {
                 console.log(err);
@@ -125,6 +129,8 @@ export default class AdminPanel extends Component {
                 if (response.status < 400) {
                     alert("Updated!");
                     this.setState({ [param]: value });
+                } else {
+                    alert("Something went wrong!");
                 }
             } catch (err) {
                 console.log(err);
@@ -149,11 +155,14 @@ export default class AdminPanel extends Component {
                 if (response.status < 400) {
                     alert("Updated!");
                     this.setState({ [param]: value });
+                } else {
+                    alert("Something went wrong!");
                 }
             } catch (err) {
                 console.log(err);
             }
         }
+        await this.props.getAllData();
     }
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });

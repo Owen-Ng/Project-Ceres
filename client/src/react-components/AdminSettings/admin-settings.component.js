@@ -125,11 +125,7 @@ export default class AdminSettings extends Component {
     will call the server to handover the new update.
     */
     async deleteObj(selectedItem, displayType) {
-        let updatedList;
         if (displayType === "user") {
-            updatedList = this.state.allUsers;
-            delete updatedList[selectedItem];
-            const allUsers = Object.keys(this.state.allUsers);
             try {
                 const response = await fetch("http://localhost:5000/users", {
                     method: "DELETE",
@@ -155,12 +151,8 @@ export default class AdminSettings extends Component {
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                allUsers,
             });
         } else if (displayType === "family") {
-            updatedList = this.state.allFamilies;
-            delete updatedList[selectedItem];
-            const allFamilies = Object.keys(this.state.allFamilies);
             try {
                 const response = await fetch("http://localhost:5000/family", {
                     method: "DELETE",
@@ -186,13 +178,8 @@ export default class AdminSettings extends Component {
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                allFamilies,
             });
         } else if (displayType === "store") {
-            updatedList = this.state.allStores;
-            updatedList = this.state.allFamilies;
-            delete updatedList[selectedItem];
-            const allFamilies = Object.keys(this.state.allFamilies);
             try {
                 const response = await fetch("http://localhost:5000/MapList", {
                     method: "DELETE",
@@ -217,11 +204,8 @@ export default class AdminSettings extends Component {
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                allStores: updatedList,
             });
         } else if (displayType === "tribe") {
-            updatedList = this.state.allTribes;
-            delete updatedList[selectedItem];
             try {
                 const response = await fetch("http://localhost:5000/tribe", {
                     method: "DELETE",
@@ -247,7 +231,6 @@ export default class AdminSettings extends Component {
             this.setState({
                 selectedItem: "",
                 selectedObj: [],
-                allTribes: updatedList,
             });
         } else {
             alert("Something went wrong");

@@ -22,7 +22,7 @@ export default class GroceryList extends Component {
             //make sure data is this format {list1: {obj1: quantity, obj2: quantity}, list2:...}
             familyLists: {},
             currentList: "No list selected",
-            currentTribe: "",
+            yourFamily: null,
             alphabeticallyOrdered: false,
             listEditMode: false,
             isLoaded: false,
@@ -38,10 +38,13 @@ export default class GroceryList extends Component {
         this.deleteList = this.deleteList.bind(this);
         this.isValidUser = this.isValidUser.bind(this);
         this.getLists = this.getLists.bind(this);
+        this.getFamily = this.getFamily.bind(this);
     }
     async componentDidMount() {
         await this.getLists();
+        await this.getFamily();
     }
+
     async getLists() {
         const user = this.props.user;
         if (user !== null) {
@@ -77,6 +80,31 @@ export default class GroceryList extends Component {
                 }
             } catch (err) {
                 console.log(err);
+            }
+        }
+    }
+    async getFamily() {
+        if (this.props.user) {
+            //Get family
+            try {
+                const response = await fetch(`http://localhost:5000/family`, {
+                    method: "GET",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                });
+                const yourFamily = await response.json();
+                if (yourFamily) {
+                    this.setState({ yourFamily });
+                } else {
+                    console.log("Failed to get family");
+                }
+            } catch (err) {
+                console.log(err, "Failed to get family");
             }
         }
     }
@@ -160,6 +188,12 @@ export default class GroceryList extends Component {
             alert("Please enter a valid name");
             return;
         }
+        if (this.state.currentList === "No list selected") {
+            alert(
+                "Please add a list using the right hand menu. Enter a name and then hit the orange + button to create it. Once created, you can add items to your new list."
+            );
+            return;
+        }
         try {
             await fetch("http://localhost:5000/item", {
                 method: "POST",
@@ -231,10 +265,6 @@ export default class GroceryList extends Component {
     This will delete a list and later on call the server to hand over the new set of lists
     */
     async deleteList() {
-        const oldList = this.state.currentList;
-        const updatedListKeys = Object.keys(this.state.familyLists).filter(
-            (list) => list !== oldList
-        );
         /*
         let updatedList = this.state.familyLists;
         delete updatedList[oldList];
@@ -265,6 +295,19 @@ export default class GroceryList extends Component {
     }
 
     render() {
+        const userInfo = (
+            <div>
+                <h6>
+                    {this.props.user ? `Hello, ${this.props.user.name}` : ""}{" "}
+                </h6>
+                <h6>
+                    {this.state.yourFamily
+                        ? `You are part of ${this.state.yourFamily.familyName}`
+                        : ""}
+                </h6>
+            </div>
+        );
+
         const listDeleteButton = (
             <button
                 className="GroceryList-list-btn btn btn-secondary btn-delete"
@@ -276,6 +319,7 @@ export default class GroceryList extends Component {
         const loggedInData = (
             <div className="row">
                 <div className="GroceryList-currentList col-lg-">
+                    {this.props.user ? userInfo : ""}
                     <h4 className="GroceryList-list-title">
                         {this.state.currentList}
                     </h4>
