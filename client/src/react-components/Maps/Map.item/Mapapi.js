@@ -16,6 +16,8 @@ export default class PublicMap extends Component {
   this.state = {
     currentstate:null,
     groceries: [],
+    toggle: false,
+    oldtoggle: false
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
@@ -41,9 +43,12 @@ export default class PublicMap extends Component {
       />
     )
   }
+  componentWillReceiveProps(){
+    this.setState({toggle: this.props.toggle})
+  }
   componentDidMount(){
     // this.intervalupdate = setInterval(()=>{
-    
+   
     const url = "/MapList";
     fetch(url, {
       method: "GET"
@@ -63,20 +68,45 @@ export default class PublicMap extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
-    // setTimeout(function(){
-    //   const newtime = new Date();
-    //   if (this.state.groceries !==[]){
-    //       this.state.groceries.map((obj) => {
-    //           const newtimearray = obj.timesubmitted.filter((time) => 
-    //               datetime.subtract(newtime, new Date(time.date)).toHours() < 2
-    //           )
-    //           removedexpired(obj._id, newtimearray);
-    //       })
+    setTimeout(function(){
+      const newtime = new Date();
+      if (this.state.groceries !==[]){
+          this.state.groceries.map((obj) => {
+              const newtimearray = obj.timesubmitted.filter((time) => 
+                  datetime.subtract(newtime, new Date(time.date)).toHours() < 2
+              )
+              removedexpired(obj._id, newtimearray);
+          })
           
-    //     }
-    // }.bind(this),50);
+        }
+     }.bind(this),10000);
    
-  //},1500)
+  }
+  componentDidUpdate(){
+    
+    if (this.state.oldtoggle !== this.state.toggle){
+      this.setState({oldtoggle: this.state.toggle});
+  
+    const url = "/MapList";
+    fetch(url, {
+      method: "GET"
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
+
+      } else {
+        log("Could not get data");
+      }
+    }).then(function (json) {
+      
+
+      this.setState({ groceries: json.groceries });
+      // console.log(this.state);
+
+    }.bind(this)).catch(error => {
+      log(error)
+    })
+  }
   }
 
   // componentWillMount(){

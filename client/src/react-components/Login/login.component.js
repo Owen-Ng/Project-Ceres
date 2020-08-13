@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./login.component.css";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 //import Map from "../Maps/maps.component.js";
 export default class Login extends Component {
@@ -42,6 +42,8 @@ export default class Login extends Component {
                 this.state.isError = false; // removes error message
                 const user = await response.json();
                 await this.props.determinePermissions(user); // Update the App()
+            } else {
+                this.setState({ isError: true });
             }
         } catch (err) {
             console.log(err);
@@ -59,7 +61,7 @@ export default class Login extends Component {
                 </p>
                 {this.state.isError ? (
                     <p className="red">
-                        <strong>Incorrect Password </strong>
+                        <strong>Invalid Credentials</strong>
                     </p>
                 ) : (
                     ""

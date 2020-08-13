@@ -46,6 +46,7 @@ export default class AdminPanel extends Component {
             }
         }
     }
+
     deleteObj() {
         this.props.deleteObj(this.props.selectedItem, this.props.displayType);
     }
@@ -129,7 +130,29 @@ export default class AdminPanel extends Component {
                 console.log(err);
             }
         } else if (this.props.displayType === "store") {
-            //TODO
+            try {
+                const response = await fetch("http://localhost:5000/MapList", {
+                    method: "PATCH",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        storeID: this.props.selectedObj["_id"],
+                        change: [param, value],
+                    }),
+                });
+
+                if (response.status < 400) {
+                    alert("Updated!");
+                    this.setState({ [param]: value });
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
     onChange(e) {
@@ -221,14 +244,36 @@ export default class AdminPanel extends Component {
             this.props.selectedObj !== undefined &&
             this.props.displayType === "store"
         ) {
-            return (
-                <div key={uuidv4()}>
-                    <p>Store name: {this.props.selectedObj["name"]}</p>
-                    <p>Address: {this.props.selectedItem}</p>
-                    <p>Line size: {this.props.selectedObj["line-size"]}</p>
-                    {deleteButton}
-                </div>
-            );
+            let stores = this.props.selectedObj;
+
+            for (let store in stores) {
+                return (
+                    <div>
+                        <div className="AdminPanel-tribe-members">
+                            {Object.keys(stores).map((key) => (
+                                <div className="info" key={key}>
+                                    <form onSubmit={this.editDB}>
+                                        <p>{key}</p>
+                                        <input
+                                            type="text"
+                                            name={key}
+                                            onChange={this.onChange}
+                                            value={
+                                                this.state[key]
+                                                    ? this.state[key]
+                                                    : ""
+                                            }
+                                        />
+                                        <button>Send Change</button>
+                                    </form>
+                                    <br></br>
+                                </div>
+                            ))}
+                        </div>
+                        {deleteButton}
+                    </div>
+                );
+            }
         } else if (
             this.props.selectedObj !== undefined &&
             this.props.displayType === "tribe"
