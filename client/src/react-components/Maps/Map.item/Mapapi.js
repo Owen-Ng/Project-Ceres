@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer, withLeaflet, Tooltip } from "react-leaflet";
+import { Map, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import { Icon } from "leaflet";
 import './Mapapi.css'
-import Search from "react-leaflet-search/lib/Search-v1";
-// import * as groceries from '../data/groceries.json'
 import { removedexpired} from '../../../actions/maplist'
 const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
 const active = new Icon({ iconUrl: "/basket", iconSize: 20 })
@@ -17,7 +15,7 @@ export default class PublicMap extends Component {
     currentstate:null,
     groceries: [],
     toggle: false,
-    oldtoggle: false
+    oldtoggle: false,
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
@@ -47,7 +45,6 @@ export default class PublicMap extends Component {
     this.setState({toggle: this.props.toggle})
   }
   componentDidMount(){
-    // this.intervalupdate = setInterval(()=>{
    
     const url = "/MapList";
     fetch(url, {
@@ -68,7 +65,7 @@ export default class PublicMap extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
-    setTimeout(function(){
+  
       const newtime = new Date();
       if (this.state.groceries !==[]){
           this.state.groceries.map((obj) => {
@@ -79,12 +76,12 @@ export default class PublicMap extends Component {
           })
           
         }
-     }.bind(this),10000);
+
    
   }
   componentDidUpdate(){
     
-    if (this.state.oldtoggle !== this.state.toggle){
+    if (this.state.oldtoggle !== this.state.toggle ){
       this.setState({oldtoggle: this.state.toggle});
   
     const url = "/MapList";
