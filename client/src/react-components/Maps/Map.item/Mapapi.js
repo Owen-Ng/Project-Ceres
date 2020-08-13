@@ -17,7 +17,8 @@ export default class PublicMap extends Component {
     currentstate:null,
     groceries: [],
     toggle: false,
-    oldtoggle: false
+    oldtoggle: false,
+    isdataupdated: false,
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
@@ -79,14 +80,16 @@ export default class PublicMap extends Component {
           })
           
         }
+        this.setState({isdataupdated: true});
      }.bind(this),10000);
    
   // },1500)
   }
   componentDidUpdate(){
     
-    if (this.state.oldtoggle !== this.state.toggle){
+    if (this.state.oldtoggle !== this.state.toggle || this.state.isdataupdated){
       this.setState({oldtoggle: this.state.toggle});
+      this.setState({isdataupdated: false});
   
     const url = "/MapList";
     fetch(url, {
