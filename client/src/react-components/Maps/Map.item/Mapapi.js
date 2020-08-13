@@ -81,7 +81,6 @@ export default class PublicMap extends Component {
         }
      }.bind(this),10000);
    
-  // },1500)
   }
   componentDidUpdate(){
     

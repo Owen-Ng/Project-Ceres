@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./profile.css"
-import { createFamily, createTribe, joinFamily, declineFamily } from "../../actions/profile"
+import { createFamily, createTribe, joinFamily, declineFamily, joinTribe, declineTribe } from "../../actions/profile"
 
 const log = console.log
 
@@ -11,6 +11,9 @@ export default class Profile extends Component {
       newFamilyName: "",
       newTribeName: "",
       pendingFamily: "",
+      pendingTribeID: [],
+      pendingTribes: [],
+      joinTribe: undefined,
       user: undefined,
       input: {
         email: "",
@@ -24,7 +27,10 @@ export default class Profile extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleJoinFamily = this.handleJoinFamily.bind(this);
-    this.handleDeclineFamily = this.handleDeclineFamily.bind(this)
+    this.handleDeclineFamily = this.handleDeclineFamily.bind(this);
+    this.handleJoinTribe = this.handleJoinTribe.bind(this);
+    this.handleDeclineTribe = this.handleDeclineTribe.bind(this);
+    this.handleJoinTribeChange = this.handleJoinTribeChange.bind(this);
     this.handleSubmitNewFamily = this.handleSubmitNewFamily.bind(this);
     this.handleChangeNewFamily = this.handleChangeNewFamily.bind(this);
     this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
@@ -58,11 +64,33 @@ export default class Profile extends Component {
     try {
       if (!this.state.user) {
         return;
-    }
-    if (!this.state.user.pending) {
+      }
+      if (!this.state.user.pending) {
+          ;
+      } else {
+          const fid = this.state.user.pending;
+          const url = `/family/${fid}`
+          const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+          });
+          const response = await fetch(request, {});
+          const json = await response.json();
+          const name = await json.familyName;
+
+          this.setState({ pendingFamily: name });
+
+      }
+
+      if (!this.state.user.familyID) {
+        console.log("no Family")
         return;
-    } else {
-        const fid = this.state.user.pending;
+      } else {
+        console.log("checking...")
+        const fid = this.state.user.familyID;
         const url = `/family/${fid}`
         const request = new Request(url,{
             method:"GET",
@@ -73,14 +101,38 @@ export default class Profile extends Component {
         });
         const response = await fetch(request, {});
         const json = await response.json();
-        const name = await json.familyName;
+        const tribes = await json.pending;
 
-        this.setState({ pendingFamily: name });
+        this.setState({ pendingTribeID: tribes });
 
-    }
+      }
+
+      if (this.state.pendingTribeID.length > 0) {
+
+        const pendingTribeNames = [];
+        this.state.pendingTribeID.map(async (tribeID) => {
+
+          const url = `/tribe/${tribeID}`
+          const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+          });
+          const response = await fetch(request, {});
+          const json = await response.json();
+          const tribeName = await json.tribeName;
+
+          pendingTribeNames.push(await tribeName)
+          this.setState({ pendingTribes: pendingTribeNames })
+
+        })
+      }
     } catch (err) {
       console.log(err);
     }
+
 }
 
   handleSubmit(e) {
@@ -103,13 +155,34 @@ export default class Profile extends Component {
   handleJoinFamily(e) {
     e.preventDefault();
     joinFamily(this.state.user.pending);
-    this.setState({ pendingFamily: "" })
+    this.setState({ pendingFamily: "" });
   }
 
   handleDeclineFamily(e) {
     e.preventDefault();
     declineFamily(this.state.user.pending);
-    this.setState({ pendingFamily: "" })
+    this.setState({ pendingFamily: "" });
+  }
+
+  handleJoinTribe(e) {
+    e.preventDefault();
+    const index = this.state.pendingTribes.indexOf(this.state.joinTribe)
+    const tribe = this.state.pendingTribeID[index]
+    joinTribe(tribe)
+    this.setState({joinTribe: undefined});
+  }
+
+  handleDeclineTribe(e) {
+    e.preventDefault();
+    const index = this.state.pendingTribes.indexOf(this.state.joinTribe)
+    const tribe = this.state.pendingTribeID[index]
+    declineTribe(tribe)
+    this.setState({joinTribe: undefined});
+  }
+
+  handleJoinTribeChange(e) {
+    e.preventDefault();
+    this.setState({joinTribe: e.target.value})
   }
 
   handleChangeNewFamily(e) {
@@ -143,6 +216,7 @@ export default class Profile extends Component {
     const userFamily = this.state.user ? this.state.user.familyID : null;
     const familyName = this.state.user ? this.state.pendingFamily : null;
     const isFamilyAdmin = this.state.user ? this.state.user.familyAdmin : false;
+    
     const newForm = userFamily ? isFamilyAdmin ? (
         <div className=" stylechanges col-md  ">
         <div className="list">
@@ -201,20 +275,27 @@ export default class Profile extends Component {
         </div>
       ) : (<div></div>);
 
-      const joinTribeForm = isFamilyAdmin ? (
+      const joinTribeForm = isFamilyAdmin && this.state.pendingTribes.length > 0 ? (
         <div>
           <div className="list">
             <li><strong>Join Tribe:</strong></li>
           </div>
           <form>
-            <input
-              type="name"
-              name="name"
-              placeholder="Tribe Name"
-              required
-              />
-              <br />
-              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Join Tribe</button>
+            <label>
+              Choose a tribe:
+              <input
+                list="tribes"
+                onChange={this.handleJoinTribeChange}
+                />
+            </label>
+            <datalist id="tribes">
+                {this.state.pendingTribes.map((tribe) =>
+                  <option value={tribe} />
+                )}
+            </datalist>
+            <br />
+            <button className="btn btn-primary btn-add" type="button" onClick={this.handleJoinTribe}>Join Tribe</button>
+            <button className="btn btn-primary btn-add" type="button" onClick={this.handleDeclineTribe}>Decline Tribe</button>
           </form>
         </div>
       ) : (<div></div>);

@@ -17,6 +17,11 @@ const Family = mongoose.model("Family", {
         ref: "User",
         required: true,
     },
+    pending: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Tribe",
+        required: true,
+    },
 });
 
 module.exports = { Family };

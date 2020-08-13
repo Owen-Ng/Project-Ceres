@@ -40,6 +40,50 @@ export const declineFamily = (family) => {
     });
 }
 
+export const joinTribe = (tribe) => {
+
+    console.log("Join", tribe)
+    const url = `/tribe/join/${tribe}`;
+    const request = new Request(url,{
+        method:"PATCH",
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }) .catch(error => {
+        console.log(error);
+    });
+}
+
+export const declineTribe = (tribe) => {
+
+    console.log("Decline", tribe)
+    const url = `/tribe/decline/${tribe}`;
+    const request = new Request(url,{
+        method:"PATCH",
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }) .catch(error => {
+        console.log(error);
+    });
+}
+
 export const createFamily = (name) =>{
     const url = "/family";
     const request = new Request(url,{

@@ -10,7 +10,7 @@ const Tribe = mongoose.model('Tribe', {
     },
     offers: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: "User",
+        ref: "Family",
         required: true
     }
 });
