@@ -40,11 +40,18 @@ export default class GroceryList extends Component {
         this.getLists = this.getLists.bind(this);
         this.getFamily = this.getFamily.bind(this);
     }
-    async componentDidMount() {
-        await this.getLists();
-        await this.getFamily();
-    }
 
+    /* 
+        After render() is performed get the family and the all its lists.
+    */
+    async componentDidMount() {
+        await this.getFamily();
+        await this.getLists();
+    }
+    /*
+        To be used only if user is in a family. This will pull all the lists of that given family 
+        from the DB.
+    */
     async getLists() {
         const user = this.props.user;
         if (user !== null && user.familyID) {
@@ -80,6 +87,10 @@ export default class GroceryList extends Component {
             }
         }
     }
+    /*
+        If the user exists and the user is in a family getFamily() 
+        pulls the family from the DB for later use
+    */
     async getFamily() {
         const user = this.props.user;
         if (user && user.familyID) {
@@ -106,9 +117,11 @@ export default class GroceryList extends Component {
             }
         }
     }
+
     updateState(updateObj) {
         this.setState(updateObj);
     }
+
     /*
         Later on this will call the server to hand over the new set of lists and items.
     */
@@ -144,8 +157,9 @@ export default class GroceryList extends Component {
         await this.getLists();
         this.setState({ currentList });
     }
+
     /*
-        Later on this will call the server to hand over the new set of lists and items.
+        Requests the DB to remove an item from a list. We then pull the uopdates.
     */
     async deleteItem(itemName) {
         const currentList = this.state.currentList;
@@ -175,9 +189,8 @@ export default class GroceryList extends Component {
         this.setState({ currentList });
     }
     /*
-        Recieves items from the GroceryListForm and is passed down as a prop. Once the new item object is recieved
-        the appropriate list is appended the new item. Later on this will call the server to hand over the new 
-        set of lists and items.
+        Validates the items name and then sends the db a request for a change. 
+        Pulls the new lists after.
     */
     async addItem(newItem) {
         const currentList = this.state.currentList;
@@ -223,6 +236,7 @@ export default class GroceryList extends Component {
         await this.getLists();
         this.setState({ currentList });
     }
+
     /*
         Calls the GroceryItem component to generate a tab with all the information given for each item on 
         the currently selected list.
@@ -260,7 +274,7 @@ export default class GroceryList extends Component {
         });
     }
     /*
-    This will delete a list and later on call the server to hand over the new set of lists
+        Similar to deleteItem()
     */
     async deleteList() {
         /*
@@ -285,7 +299,9 @@ export default class GroceryList extends Component {
         await this.getLists();
         this.setState({ currentList: "No list selected" });
     }
-
+    /*
+        Blocks people who are not signed in or are not part of a family
+    */
     isValidUser(content) {
         if (this.props.user === null) return <SigninError />;
         if (this.props.user.familyID === null) return <FamilyError />;
