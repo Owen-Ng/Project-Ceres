@@ -57,25 +57,22 @@ export default class AdminData extends Component {
             if (allUsers[this.state.username] === undefined) {
                 allUsers[this.state.username] = this.state.allUsers;
                 try {
-                    const response = await fetch(
-                        "http://localhost:5000/users",
-                        {
-                            method: "POST",
-                            crossDomain: true,
-                            credentials: "include",
-                            redirect: "follow",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            referrerPolicy: "no-referrer",
-                            body: JSON.stringify({
-                                username: this.state.username,
-                                password: this.state.password,
-                                name: this.state.name,
-                                email: this.state.email,
-                            }),
-                        }
-                    );
+                    const response = await fetch("/users", {
+                        method: "POST",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                        body: JSON.stringify({
+                            username: this.state.username,
+                            password: this.state.password,
+                            name: this.state.name,
+                            email: this.state.email,
+                        }),
+                    });
 
                     if (response.status < 400) {
                         alert(`Added ${this.state.username}`);
@@ -97,22 +94,19 @@ export default class AdminData extends Component {
             this.state.dataType.length > 0
         ) {
             try {
-                const response = await fetch(
-                    "http://localhost:5000/admin/family",
-                    {
-                        method: "POST",
-                        crossDomain: true,
-                        credentials: "include",
-                        redirect: "follow",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        referrerPolicy: "no-referrer",
-                        body: JSON.stringify({
-                            familyName: this.state.familyName,
-                        }),
-                    }
-                );
+                const response = await fetch("/admin/family", {
+                    method: "POST",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify({
+                        familyName: this.state.familyName,
+                    }),
+                });
 
                 if (response.status < 400) {
                     //alert(`Added ${this.state.familyName}`);
@@ -133,26 +127,23 @@ export default class AdminData extends Component {
                 this.state.storeAddress.length > 0
             ) {
                 try {
-                    const response = await fetch(
-                        "http://localhost:5000/MapList",
-                        {
-                            method: "POST",
-                            crossDomain: true,
-                            credentials: "include",
-                            redirect: "follow",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            referrerPolicy: "no-referrer",
-                            body: JSON.stringify({
-                                name: this.state.storeName,
-                                address: this.state.storeAddress,
-                                open: "true",
-                                wait: this.state.wait,
-                                coordinates: this.state.coordinates,
-                            }),
-                        }
-                    );
+                    const response = await fetch("/MapList", {
+                        method: "POST",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                        body: JSON.stringify({
+                            name: this.state.storeName,
+                            address: this.state.storeAddress,
+                            open: "true",
+                            wait: this.state.wait,
+                            coordinates: this.state.coordinates,
+                        }),
+                    });
                     if (response.status < 400) {
                         alert(`Added ${this.state.storeName}`);
                     } else {
@@ -171,22 +162,19 @@ export default class AdminData extends Component {
                 this.state.dataType.length > 0
             ) {
                 try {
-                    const response = await fetch(
-                        "http://localhost:5000/admin/tribe",
-                        {
-                            method: "POST",
-                            crossDomain: true,
-                            credentials: "include",
-                            redirect: "follow",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            referrerPolicy: "no-referrer",
-                            body: JSON.stringify({
-                                tribeName: this.state.tribeName,
-                            }),
-                        }
-                    );
+                    const response = await fetch("/admin/tribe", {
+                        method: "POST",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                        body: JSON.stringify({
+                            tribeName: this.state.tribeName,
+                        }),
+                    });
 
                     if (response.status < 400) {
                         alert(`Added ${this.state.tribeName}`);
