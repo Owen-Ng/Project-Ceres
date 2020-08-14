@@ -81,7 +81,8 @@ export default class GroceryList extends Component {
         }
     }
     async getFamily() {
-        if (this.props.user) {
+        const user = this.props.user;
+        if (user && user.familyID) {
             //Get family
             try {
                 const response = await fetch(`/family`, {
