@@ -125,20 +125,3 @@ export const createTribe = (name) =>{
         console.log(error);
     });
 }
-
-// export const createFamily = (name) =>{
-//     const url = "/family";
-//     fetch(url).then(res => {
-//         if(res.status === 200){
-//             log(res.json());
-
-//         }else{
-//             log("Could not get data");
-//         }
-//     }).then(json => {
-//         name.setState({name: json});
-
-//     }).catch(error => {
-//         log(error)
-//     })
-// }
