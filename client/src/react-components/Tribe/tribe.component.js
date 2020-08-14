@@ -10,19 +10,9 @@ export default class Tribe extends Component {
 
     // This data will all be pulled from a server
     this.state = {
-      membersLists: {   "Family 1" : ["Anna", "Bob" ],
-                        "Family 2" : ["James", "Debbie"],
-                        "Family 3" : ["Scott", "Barry"], 
-                        "Family 4" : ["Doug"],
-                        "Family 5" : ["Christine", "Valerie"], 
-                        "Family 6" : ["Stephen", "Joanne", "Kia"],
-                        "Family 7" : ["TribeAdmin", "Admin", "User"]},
-      tribeList: {  "Tribe 1" : ["Family 1", "Family 2", "Family 5"],
-                    "Tribe 2" : ["Family 2", "Family 3"],
-                    "Tribe 3" : ["Family 4", "Family 5"],
-                    "Tribe 4" : ["Family 4", "Family 7"]},
-      unassigned: ["Jake", "Betty", "Alice"],
-      currentFamily: "Family 7",
+      users: [],
+      tribeList: {},
+      currentFamily: "",
       currentTribe: "",
     }
 
@@ -31,11 +21,117 @@ export default class Tribe extends Component {
     this.selectList = this.selectList.bind(this);
   }
 
+  async componentDidMount() {
+    try {
+        const response = await fetch("/users", {
+            method: "GET",
+            crossDomain: true,
+            credentials: "include",
+            redirect: "follow",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            referrerPolicy: "no-referrer",
+        });
+        if (response.status < 400) {
+            const user = await response.json();
+            if (!user) {
+                return;
+            }
+            this.setState({ user });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    try {
+      if (!this.state.user) {
+        return;
+      }
+      if (!this.state.user.familyID) {
+          ;
+      } else {
+          const fid = this.state.user.familyID;
+          const url = `/family/users/${fid}`
+          const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+          });
+          const response = await fetch(request, {});
+          const json = await response.json();
+          const users = await json.users;
+          const familyName = await json.familyName;
+
+          const names = [];
+
+          users.map((user) => {
+            names.push(user.name)
+          })
+          
+          this.setState({ users: names, currentFamily: familyName });
+      }
+
+      if (!this.state.user) {
+        return;
+      }
+      if (!this.state.user.familyID) {
+          ;
+      } else {
+          const fid = this.state.user.familyID;
+          const url = `/family/${fid}`
+          const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+          });
+          const response = await fetch(request, {});
+          const json = await response.json();
+          const tribeID = await json.tribes;
+          const tribes = { };
+          
+          tribeID.map(async (tid) => {
+            const url = `/tribe/families/${tid}`
+            const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+            });
+            const response = await fetch(request, {});
+            const json = await response.json();
+            const tribeName = await json.tribeName;
+            const familyArray = await json.family;
+            const familyNames = [];
+
+            familyArray.map((family) => {
+              familyNames.push(family.familyName)
+            })
+
+            const tribeObj = {
+              [tribeName]: familyNames
+            }
+
+            const returned = Object.assign(tribes, tribeObj)
+            this.setState({ tribeList: returned })
+          })
+          
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   // Lists the members of the currently selected family
   //Will require server call to get names of family members
   renderCurrentList() {
-    const currentList = this.state.currentFamily
-    const listObject = this.state.membersLists[currentList]
+    const listObject = this.state.users
     const listKeys = Object.keys(listObject).sort()
 
     return listKeys.map(key =>
@@ -110,12 +206,12 @@ export default class Tribe extends Component {
         <div className="row">
           <div className="Family-list col-lg">
 
-            <h3>{this.state.currentFamily}</h3>
-            {this.renderCurrentList()}
+            <h3>Family: { this.state.currentFamily }</h3>
+            { this.renderCurrentList() }
           </div>
           <div  className="Tribe-list col-sm">
             <h3>Tribes</h3>
-            { this.renderLists()}
+            { this.renderLists() }
           </div>
         </div>
       </div>
