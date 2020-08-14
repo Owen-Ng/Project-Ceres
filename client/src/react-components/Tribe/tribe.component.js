@@ -14,11 +14,16 @@ export default class Tribe extends Component {
       tribeList: {},
       currentFamily: "",
       currentTribe: "",
+      invitedUser: "",
     }
 
     this.renderLists = this.renderLists.bind(this);
     this.renderCurrentList = this.renderCurrentList.bind(this);
     this.selectList = this.selectList.bind(this);
+    this.inviteJoinFamily = this.inviteJoinFamily.bind(this);
+    this.handleChangeinvitedUser = this.handleChangeinvitedUser.bind(this);
+    this.inviteJoinTribe = this.inviteJoinTribe.bind(this);
+    this.handleChangeinvitedFamily = this.handleChangeinvitedFamily.bind(this);
   }
 
   async componentDidMount() {
@@ -183,7 +188,29 @@ export default class Tribe extends Component {
   grocery list page in order to display the correct lists based on which tribe
   was selected */
   selectList(tribe) {
-    this.props.history.push({pathname: `/grocerylists`, currentTribe: tribe})
+    this.setState({ currentTribe: tribe })
+  }
+
+  inviteJoinFamily(e) {
+    e.preventDefault();
+    console.log("here");
+  }
+
+  handleChangeinvitedUser(e) {
+    e.preventDefault();
+    const uName = e.target.value;
+    this.setState({ invitedUser: uName });
+  }
+
+  inviteJoinTribe(e) {
+    e.preventDefault();
+    console.log("here");
+  }
+
+  handleChangeinvitedFamily(e) {
+    e.preventDefault();
+    const fName = e.target.value;
+    this.setState({ invitedFaily: fName });
   }
 
   // Helper function, creates the list of families in each tribe
@@ -208,12 +235,43 @@ export default class Tribe extends Component {
 
             <h3>Family: { this.state.currentFamily }</h3>
             { this.renderCurrentList() }
+            <br />
+            <br />
+            <form className="bottomForm" onSubmit={this.inviteJoinFamily}>
+              <input
+                type="name"
+                name="username"
+                placeholder="Username"
+                value = {this.state.invitedUser}
+                onChange={this.handleChangeinvitedUser}
+                required
+              />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Invite To Family</button>
+
+            </form>
           </div>
           <div  className="Tribe-list col-sm">
-            <h3>Tribes</h3>
+            <h3>Selected Tribe: {this.state.currentTribe}</h3>
             { this.renderLists() }
+            <br />
+            <br />
+            <form className="bottomForm" onSubmit={this.inviteJoinTribe}>
+              <input
+                type="name"
+                name="username"
+                placeholder="Username"
+                value = {this.state.invitedFamily}
+                onChange={this.handleChangeinvitedFamily}
+                required
+              />
+              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Invite To Tribe</button>
+
+            </form>
           </div>
         </div>
+        <br />
+        <br />
+        <button className="btn btn-primary btn-showList">Show Lists for Current Tribe</button>
       </div>
     )
   }

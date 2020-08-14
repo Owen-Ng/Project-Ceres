@@ -52,3 +52,16 @@
 	top:1px;
 }
 
+.btn-showList {
+	float: right;
+}
+
+.btn-add {
+	float: right;
+}
+
+.bottomForm {
+	margin-left: 15px;
+	position: absolute;
+	bottom: 10px;
+}
