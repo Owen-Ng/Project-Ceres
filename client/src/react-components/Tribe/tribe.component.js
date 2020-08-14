@@ -194,8 +194,67 @@ export default class Tribe extends Component {
     this.setState({ currentTribe: tribe })
   }
 
-  showLists() {
-    console.log(this.state.tribeList)
+  async showLists() {
+    const list = document.querySelector("#groceries");
+    const header = document.createElement("h4")
+    const headerText = document.createTextNode(`${this.state.currentTribe}'s Grocery Lists`)
+
+    // empty div
+    while (list.firstChild) list.removeChild(list.firstChild);
+
+    // add header
+    header.appendChild(headerText)
+    list.appendChild(header)
+
+    // get lists
+    try {
+      if (!this.state.user) {
+        return;
+      }
+      if (!this.state.user.familyID) {
+          ;
+      } else {
+          const tName = this.state.currentTribe;
+          const url = `/tribe/lists/${tName}`
+          const request = new Request(url,{
+              method:"GET",
+              headers:{
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json"
+              }
+          });
+          const response = await fetch(request, {});
+          const json = await response.json()
+          
+
+          json.map((family) => {
+            console.log(family)
+
+            const famHeader = document.createElement("h5")
+            const famHeaderText = document.createTextNode(`${family.familyName}`)
+            famHeader.appendChild(famHeaderText)
+            list.appendChild(famHeader)
+
+            family.list.map((item) => {
+              const stuff = Object.entries(item.items)
+
+              stuff.map((thing) => {
+                const listNode = document.createElement("p")
+                const itemText = document.createTextNode(`${thing[0]} ${thing[1]}`)
+                listNode.appendChild(itemText)
+                list.appendChild(listNode)
+              })
+            })
+
+          })
+          // lists.map(async (list) => {
+          //   const keys = Object.keys(list.items)
+          //   console.log(keys)
+          // })
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   inviteJoinFamily(e) {
@@ -281,6 +340,11 @@ export default class Tribe extends Component {
         <br />
         <br />
         <button className="btn btn-primary btn-showList" onClick={this.showLists}>Show Lists for Current Tribe</button>
+        <div className="FamilyTribe container col-lg">
+          <div id="groceries">
+            <h4>Tribe Members Grocery Lists</h4>
+          </div>
+        </div>
       </div>
     )
   }

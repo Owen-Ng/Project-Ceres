@@ -25,6 +25,16 @@
     background-color: antiquewhite;
 }
 
+.col-lg{
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 100%;
+    display: inline-block;
+    margin: 10px; 
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    padding: 15px;
+    background-color: antiquewhite;
+}
 
 .TribeList-list-change-btn {
 	box-shadow:inset 0px 1px 0px 0px #fce2c1;
