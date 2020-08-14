@@ -4,7 +4,7 @@ import { Icon } from "leaflet";
 import './Mapapi.css'
 import { removedexpired} from '../../../actions/maplist'
 const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
-const active = new Icon({ iconUrl: "/basket", iconSize: 20 })
+const active = new Icon({ iconUrl: "/logo192.png", iconSize: 20 })
 const datetime = require('date-and-time');
 const log = console.log
 export default class PublicMap extends Component {
@@ -16,6 +16,8 @@ export default class PublicMap extends Component {
     groceries: [],
     toggle: false,
     oldtoggle: false,
+    isfirst: false,
+  
   };
   this.data = this.data.bind(this);
   this.selected = this.selected.bind(this);
@@ -45,7 +47,7 @@ export default class PublicMap extends Component {
     this.setState({toggle: this.props.toggle})
   }
   componentDidMount(){
-   
+
     const url = "/MapList";
     fetch(url, {
       method: "GET"
@@ -65,22 +67,24 @@ export default class PublicMap extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
-  
-      const newtime = new Date();
-      if (this.state.groceries !==[]){
-          this.state.groceries.map((obj) => {
-              const newtimearray = obj.timesubmitted.filter((time) => 
-                  datetime.subtract(newtime, new Date(time.date)).toHours() < 2
-              )
-              removedexpired(obj._id, newtimearray);
-          })
-          
-        }
+
+    
 
    
   }
   componentDidUpdate(){
-    
+    if (!this.state.isfirst){
+      this.setState({isfirst: true})
+      const newtime = new Date();
+        this.state.groceries.map((obj) => {
+            const newtimearray = obj.timesubmitted.filter((time) => 
+                datetime.subtract(newtime, new Date(time.date)).toHours() < 2
+            )
+            removedexpired(obj._id, newtimearray);
+        })
+        
+      }
+
     if (this.state.oldtoggle !== this.state.toggle ){
       this.setState({oldtoggle: this.state.toggle});
   
@@ -132,10 +136,10 @@ export default class PublicMap extends Component {
               onClick={() => {
                 this.setState({currentstate: map}); this.data(map); this.selected(map);
               }}
-              icon={someicon}>
+              icon={this.state.currentstate?this.state.currentstate._id === map._id? someicon: active:active}>
 
               <Tooltip className='tooltip' direction='center' offset={[-90, 0]} opacity={1} permanent>
-                <span>{map.wait}</span>
+                <span>{map.wait === "Unavailable"? null: map.wait}</span>
               </Tooltip>
             </Marker>
           )
