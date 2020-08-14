@@ -82,6 +82,7 @@ export default class AdminPanel extends Component {
                 }
             } catch (err) {
                 console.log(err);
+                alert("Something went wrong!");
             }
         } else if (this.props.displayType === "family") {
             try {
@@ -108,6 +109,7 @@ export default class AdminPanel extends Component {
                 }
             } catch (err) {
                 console.log(err);
+                alert("Something went wrong!");
             }
         } else if (this.props.displayType === "tribe") {
             try {
@@ -134,6 +136,7 @@ export default class AdminPanel extends Component {
                 }
             } catch (err) {
                 console.log(err);
+                alert("Something went wrong!");
             }
         } else if (this.props.displayType === "store") {
             try {
@@ -160,6 +163,7 @@ export default class AdminPanel extends Component {
                 }
             } catch (err) {
                 console.log(err);
+                alert("Something went wrong!");
             }
         }
         await this.props.getAllData();
