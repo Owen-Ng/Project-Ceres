@@ -41,7 +41,7 @@ export default class Maps extends Component {
     this.setState({currentstate:something})
   }
   changetimesubmitted(event){
-    console.log(this.props.user);
+    
     
     const target = event.target;
     const value = target.value;
