@@ -20,6 +20,7 @@ const MapListSchema = new mongoose.Schema({
         required: true,
     },
     timesubmitted: [time],
+ 
 
     wait: {
         type: String,

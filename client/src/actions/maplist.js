@@ -20,6 +20,7 @@ export const addtime = (time, id) =>{
         console.log(error);
     });
 }
+
 export const removedexpired = (id, array) =>{
     const url = '/MapList/' + id;
     const averagetime = parseInt(array.reduce(function(sum, n){

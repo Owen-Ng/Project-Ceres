@@ -22,6 +22,7 @@ const Family = mongoose.model("Family", {
         ref: "Tribe",
         required: true,
     },
+    
 });
 
 module.exports = { Family };
