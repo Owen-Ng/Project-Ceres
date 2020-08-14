@@ -47,21 +47,18 @@ export default class GroceryList extends Component {
 
     async getLists() {
         const user = this.props.user;
-        if (user !== null) {
+        if (user !== null && user.familyID) {
             try {
-                const response = await fetch(
-                    `/list/${user.familyID}`,
-                    {
-                        method: "GET",
-                        crossDomain: true,
-                        credentials: "include",
-                        redirect: "follow",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        referrerPolicy: "no-referrer",
-                    }
-                );
+                const response = await fetch(`/list/${user.familyID}`, {
+                    method: "GET",
+                    crossDomain: true,
+                    credentials: "include",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    referrerPolicy: "no-referrer",
+                });
                 const groceryLists = await response.json();
                 let updatedList = {};
 
