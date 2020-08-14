@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./tribe.css";
 import FamilyMember from "./FamilyMember/family-member.component"
+import { inviteFamily, inviteTribe } from "../../actions/tribe"
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,6 +16,7 @@ export default class Tribe extends Component {
       currentFamily: "",
       currentTribe: "",
       invitedUser: "",
+      invitedFamily: ""
     }
 
     this.renderLists = this.renderLists.bind(this);
@@ -24,6 +26,7 @@ export default class Tribe extends Component {
     this.handleChangeinvitedUser = this.handleChangeinvitedUser.bind(this);
     this.inviteJoinTribe = this.inviteJoinTribe.bind(this);
     this.handleChangeinvitedFamily = this.handleChangeinvitedFamily.bind(this);
+    this.showLists = this.showLists.bind(this);
   }
 
   async componentDidMount() {
@@ -191,9 +194,14 @@ export default class Tribe extends Component {
     this.setState({ currentTribe: tribe })
   }
 
+  showLists() {
+    console.log(this.state.tribeList)
+  }
+
   inviteJoinFamily(e) {
     e.preventDefault();
-    console.log("here");
+    inviteFamily(this.state.invitedUser, this.state.user.familyID);
+    this.setState({ invitedUser: "" });
   }
 
   handleChangeinvitedUser(e) {
@@ -204,13 +212,14 @@ export default class Tribe extends Component {
 
   inviteJoinTribe(e) {
     e.preventDefault();
-    console.log("here");
+    inviteTribe(this.state.invitedFamily, this.state.currentTribe);
+    this.setState({ invitedUser: "" });
   }
 
   handleChangeinvitedFamily(e) {
     e.preventDefault();
     const fName = e.target.value;
-    this.setState({ invitedFaily: fName });
+    this.setState({ invitedFamily: fName });
   }
 
   // Helper function, creates the list of families in each tribe
@@ -271,7 +280,7 @@ export default class Tribe extends Component {
         </div>
         <br />
         <br />
-        <button className="btn btn-primary btn-showList">Show Lists for Current Tribe</button>
+        <button className="btn btn-primary btn-showList" onClick={this.showLists}>Show Lists for Current Tribe</button>
       </div>
     )
   }

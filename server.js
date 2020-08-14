@@ -635,7 +635,7 @@ app.patch("/tribe/decline/:tid", (req, res) => {
 // Invite a users family to join a tribe
 app.patch("/tribe/invite/:uid", (req, res) => {
     const uid = req.params.uid;
-    const tid = req.body.tribeid;
+    const tName = req.body.tribeName;
 
     if (!ObjectID.isValid(uid)) {
         res.status(404).send();
@@ -650,12 +650,12 @@ app.patch("/tribe/invite/:uid", (req, res) => {
         } else {
             const currentFamily = user.familyID;
 
-            Tribe.findById(tid).then((tribe) => {
+            Tribe.findOne({tribeName: tName}).then((tribe) => {
                 if (!tribe) {
                     res.statusMessage(404).send("Resource not found");
                 } else {
                     Family.findById(currentFamily).then((family) => {
-                        family.pending.push(tid);
+                        family.pending.push(tribe._id);
                         tribe.offers = currentFamily;
                         family.save();
 
