@@ -246,7 +246,7 @@ export default class Tribe extends Component {
                 onChange={this.handleChangeinvitedUser}
                 required
               />
-              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Invite To Family</button>
+              <button className="buttonsubmit btn btn-primary btn-add-tribe" type="submit">Invite To Family</button>
 
             </form>
           </div>
@@ -264,14 +264,14 @@ export default class Tribe extends Component {
                 onChange={this.handleChangeinvitedFamily}
                 required
               />
-              <button className="buttonsubmit btn btn-primary btn-add" type="submit">Invite To Tribe</button>
+              <button className="buttonsubmit btn btn-primary btn-add-tribe" type="submit">Invite To Tribe</button>
 
             </form>
           </div>
         </div>
         <br />
         <br />
-        <button className="btn btn-primary btn-showList">Show Lists for Current Tribe</button>
+        <button className="buttonsubmit btn btn-primary btn-showList">Show Lists for Current Tribe</button>
       </div>
     )
   }

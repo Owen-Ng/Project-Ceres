@@ -36,7 +36,7 @@ export default class Register extends Component {
             this.state.password === this.state.passwordRetyped
         ) {
             try {
-                const response = await fetch("http://localhost:5000/users", {
+                const response = await fetch("/users", {
                     method: "POST",
                     crossDomain: true,
                     credentials: "include",

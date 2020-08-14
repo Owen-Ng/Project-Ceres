@@ -38,7 +38,7 @@ export default class Profile extends Component {
 
   async componentDidMount() {
     try {
-        const response = await fetch("http://localhost:5000/users", {
+        const response = await fetch("/users", {
             method: "GET",
             crossDomain: true,
             credentials: "include",

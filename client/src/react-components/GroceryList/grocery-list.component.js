@@ -50,7 +50,7 @@ export default class GroceryList extends Component {
         if (user !== null) {
             try {
                 const response = await fetch(
-                    `http://localhost:5000/list/${user.familyID}`,
+                    `/list/${user.familyID}`,
                     {
                         method: "GET",
                         crossDomain: true,
@@ -87,7 +87,7 @@ export default class GroceryList extends Component {
         if (this.props.user) {
             //Get family
             try {
-                const response = await fetch(`http://localhost:5000/family`, {
+                const response = await fetch(`/family`, {
                     method: "GET",
                     crossDomain: true,
                     credentials: "include",
@@ -123,7 +123,7 @@ export default class GroceryList extends Component {
         this.setState((state) => updatedList);
         */
         try {
-            await fetch("http://localhost:5000/item", {
+            await fetch("/item", {
                 method: "PATCH",
                 crossDomain: true,
                 credentials: "include",
@@ -153,7 +153,7 @@ export default class GroceryList extends Component {
         const currentList = this.state.currentList;
         let updatedList = this.state.familyLists;
         try {
-            await fetch("http://localhost:5000/item", {
+            await fetch("/item", {
                 method: "DELETE",
                 crossDomain: true,
                 credentials: "include",
@@ -195,7 +195,7 @@ export default class GroceryList extends Component {
             return;
         }
         try {
-            await fetch("http://localhost:5000/item", {
+            await fetch("/item", {
                 method: "POST",
                 crossDomain: true,
                 credentials: "include",
@@ -269,7 +269,7 @@ export default class GroceryList extends Component {
         let updatedList = this.state.familyLists;
         delete updatedList[oldList];
         */
-        await fetch("http://localhost:5000/list", {
+        await fetch("/list", {
             method: "DELETE",
             crossDomain: true,
             credentials: "include",

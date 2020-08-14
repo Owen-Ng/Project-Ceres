@@ -61,7 +61,7 @@ export default class GroceryListTab extends Component {
                 updatedList[listInputBar.trim()] = {};
                 this.props.updateState({ familyLists: updatedList });
                 this.setState({ familyLists: updatedList });
-                await fetch("http://localhost:5000/list", {
+                await fetch("/list", {
                     method: "POST",
                     crossDomain: true,
                     credentials: "include",

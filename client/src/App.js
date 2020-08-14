@@ -79,7 +79,7 @@ export default class App extends Component {
 
     async logout() {
         this.setState({ isAdmin: false, loggedIn: false, username: "" });
-        await fetch("http://localhost:5000/users/logout", {
+        await fetch("/users/logout", {
             method: "GET",
             crossDomain: true,
             credentials: "include",
@@ -94,7 +94,7 @@ export default class App extends Component {
     async getUser() {
         try {
             const response = await fetch(
-                "http://localhost:5000/users/check-session",
+                "/users/check-session",
                 {
                     method: "GET",
                     crossDomain: true,
@@ -110,7 +110,7 @@ export default class App extends Component {
             if (isSignedIn) {
                 try {
                     const response = await fetch(
-                        "http://localhost:5000/users",
+                        "/users",
                         {
                             method: "GET",
                             crossDomain: true,
