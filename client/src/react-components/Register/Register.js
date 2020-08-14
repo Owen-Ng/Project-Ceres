@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import "./Register.css";
+import * as EmailValidator from "email-validator";
 //import Login from "../Login/login.component";
 //import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 //import Map from "../Maps/maps.component.js";
@@ -18,6 +19,7 @@ export default class Register extends Component {
             isUserEmailError: false,
             isUserPasswordError: false,
             isSuccessful: false,
+            isFormatError: false,
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,7 +32,15 @@ export default class Register extends Component {
 
     async handleSubmit(e) {
         e.preventDefault();
-
+        if (!EmailValidator.validate(this.state.email)) {
+            this.setState({
+                isFormatError: true,
+                isUserPasswordError: false,
+                isUserEmailError: false,
+                isUserNameError: false,
+            });
+            return;
+        }
         if (
             this.state.password.length > 3 &&
             this.state.password === this.state.passwordRetyped
@@ -57,12 +67,14 @@ export default class Register extends Component {
                     if (error.email) {
                         this.setState({
                             isUserEmailError: true,
+                            isFormatError: false,
                             isUserPasswordError: false,
                             isUserNameError: false,
                         });
                     } else {
                         this.setState({
                             isUserPasswordError: false,
+                            isFormatError: false,
                             isUserEmailError: false,
                             isUserNameError: true,
                         });
@@ -79,6 +91,7 @@ export default class Register extends Component {
                 isUserPasswordError: true,
                 isUserEmailError: false,
                 isUserNameError: false,
+                isFormatError: false,
             });
     }
     handleChange(e) {
@@ -90,9 +103,17 @@ export default class Register extends Component {
                 <p>
                     <strong>Welcome to Project Ceres </strong>
                 </p>
+
                 {this.state.isSuccessful ? (
                     <p className="green">
                         <strong>{<Redirect to="/login" />}</strong>
+                    </p>
+                ) : (
+                    ""
+                )}
+                {this.state.isFormatError ? (
+                    <p className="red">
+                        <strong>This is not a valid email address</strong>
                     </p>
                 ) : (
                     ""

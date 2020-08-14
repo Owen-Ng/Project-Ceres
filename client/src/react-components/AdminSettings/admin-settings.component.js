@@ -18,8 +18,6 @@ export default class AdminSettings extends Component {
             allFamilies: {},
             allStores: {},
             allTribes: {},
-            membersLists: {},
-            tribeLists: {},
             displayType: "",
             selectedItem: "",
             selectedObj: {},
