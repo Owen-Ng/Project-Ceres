@@ -58,7 +58,7 @@ export default class AdminData extends Component {
                 allUsers[this.state.username] = this.state.allUsers;
                 try {
                     const response = await fetch(
-                        "http://localhost:5000/users",
+                        "/users",
                         {
                             method: "POST",
                             crossDomain: true,
@@ -98,7 +98,7 @@ export default class AdminData extends Component {
         ) {
             try {
                 const response = await fetch(
-                    "http://localhost:5000/admin/family",
+                    "/admin/family",
                     {
                         method: "POST",
                         crossDomain: true,
@@ -134,7 +134,7 @@ export default class AdminData extends Component {
             ) {
                 try {
                     const response = await fetch(
-                        "http://localhost:5000/MapList",
+                        "/MapList",
                         {
                             method: "POST",
                             crossDomain: true,
@@ -172,7 +172,7 @@ export default class AdminData extends Component {
             ) {
                 try {
                     const response = await fetch(
-                        "http://localhost:5000/admin/tribe",
+                        "/admin/tribe",
                         {
                             method: "POST",
                             crossDomain: true,

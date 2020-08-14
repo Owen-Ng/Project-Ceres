@@ -59,7 +59,7 @@ export default class AdminPanel extends Component {
 
         if (this.props.displayType === "user") {
             try {
-                const response = await fetch("http://localhost:5000/users", {
+                const response = await fetch("/users", {
                     method: "PATCH",
                     crossDomain: true,
                     credentials: "include",
@@ -86,7 +86,7 @@ export default class AdminPanel extends Component {
             }
         } else if (this.props.displayType === "family") {
             try {
-                const response = await fetch("http://localhost:5000/family", {
+                const response = await fetch("/family", {
                     method: "PATCH",
                     crossDomain: true,
                     credentials: "include",
@@ -113,7 +113,7 @@ export default class AdminPanel extends Component {
             }
         } else if (this.props.displayType === "tribe") {
             try {
-                const response = await fetch("http://localhost:5000/tribe", {
+                const response = await fetch("/tribe", {
                     method: "PATCH",
                     crossDomain: true,
                     credentials: "include",
@@ -140,7 +140,7 @@ export default class AdminPanel extends Component {
             }
         } else if (this.props.displayType === "store") {
             try {
-                const response = await fetch("http://localhost:5000/MapList", {
+                const response = await fetch("/MapList", {
                     method: "PATCH",
                     crossDomain: true,
                     credentials: "include",

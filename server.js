@@ -23,7 +23,7 @@ const { ObjectID } = require("mongodb");
 const bodyParser = require("body-parser");
 const datetime = require("date-and-time");
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors());
 // express-session for user sessions
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));

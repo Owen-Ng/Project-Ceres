@@ -125,7 +125,7 @@ export default class AdminSettings extends Component {
     async deleteObj(selectedItem, displayType) {
         if (displayType === "user") {
             try {
-                const response = await fetch("http://localhost:5000/users", {
+                const response = await fetch("/users", {
                     method: "DELETE",
                     crossDomain: true,
                     credentials: "include",
@@ -152,7 +152,7 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "family") {
             try {
-                const response = await fetch("http://localhost:5000/family", {
+                const response = await fetch("/family", {
                     method: "DELETE",
                     crossDomain: true,
                     credentials: "include",
@@ -179,7 +179,7 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "store") {
             try {
-                const response = await fetch("http://localhost:5000/MapList", {
+                const response = await fetch("/MapList", {
                     method: "DELETE",
                     crossDomain: true,
                     credentials: "include",
@@ -205,7 +205,7 @@ export default class AdminSettings extends Component {
             });
         } else if (displayType === "tribe") {
             try {
-                const response = await fetch("http://localhost:5000/tribe", {
+                const response = await fetch("/tribe", {
                     method: "DELETE",
                     crossDomain: true,
                     credentials: "include",
@@ -254,7 +254,7 @@ export default class AdminSettings extends Component {
     async getAllData() {
         try {
             //Getting all users
-            const response = await fetch(`http://localhost:5000/all`, {
+            const response = await fetch(`/all`, {
                 method: "GET",
                 crossDomain: true,
                 credentials: "include",
@@ -274,7 +274,7 @@ export default class AdminSettings extends Component {
         }
         try {
             //Getting all Stores
-            const response = await fetch(`http://localhost:5000/MapList`, {
+            const response = await fetch(`/MapList`, {
                 method: "GET",
                 crossDomain: true,
                 credentials: "include",
@@ -294,7 +294,7 @@ export default class AdminSettings extends Component {
         }
         try {
             //Getting all families
-            const response = await fetch(`http://localhost:5000/all/family`, {
+            const response = await fetch(`/all/family`, {
                 method: "GET",
                 crossDomain: true,
                 credentials: "include",
@@ -315,7 +315,7 @@ export default class AdminSettings extends Component {
 
         try {
             //Getting all users
-            const response = await fetch(`http://localhost:5000/all/tribe`, {
+            const response = await fetch(`/all/tribe`, {
                 method: "GET",
                 crossDomain: true,
                 credentials: "include",
