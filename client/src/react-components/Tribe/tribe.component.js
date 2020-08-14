@@ -271,7 +271,7 @@ export default class Tribe extends Component {
         </div>
         <br />
         <br />
-        <button className="buttonsubmit btn btn-primary btn-showList">Show Lists for Current Tribe</button>
+        <button className="btn btn-primary btn-showList">Show Lists for Current Tribe</button>
       </div>
     )
   }
