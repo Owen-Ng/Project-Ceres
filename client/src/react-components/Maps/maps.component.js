@@ -24,6 +24,7 @@ export default class Maps extends Component {
         currentcity:"etobicoke",
         timesubmitted:null,
         toggle: false,
+        isalert:false
 
       }
  
@@ -68,14 +69,14 @@ export default class Maps extends Component {
       }
       else {
         if (this.state.currentstate.id === "") {
-          this.setState({ timesubmitted: "Please select a store" });
+          this.setState({ timesubmitted: "Please select a store" ,isalert:true});
           setTimeout(function () {
-            this.setState({ timesubmitted: "" })
+            this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
         } else {
-          this.setState({ timesubmitted: "Input should be a number" });
+          this.setState({ timesubmitted: "Input should be a number",isalert:true });
           setTimeout(function () {
-            this.setState({ timesubmitted: "" })
+            this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
         }
       
@@ -123,9 +124,9 @@ export default class Maps extends Component {
     
           }
           else{
-            this.setState({citystate: "City does not exist"});
+            this.setState({citystate: "City does not exist",isalert:true});
             setTimeout(function(){
-              this.setState({citystate:""})
+              this.setState({citystate:"",isalert:false})
             }.bind(this),1000)
             //alert("Does not exist")
           }
@@ -150,8 +151,9 @@ export default class Maps extends Component {
               value = {this.state.citystate} 
               onChange={this.changecity} 
               onKeyUp={this.Keypress} 
+              autocomplete="off"
               type="text" 
-              className="inputext m-2 border-dark" placeholder="Enter City" 
+              className={!this.state.isalert?"inputext m-2 border-dark":"inputext m-2 border-dark text-danger "}  placeholder="Enter City" 
      />
              
             </div>
@@ -159,12 +161,12 @@ export default class Maps extends Component {
             <p>Store Info: <strong>{this.state.currentstate.Store}</strong> </p>
             <p>Address: <strong>{this.state.currentstate.Address}</strong> </p>
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
-            <p>Wait time: <strong>{this.state.currentstate.Wait_time}</strong> </p>
+            <p>Wait time: <strong>{this.state.currentstate.Wait_time }</strong> </p>
             </div>
             {this.props.user?this.props.user.familyAdmin?<div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
-               onKeyUp={this.timesubmit} type= "text" className="waitTime" placeholder="Enter time taken"></input>
+               onKeyUp={this.timesubmit}  type= "text" className={!this.state.isalert?"waitTime":"waitTime text-danger"} placeholder="Enter time taken"></input>
             </div>: <div></div>:<div></div>}
           </div>
           </div>
