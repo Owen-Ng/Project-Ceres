@@ -257,8 +257,10 @@ app.get("/family/users/:fid", (req, res) => {
         return;
     }
 
-    User.find({ familyID: fid }).then((users) => {
-        res.send(users);
+    Family.findById(fid).then((family) => {
+        User.find({ familyID: fid }).then((users) => {
+            res.send({users, familyName: family.familyName});
+        })
     });
 });
 
@@ -468,13 +470,22 @@ app.get("/tribe/families/:tid", (req, res) => {
         return;
     }
 
-    Family.find({ tribes: tid }).then((tribe) => {
-        if (!tribe) {
-            res.status(404).send("Resource not found");
-        } else {
-            res.send(tribe);
-        }
-    });
+    // Family.findById(fid).then((family) => {
+    //     User.find({ familyID: fid }).then((users) => {
+    //         res.send({users, familyName: family.familyName});
+    //     })
+    // });
+
+    Tribe.findById(tid).then((tribe) => {
+        Family.find({ tribes: tid }).then((family) => {
+            if (!family) {
+                res.status(404).send("Resource not found");
+            } else {
+                res.send({ family, tribeName: tribe.tribeName });
+            }
+        });
+    })
+    
 });
 
 // Current users family joins tribe tid

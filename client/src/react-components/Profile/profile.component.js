@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import "./profile.css"
 import { createFamily, createTribe, joinFamily, declineFamily, joinTribe, declineTribe } from "../../actions/profile"
 
-const log = console.log
-
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -86,10 +84,8 @@ export default class Profile extends Component {
       }
 
       if (!this.state.user.familyID) {
-        console.log("no Family")
         return;
       } else {
-        console.log("checking...")
         const fid = this.state.user.familyID;
         const url = `/family/${fid}`
         const request = new Request(url,{
