@@ -356,7 +356,7 @@ export default class Profile extends Component {
                             <li>
                                 {" "}
                                 <strong>Email:</strong>{" "}
-                                {this.state.current.email}
+                                {this.props.user?this.props.user.email:""}
                             </li>
                             <li>
                                 <strong>Password:</strong>{" "}
