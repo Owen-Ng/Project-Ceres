@@ -515,23 +515,17 @@ app.get("/tribe/families/:tid", (req, res) => {
 
 app.get("/tribe/lists/:tName", (req, res) => {
     const tName = req.params.tName;
-    const lists = [];
 
     Tribe.findOne({ tribeName: tName }).then((tribe) => {
+        let itemLists = [];
+
         const tid = tribe._id;
         Family.find({ tribes: tid }).then((family) => {
             
-            family.map((fam) => {
-                const fid = fam._id
+            res.send(family)
 
-                List.find({ familyID: fid }).then((list) => {
-                    if (list.length > 0) {
-                        res.send([{ list, familyName: fam.familyName }])
-                    }
-                });
             })
         })
-    })
 });
 
 // Current users family joins tribe tid
