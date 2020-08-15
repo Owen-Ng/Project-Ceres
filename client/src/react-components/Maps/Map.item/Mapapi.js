@@ -74,19 +74,28 @@ export default class PublicMap extends Component {
   }
   componentDidUpdate(){
     if (!this.state.isfirst){
-      this.setState({isfirst: true})
+      
       const newtime = new Date();
         this.state.groceries.map((obj) => {
             const newtimearray = obj.timesubmitted.filter((time) => 
                 datetime.subtract(newtime, new Date(time.date)).toHours() < 2
+           
             )
-            removedexpired(obj._id, newtimearray);
+         
+            if (JSON.stringify(newtimearray) !== JSON.stringify(obj.timesubmitted)){
+              // console.log(newtimearray)
+              // console.log(obj.timesubmitted == newtimearray)
+               console.log(obj.timesubmitted)
+              removedexpired(obj._id, newtimearray);
+            }
+            
         })
         
       }
 
-    if (this.state.oldtoggle !== this.state.toggle ){
+    if (this.state.oldtoggle !== this.state.toggle || !this.state.isfirst ){
       this.setState({oldtoggle: this.state.toggle});
+      this.setState({isfirst: true})
   
     const url = "/MapList";
     fetch(url, {
