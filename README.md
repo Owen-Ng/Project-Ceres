@@ -10,45 +10,45 @@ Grocery List sharing web app.
 
 ### Table of Contents
 
-1. [Description](#description)  
+1. [Description](#description)
 2. [Credentials](#credentials)  
-  2.1. [User](#user)  
-  2.2. [Admin](#admin)
+   2.1. [User](#user)  
+   2.2. [Admin](#admin)
 3. [How To Use](#how-to-use)  
-  3.1. [Map](#map)  
-  3.2. [Tribe](#tribe)  
-  3.3. [Grocery Lists](#grocery-list)  
-  3.4. [Profile](#profile)  
-  3.5. [Admin Settings](#admin-settings) 
-4. [Routes](#routes) 
-5. [Author Info](#author-info)  
+   3.1. [Map](#map)  
+   3.2. [Tribe](#tribe)  
+   3.3. [Grocery Lists](#grocery-list)  
+   3.4. [Profile](#profile)  
+   3.5. [Admin Settings](#admin-settings)
+4. [Routes](#routes)
+5. [Author Info](#author-info)
 
 ---
 
 ## Description
 
-The purpose of the web app is to enhance the experience of grocery shopping during the global COVID-19 pandemic. The app allows families to create grocery lists and share those lists with their “inner circle”, or tribe, of other families. This will help reduce traffic to grocery stores, by allowing one family member to shop for other families as well as their own. In addition to creating and sharing grocery lists there is a map view which  includes wait times for each grocery store. This allows the family member who is going shopping to choose the store with the least amount of wait time, or plan their trip for when the wait times are minimal.
+The purpose of the web app is to enhance the experience of grocery shopping during the global COVID-19 pandemic. The app allows families to create grocery lists and share those lists with their “inner circle”, or tribe, of other families. This will help reduce traffic to grocery stores, by allowing one family member to shop for other families as well as their own. In addition to creating and sharing grocery lists there is a map view which includes wait times for each grocery store. This allows the family member who is going shopping to choose the store with the least amount of wait time, or plan their trip for when the wait times are minimal.
 
 #### Technologies
 
 Front End
 
-- [React.js](https://reactjs.org)
-- [Bootstrap](https://getbootstrap.com)
-- [React Leaflet](https://react-leaflet.js.org)
-- [React Leaflet Search](https://www.npmjs.com/package/react-leaflet-search)
-- [JQuery](https://jquery.com)
+-   [React.js](https://reactjs.org)
+-   [Bootstrap](https://getbootstrap.com)
+-   [React Leaflet](https://react-leaflet.js.org)
+-   [React Leaflet Search](https://www.npmjs.com/package/react-leaflet-search)
+-   [JQuery](https://jquery.com)
 
 Back End
 
-- [Node.js](https://nodejs.org)
-- [Express](https://expressjs.com)
-- [MongoDB](https://www.mongodb.com)
-- [mongoose](https://mongoosejs.com)
-- [bcrypt](https://www.npmjs.com/package/bcryptjs)
-- [validator](https://www.npmjs.com/package/validator)
-- [body-parser](https://www.npmjs.com/package/body-parser)
-- [cors](https://www.npmjs.com/package/cors)
+-   [Node.js](https://nodejs.org)
+-   [Express](https://expressjs.com)
+-   [MongoDB](https://www.mongodb.com)
+-   [mongoose](https://mongoosejs.com)
+-   [bcrypt](https://www.npmjs.com/package/bcryptjs)
+-   [validator](https://www.npmjs.com/package/validator)
+-   [body-parser](https://www.npmjs.com/package/body-parser)
+-   [cors](https://www.npmjs.com/package/cors)
 
 [Back To The Top](#project-ceres)
 
@@ -66,7 +66,7 @@ The user login will allow users to access the Map, Tribe, Grocery List and Profi
 Admin credentials are admin/admin.  
 The admin login will allow users to access the Map, Tribe, Grocery List, Admin Settings and Profile pages of the app.
 
-### User#
+### User
 
 There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user# with the password user#.
 
@@ -82,26 +82,25 @@ This page can be accessed by clicking on either the Project Ceres title or 'Map'
 
 This page will allow the user to select which tribe's grocery lists they will see. The left had side of the page shows the name of their family as well as the members. The will also be a textbox which will allow family admins to invite users to their family. The right hand side of the page lists the tribes that thier familiy belongs to as well as the other families who are members of that tribe. By clicking on the tribe button for the desired tribe they will select the current tribe. This will allow the tribe admins to invite other users families to that tribe. For a regular user selecting the current tribe will allow them display a list of all of the grocery lists which belong to families in that tribe buy clicking the button at the bottom of the page.
 
-
 #### Grocery List
 
 This page is the allows the users to see all the grocery lists associated with the families in their tribe. To select a list the user must click the button which contains that lists name. The user is able to create and delete lists, add new items with varying quantities to the lists as well as edit and delete items from lists.
 
 #### Profile
 
-This page will have various functionality dependent on the state of the user. 
+This page will have various functionality dependent on the state of the user.
 
- 1. A user with no family will be shown a "Create Family" dialog where they will be able to create a family, and will automatically be assigned to the family admin position.
+1.  A user with no family will be shown a "Create Family" dialog where they will be able to create a family, and will automatically be assigned to the family admin position.
 
- 2. A user who has been invited to a family will be shown a "Join Family" where they will be able to either join or decline the invitation. A user may only be invited to one family at a time.
+2.  A user who has been invited to a family will be shown a "Join Family" where they will be able to either join or decline the invitation. A user may only be invited to one family at a time.
 
- 3. A user who is a family admin will be shown a "Create Tribe" dialog where they will be able to create a tribe, and will automatically be assigned to the tribe admin position.
+3.  A user who is a family admin will be shown a "Create Tribe" dialog where they will be able to create a tribe, and will automatically be assigned to the tribe admin position.
 
- 4. A user who is a family admin and whose family has be invited to join a/many tribe(s) will be shown a dialog with a dropdown menu to select the tribe they would like to join or decline.
+4.  A user who is a family admin and whose family has be invited to join a/many tribe(s) will be shown a dialog with a dropdown menu to select the tribe they would like to join or decline.
 
- 5. A regular user who is part of a family but not an admin will be shown none of these dialogs.
+5.  A regular user who is part of a family but not an admin will be shown none of these dialogs.
 
- The change Email and Password dialog is not functional as of version 1.0. 
+The change Email and Password dialog is not functional as of version 1.0.
 
 #### Admin Settings
 
@@ -119,335 +118,457 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: get("/users/logout"
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: get("/users/check-session",
+  Method: GET
+  Description: Responds with true if the session is valid and false otherwise.
+  URL Parameters: None
+  Body: None
+  Returns: True or false
+```
+
+```
+  Route: post("/users",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
-```
-  Route: post("/users", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
+
 ```
   Route: delete("/users",
+  Method: DELETE
+  Description: Deletes a user to be used by admin, verification is performed.
+  URL Parameters: None
+  Body:
+  {
+    userID
+  }
+  Returns: None
+```
+
+```
+  Route: patch("/users",
+  Method:
+  Description: Providing an array composed of [property, new value] will find a property such as username or name and change its value to new value. ex ["username", "Karen"] will change the user's username to Karen.
+  URL Parameters:
+  Body:
+  {
+    userID,
+    change
+  }
+  Returns: None
+```
+
+```
+  Route: get("/users",
+  Method: GET
+  Description: Returns the current user signed in
+  URL Parameters: None
+  Body: None
+  Returns: (most data except password) {
+    id,
+    admin (true or false),
+    tribeAdmin,
+    email,
+    familyID,
+    name,
+    familyAdmin,
+    username,
+    pending
+  }
+```
+
+```
+  Route: get("/user/:uName",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/users", 
+  Route: get("/family",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/users", 
+  Route: get("/family/addtime/:id",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/user/:uName", 
+  Route: post("/family",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/family", 
+  Route: delete("/family",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/family/addtime/:id", 
+  Route: patch("/family",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: post("/family", 
+  Route: patch("/family/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: delete("/family", 
+  Route: get("/family/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/family", 
+  Route: post("/family/addtime/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/family/:fid", 
+  Route: get("/family/users/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/family/:fid", 
+  Route: patch("/family/join/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: post("/family/addtime/:fid", 
+  Route: patch("/family/decline/:fid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/family/users/:fid", 
+  Route: patch("/family/invite/:uid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
-```
-  Route: patch("/family/join/:fid", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
-```
-  Route: patch("/family/decline/:fid", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
-```
-  Route: patch("/family/invite/:uid", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
+
 ```
   Route: post("/tribe",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: delete("/tribe", 
+  Route: delete("/tribe",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/tribe", 
+  Route: patch("/tribe",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/tribe/:tid", 
+  Route: get("/tribe/:tid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/tribe/families/:tid", 
+  Route: get("/tribe/families/:tid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: get("/tribe/lists/:tName", 
+  Route: get("/tribe/lists/:tName",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/tribe/join/:tid", 
+  Route: patch("/tribe/join/:tid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/tribe/decline/:tid",  
+  Route: patch("/tribe/decline/:tid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: patch("/tribe/invite/:uid", 
+  Route: patch("/tribe/invite/:uid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: post("/list", 
-  Method:
-  Description:
+  Route: post("/list",
+  Method: POST
+  Description: Creates a new list
+  URL Parameters:
+  Body: {
+    listname,
+    fid,
+    shared : true/false
+  }
+  Returns: the new list's json
+```
+
+```
+  Route: get("/list/:fid",
+  Method: GET
+  Description: Gets all lists belonging a to a family
+  URL Parameters: a familyID
+  Body:
+  Returns: A json with all the lists
+```
+
+```
+  Route: delete("/list",
+  Method: DELETE
+  Description: Deletes a list from a families lists
   URL Parameters:
   Body:
+  {
+    listName,
+    fid
+  }
+  Returns: None
 ```
+
 ```
-  Route: get("/list/:fid", 
-  Method:
-  Description:
+  Route: post("/item",
+  Method: POST
+  Description: Adds a new item to a list
   URL Parameters:
-  Body:
+  Body: {
+    listname,
+    fid,
+    itemname,
+    quantity
+  }
+  Returns: list
 ```
+
 ```
-  Route: delete("/list", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
-```
-  Route: post("/item", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
-```
-  Route: patch("/item", 
+  Route: patch("/item",
   Method: PATCH
   Description: Used when editing an items name or quantity. All fields must be provided even if no change occurred.
   URL Parameters:
   Body:
   {
-     listName 
-     familyID 
-     prevName 
-     newName 
-     quantity 
+     listName
+     fid
+     prevName
+     newName
+     quantity
   }
+  Returns: None
 ```
+
 ```
-  Route: delete("/item", 
+  Route: delete("/item",
   Method:DELETE
   Description: Given an list name, a familyID and an item name, this route will find the family enter the specified list and delete the item.
   URL Parameters:
   Body:
   {
     listName,
-    familyID,
+    did,
     itemName
   }
+  Returns: None
 ```
+
 ```
   Route: get("/MapList",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: post("/MapList",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: patch("/MapList",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: delete("/MapList",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: post("/MapList/:mid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: patch("/MapList/:mid",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: get("/City",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
-  Route: post("/City", 
+  Route: post("/City",
   Method:
   Description:
   URL Parameters:
   Body:
+  Returns:
 ```
+
 ```
   Route: get("/all",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all users in the DB.
   URL Parameters:
   Body:
+  Returns: all users
 ```
+
 ```
   Route: get("/all/tribe",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all tribes in the DB.
   URL Parameters:
   Body:
+  Returns: all tribes
 ```
+
 ```
   Route: get("/all/family",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all families in the DB.
   URL Parameters:
   Body:
-  
+  Returns: all families
+
 ```
+
 ```
   Route: post("/admin/family",
   Method:
@@ -457,22 +578,25 @@ This page will only be available for admin users. The page will allow administra
   {
     familyname: familyname
   }
+  Returns: None
 ```
+
 ```
   Route: post("/admin/tribe",
   Method: POST
   Description: Creates a new tribe with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:
-  Body: 
+  Body:
   {
     tribename: tribename
   }
+  Returns: None
 ```
 
-  Description:
-  URL Parameters:
-  Body:
-```ck To The Top](#project-cere```
+Description:
+URL Parameters:
+Body:
+`ck To The Top](#project-cere`
 s)
 
 ---

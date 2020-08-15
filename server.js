@@ -118,7 +118,7 @@ app.delete("/users", (req, res) => {
         .then((user) => {
             if (!user) {
                 res.status(404).send("Insufficient privileges");
-            } else {
+            } else if (user.admin) {
                 User.findByIdAndDelete(userID)
                     .then(() => res.status(200).end())
                     .catch((err) => res.status(400).end());
@@ -176,14 +176,14 @@ app.get("/users", (req, res) => {
 app.get("/user/:uName", (req, res) => {
     const uName = req.params.uName;
 
-    User.find({username: uName}).then((user) => {
+    User.find({ username: uName }).then((user) => {
         if (!user) {
-            res.status(404).send("No such user")
+            res.status(404).send("No such user");
         } else {
-            res.send(user)
+            res.send(user);
         }
-    })
-})
+    });
+});
 
 // get your family
 app.get("/family", (req, res) => {
@@ -204,21 +204,23 @@ app.get("/family", (req, res) => {
         res.status(400).send("Invaid FamilyID");
     }
 });
-app.get("/family/addtime/:id", (req,res)=>{
+app.get("/family/addtime/:id", (req, res) => {
     if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-    } 
-  
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+
     const id = req.params.id;
-    Family.findById(id).then((result)=>{
-        res.send(result)
-    }).catch((error) =>{
-        log(error);
-        res.status(500).send("Internal Server Error");
-    })
-})
+    Family.findById(id)
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((error) => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        });
+});
 // Create a new family
 app.post("/family", (req, res) => {
     const currentUser = req.session.user;
@@ -282,7 +284,7 @@ app.patch("/family", (req, res) => {
 /*
 ["path": "/time", "value": [...]]
 */
-app.patch("/family/:fid", (req,res)=>{
+app.patch("/family/:fid", (req, res) => {
     const id = req.params.fid;
     if (!ObjectID.isValid(id)) {
         res.status(404).send();
@@ -314,7 +316,7 @@ app.patch("/family/:fid", (req,res)=>{
             res.send(result);
         }
     });
-})
+});
 // Returns all users in an array belonging to family fid
 app.get("/family/:fid", (req, res) => {
     const fid = req.params.fid;
@@ -337,41 +339,48 @@ app.get("/family/:fid", (req, res) => {
 
     }
 */
-app.post("/family/addtime/:fid", (req, res)=>{
+app.post("/family/addtime/:fid", (req, res) => {
     const fid = req.params.fid;
 
     if (!ObjectID.isValid(fid)) {
         res.status(404).send();
         return;
     }
-    const newtime = {   
+    const newtime = {
         date: new Date(),
         StoreId: req.body.StoreId,
         timesubmitted: req.body.timesubmitted,
-        userId: req.body.userId
-    }
+        userId: req.body.userId,
+    };
 
-    Family.findById(fid).then((family) => {
-        family.time.push(newtime);
-        family.save().then((result)=>{
-            res.send(result);
-        }).catch((error) => {
-            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-                res.status(500).send('Internal server error')
+    Family.findById(fid)
+        .then((family) => {
+            family.time.push(newtime);
+            family
+                .save()
+                .then((result) => {
+                    res.send(result);
+                })
+                .catch((error) => {
+                    if (isMongoError(error)) {
+                        // check for if mongo server suddenly dissconnected before this request.
+                        res.status(500).send("Internal server error");
+                    } else {
+                        log(error);
+                        res.status(400).send("Bad Request"); // bad request for changing the student.
+                    }
+                });
+        })
+        .catch((error) => {
+            if (isMongoError(error)) {
+                // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send("Internal server error");
             } else {
-                log(error)
-                res.status(400).send('Bad Request') // bad request for changing the student.
+                log(error);
+                res.status(400).send("Bad Request"); // bad request for changing the student.
             }
         });
-    }).catch((error) => {
-        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-            res.status(500).send('Internal server error')
-        } else {
-            log(error)
-            res.status(400).send('Bad Request') // bad request for changing the student.
-        }
-    });;
-})
+});
 
 // Returns all users in an array belonging to family fid
 app.get("/family/users/:fid", (req, res) => {
@@ -626,11 +635,9 @@ app.get("/tribe/lists/:tName", (req, res) => {
 
         const tid = tribe._id;
         Family.find({ tribes: tid }).then((family) => {
-            
-            res.send(family)
-
-            })
-        })
+            res.send(family);
+        });
+    });
 });
 
 // Current users family joins tribe tid
@@ -764,7 +771,7 @@ app.patch("/tribe/invite/:uid", (req, res) => {
         } else {
             const currentFamily = user.familyID;
 
-            Tribe.findOne({tribeName: tName}).then((tribe) => {
+            Tribe.findOne({ tribeName: tName }).then((tribe) => {
                 if (!tribe) {
                     res.status(404).send("Resource not found");
                 } else {
