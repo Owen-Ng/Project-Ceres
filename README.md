@@ -134,16 +134,16 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/users/logout"
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Route: /users/logout
+  Method: GET
+  Description: Logs user out by destroying session cookie.
+  URL Parameters: None
+  Body: None
+  Returns: None
 ```
 
 ```
-  Route: get("/users/check-session",
+  Route: /users/check-session
   Method: GET
   Description: Responds with true if the session is valid and false otherwise.
   URL Parameters: None
@@ -152,16 +152,35 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/users",
-  Method:
-  Description:
-  URL Parameters:
+  Route: /users
+  Method: POST
+  Description: Creates a new user.
+  URL Parameters: None
   Body:
+    {
+      email: email,
+      username: username,
+      password: password,
+      name: name,
+    }
   Returns:
+    {
+      familyID: null,
+      admin: false,
+      familyAdmin: false,
+      tribeAdmin: [],
+      created: CreationDate,
+      _id: ObjectID,
+      email: email@mail.com,
+      username: username,
+      password: passwordHash,
+      name: Name,
+      __v: 0
+    }
 ```
 
 ```
-  Route: delete("/users",
+  Route: /users
   Method: DELETE
   Description: Deletes a user to be used by admin, verification is performed.
   URL Parameters: None
@@ -173,7 +192,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/users",
+  Route: /users
   Method:
   Description: Providing an array composed of [property, new value] will find a property such as username or name and change its value to new value. ex ["username", "Karen"] will change the user's username to Karen.
   URL Parameters:
@@ -186,7 +205,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/users",
+  Route: /users
   Method: GET
   Description: Returns the current user signed in
   URL Parameters: None
@@ -205,7 +224,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/user/:uName",
+  Route: /user/:uName
   Method:
   Description:
   URL Parameters:
@@ -620,12 +639,7 @@ This page will only be available for admin users. The page will allow administra
   }
   Returns: None
 ```
-
-Description:
-URL Parameters:
-Body:
-`ck To The Top](#project-cere`
-s)
+[Back To The Top](#project-ceres)
 
 ---
 
