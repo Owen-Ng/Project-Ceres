@@ -62,7 +62,6 @@ app.post("/users/login", (req, res) => {
                 familyAdmin: user.familyAdmin,
                 familyID: user.familyID,
                 email: user.email,
-                
             });
             req.session.save();
         })
@@ -250,7 +249,6 @@ app.post("/family", (req, res) => {
         }
     );
 });
-// Create a new family as an admin
 
 app.delete("/family", (req, res) => {
     const familyID = req.body.familyID;
