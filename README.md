@@ -239,8 +239,7 @@ This page will only be available for admin users. The page will allow administra
       email: email@mail.com,
       username: username,
       password: passwordHash,
-      name: Name,
-      __v: 0
+      name: Name
     }
 ```
 
@@ -400,7 +399,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /tribe
   Method: POST
-  Description: (Requires Login) Create a new tribe and adds the current users family to that tribe.
+  Description: (Requires Login) Create a new tribe and adds the current users family to 
+  that tribe.
   Current user becomes tribe admin.
   URL Parameters: None
   Body: None
@@ -427,8 +427,8 @@ This page will only be available for admin users. The page will allow administra
   Route: /tribe
   Method: PATCH
   Description: Given an array called change [property, new value] will change a tribes property 
-  to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, 
-  verification is performed.
+  to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin 
+  only, verification is performed.
   URL Parameters:
   Body:
   {
@@ -453,7 +453,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /tribe/families/:tid
   Method: GET
-  Description: Returns the tribe name and a list of families belonging to the desired tribe, (serach by TribeID).
+  Description: Returns the tribe name and a list of families belonging to the desired tribe, 
+  (serach by TribeID).
   URL Parameters: tid - TribeID of desired tribe
   Body: None
   Returns:
@@ -466,7 +467,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /tribe/lists/:tName
   Method: GET
-  Description: Returns a list of families belonging to the desired tribe, (search by tirbe name).
+  Description: Returns a list of families belonging to the desired tribe, 
+  (search by tirbe name).
   URL Parameters: tName - name of desired tribe
   Body: None
   Returns:
@@ -569,8 +571,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /item
   Method: PATCH
-  Description: Used when editing an items name or quantity. All fields must be provided even if 
-  no change occurred.
+  Description: Used when editing an items name or quantity. All fields must be provided even 
+  if no change occurred.
   URL Parameters:None
   Body:
   {
@@ -586,8 +588,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /item
   Method:DELETE
-  Description: Given an list name, a familyID and an item name, this route will find the family 
-  enter the specified list and delete the item.
+  Description: Given an list name, a familyID and an item name, this route will find the 
+  family enter the specified list and delete the item.
   URL Parameters: None
   Body:
   {
@@ -626,7 +628,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /MapList/:mid
   Method: POST
-  Description: Adding objects to time array. So we can keep track of when it was added. The average is calculated here with the new time that has been submitted.
+  Description: Adding objects to time array. So we can keep track of when it was added. 
+  The average is calculated here with the new time that has been submitted.
   URL Parameters: mid
   Body: 
     {
@@ -704,8 +707,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /admin/family
   Method:
-  Description: Creates a new family with a given name. To be run by an admin only. Verification 
-  is performed. Intended for elevated presets that in case of future needs.
+  Description: Creates a new family with a given name. To be run by an admin only. 
+  Verification is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:None
   Body:
   {
