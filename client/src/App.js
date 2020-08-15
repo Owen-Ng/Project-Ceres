@@ -99,35 +99,29 @@ export default class App extends Component {
     }
     async getUser() {
         try {
-            const response = await fetch(
-                "/users/check-session",
-                {
-                    method: "GET",
-                    crossDomain: true,
-                    credentials: "include",
-                    redirect: "follow",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    referrerPolicy: "no-referrer",
-                }
-            );
+            const response = await fetch("/users/check-session", {
+                method: "GET",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+            });
             const isSignedIn = await response.json();
             if (isSignedIn) {
                 try {
-                    const response = await fetch(
-                        "/users",
-                        {
-                            method: "GET",
-                            crossDomain: true,
-                            credentials: "include",
-                            redirect: "follow",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            referrerPolicy: "no-referrer",
-                        }
-                    );
+                    const response = await fetch("/users", {
+                        method: "GET",
+                        crossDomain: true,
+                        credentials: "include",
+                        redirect: "follow",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        referrerPolicy: "no-referrer",
+                    });
                     if (response.status < 400) {
                         const user = await response.json();
                         if (!user) {
@@ -172,17 +166,30 @@ export default class App extends Component {
                 <Route
                     path="/map"
                     exact
+
                     render={() => <Maps user={this.state.user} haschange={this.haschange}/>}
+
+                    // render={() => (
+                    //     <Maps user={this.state.user} getUser={this.getUser} />
+                    // )}
+
                 />
                 <Route
                     path="/tribe"
                     exact
-                    render={() => <Tribe user={this.state.user} />}
+                    render={() => (
+                        <Tribe user={this.state.user} getUser={this.getUser} />
+                    )}
                 />
                 <Route
                     path="/grocerylists"
                     exact
-                    render={() => <GroceryList user={this.state.user} />}
+                    render={() => (
+                        <GroceryList
+                            user={this.state.user}
+                            getUser={this.getUser}
+                        />
+                    )}
                 />
 
                 <Route
@@ -192,13 +199,19 @@ export default class App extends Component {
                         <AdminSettings
                             user={this.state.user}
                             isAdmin={this.state.isAdmin}
+                            getUser={this.getUser}
                         />
                     )}
                 />
                 <Route
                     path="/profile"
                     exact
-                    render={() => <Profile user={this.state.user} />}
+                    render={() => (
+                        <Profile
+                            user={this.state.user}
+                            getUser={this.getUser}
+                        />
+                    )}
                 />
             </Router>
         );

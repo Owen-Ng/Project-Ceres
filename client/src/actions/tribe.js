@@ -1,43 +1,68 @@
 const log = console.log
 
-export const inviteFamily = (user) => {
-    const url = `/family/invite/${user}`;
-    const request = new Request(url,{
-        method:"PATCH",
-        headers:{
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json"
-        }
-    });
-    fetch(request).then(function(res){
-        if(res.status===200){
-            log("Success");
-        }else{
-            log("failed")
-        }
-    }) .catch(error => {
-        console.log(error);
-    });
-}
+export const inviteFamily = async (user) => {
 
-export const inviteTribe = (user, tribe) => {
+    try {
+        const url = `/user/${user}`;
+        const request = new Request(url,{
+            method:"GET",
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const response = await fetch(request, {})
+        const json = await response.json()
+        const uid = await json[0]._id
+        
+        const url2 = `/family/invite/${uid}`
+        const request2 = new Request(url2,{
+            method:"PATCH",
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const resp2 = await fetch(request2, {})
+        const json2 = await resp2.json()
+        console.log(json2)
     
-    const url = `/family/invite/${user}`;
-    const request = new Request(url,{
-        method:"PATCH",
-        body: JSON.stringify({"tribeName": tribe}),
-        headers:{
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json"
-        }
-    });
-    fetch(request).then(function(res){
-        if(res.status===200){
-            log("Success");
-        }else{
-            log("failed")
-        }
-    }) .catch(error => {
+    } catch (error) {
         console.log(error);
-    });
+    }
+};
+
+
+export const inviteTribe = async (user, tribe) => {
+    
+    try {
+        const url = `/user/${user}`;
+        const request = new Request(url,{
+            method:"GET",
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const response = await fetch(request, {})
+        const json = await response.json()
+        const uid = await json[0]._id
+    
+        const url2 = `/tribe/invite/${uid}`;
+        const request2 = new Request(url2,{
+            method:"PATCH",
+            body: JSON.stringify({"tribeName": tribe}),
+            headers:{
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        });
+        const resp2 = await fetch(request2, {})
+        const json2 = await resp2.json()
+        console.log(json2)
+        
+    } catch (error) {
+        console.log(error);
+    }
+
 }

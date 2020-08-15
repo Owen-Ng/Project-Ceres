@@ -126,7 +126,7 @@ export default class Tribe extends Component {
             }
 
             const returned = Object.assign(tribes, tribeObj)
-            this.setState({ tribeList: returned })
+            this.setState({ tribeList: returned, currentTribe: tribeName })
           })
           
       }
@@ -244,7 +244,7 @@ export default class Tribe extends Component {
             const response = await fetch(request, {});
             const json = await response.json()
             list.appendChild(familyHeader)
-            
+
             json.map((grocList) => {
               
               const entries = Object.entries(grocList.items)
@@ -269,7 +269,7 @@ export default class Tribe extends Component {
 
   inviteJoinFamily(e) {
     e.preventDefault();
-    inviteFamily(this.state.invitedUser, this.state.user.familyID);
+    inviteFamily(this.state.invitedUser);
     this.setState({ invitedUser: "" });
   }
 
