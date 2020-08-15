@@ -202,7 +202,9 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button>Send Change</button>
+                                        <button className="send-changes">
+                                            Send Change
+                                        </button>
                                     </form>
                                     <br></br>
                                 </div>
@@ -239,7 +241,9 @@ export default class AdminPanel extends Component {
                                                             : ""
                                                     }
                                                 />
-                                                <button>Send Change</button>
+                                                <button className="send-changes">
+                                                    Send Change
+                                                </button>
                                             </form>
                                             <br></br>
                                         </div>
@@ -277,7 +281,9 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button>Send Change</button>
+                                        <button className="send-changes">
+                                            Send Change
+                                        </button>
                                     </form>
                                     <br></br>
                                 </div>
@@ -311,7 +317,9 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button>Send Change</button>
+                                        <button className="send-changes">
+                                            Send Change
+                                        </button>
                                     </form>
                                     <br></br>
                                 </div>
