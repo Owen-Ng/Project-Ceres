@@ -19,9 +19,6 @@ export default class GroceryListTab extends Component {
         this.makeList = this.makeList.bind(this);
     }
 
-    /* 
-        We will pull grocery data on the user from the database here upon mounting
-    */
     componentDidMount() {
         const initialList = Object.keys(this.state.familyLists);
         this.setState({ currentList: initialList[0] });
@@ -37,7 +34,7 @@ export default class GroceryListTab extends Component {
             [e.target.name]: e.target.value,
         });
     }
-
+    // Puts a list into focus
     selectList(e) {
         this.setState({ currentList: e.target.name });
         this.props.updateState({ currentList: e.target.name });

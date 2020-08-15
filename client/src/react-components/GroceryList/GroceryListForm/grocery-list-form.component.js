@@ -20,7 +20,7 @@ class GroceryListForm extends Component {
             [e.target.name]: e.target.value,
         });
     }
-
+    // Calls the parent to add the item to the DB
     sendItem(e) {
         e.preventDefault();
         this.addItem(this.state);
