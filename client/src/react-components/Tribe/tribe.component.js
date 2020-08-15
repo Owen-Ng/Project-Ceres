@@ -126,7 +126,7 @@ export default class Tribe extends Component {
             }
 
             const returned = Object.assign(tribes, tribeObj)
-            this.setState({ tribeList: returned })
+            this.setState({ tribeList: returned, currentTribe: tribeName })
           })
           
       }
