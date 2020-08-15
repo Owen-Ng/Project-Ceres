@@ -239,10 +239,13 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: patch("/family",
-  Method:
-  Description:
+  Method: PATCH
+  Description: Providing an array composed of [property, new value] will find a property such as familyname and change its value to new value. ex ["familyname", "the Smiths"] will change the family's familyname to the Smiths.
   URL Parameters:
-  Body:
+  Body:{
+    familyID,
+    change (this is an array of size 2)
+  }
   Returns:
 ```
 
@@ -320,20 +323,26 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: delete("/tribe",
-  Method:
-  Description:
+  Method: DELETE
+  Description: Finds a tribe and deletes it
   URL Parameters:
-  Body:
+  Body:{
+    tribeID
+  }
   Returns:
 ```
 
 ```
   Route: patch("/tribe",
-  Method:
-  Description:
+  Method: PATCH
+  Description: Given an array called change [property, new value] will change a tribes property to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, verification is performed.
   URL Parameters:
   Body:
-  Returns:
+  {
+    tribeID,
+    change (this is an array[2])
+  }
+  Returns: None
 ```
 
 ```
@@ -394,7 +403,7 @@ This page will only be available for admin users. The page will allow administra
   Route: post("/list",
   Method: POST
   Description: Creates a new list
-  URL Parameters:
+  URL Parameters:None
   Body: {
     listname,
     fid,
@@ -416,7 +425,7 @@ This page will only be available for admin users. The page will allow administra
   Route: delete("/list",
   Method: DELETE
   Description: Deletes a list from a families lists
-  URL Parameters:
+  URL Parameters:None
   Body:
   {
     listName,
@@ -429,7 +438,7 @@ This page will only be available for admin users. The page will allow administra
   Route: post("/item",
   Method: POST
   Description: Adds a new item to a list
-  URL Parameters:
+  URL Parameters:None
   Body: {
     listname,
     fid,
@@ -443,7 +452,7 @@ This page will only be available for admin users. The page will allow administra
   Route: patch("/item",
   Method: PATCH
   Description: Used when editing an items name or quantity. All fields must be provided even if no change occurred.
-  URL Parameters:
+  URL Parameters:None
   Body:
   {
      listName
@@ -459,7 +468,7 @@ This page will only be available for admin users. The page will allow administra
   Route: delete("/item",
   Method:DELETE
   Description: Given an list name, a familyID and an item name, this route will find the family enter the specified list and delete the item.
-  URL Parameters:
+  URL Parameters: None
   Body:
   {
     listName,
@@ -489,19 +498,26 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: patch("/MapList",
-  Method:
-  Description:
-  URL Parameters:
+  Method: PATCH
+  Description: Providing an array composed of [property, new value] will find a property such as address and change its value to new value. ex ["address", "nowhere"] will change the stores's address to nowhere.
+  URL Parameters: None
   Body:
+  {
+    storeID,
+    change (this is an array of size 2)
+  }
   Returns:
 ```
 
 ```
   Route: delete("/MapList",
-  Method:
-  Description:
-  URL Parameters:
+  Method: DELETE
+  Description: Deletes a store
+  URL Parameters: None
   Body:
+  {
+    storeID
+  }
   Returns:
 ```
 
@@ -545,8 +561,8 @@ This page will only be available for admin users. The page will allow administra
   Route: get("/all",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all users in the DB.
-  URL Parameters:
-  Body:
+  URL Parameters:None
+  Body:None
   Returns: all users
 ```
 
@@ -554,8 +570,8 @@ This page will only be available for admin users. The page will allow administra
   Route: get("/all/tribe",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all tribes in the DB.
-  URL Parameters:
-  Body:
+  URL Parameters:None
+  Body:None
   Returns: all tribes
 ```
 
@@ -563,8 +579,8 @@ This page will only be available for admin users. The page will allow administra
   Route: get("/all/family",
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all families in the DB.
-  URL Parameters:
-  Body:
+  URL Parameters:None
+  Body: None
   Returns: all families
 
 ```
@@ -573,7 +589,7 @@ This page will only be available for admin users. The page will allow administra
   Route: post("/admin/family",
   Method:
   Description: Creates a new family with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
-  URL Parameters:
+  URL Parameters:None
   Body:
   {
     familyname: familyname
@@ -585,7 +601,7 @@ This page will only be available for admin users. The page will allow administra
   Route: post("/admin/tribe",
   Method: POST
   Description: Creates a new tribe with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
-  URL Parameters:
+  URL Parameters:None
   Body:
   {
     tribename: tribename
