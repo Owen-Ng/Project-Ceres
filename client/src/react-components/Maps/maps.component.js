@@ -39,7 +39,7 @@ export default class Maps extends Component {
     this.Keypress = this.Keypress.bind(this);
     this.changetimesubmitted = this.changetimesubmitted.bind(this);
     this.timesubmit = this.timesubmit.bind(this);
-    // this.addtime = addtime.bind(this);
+    
   }
   getdata(id,info, address, hour, wait){
     const something ={id:id,Store:info,Address:address,Hours:hour,
@@ -99,7 +99,7 @@ export default class Maps extends Component {
           }.bind(this), 1000)
         }
 
-      //alert("Does not exist")
+
     }
     
   }
@@ -120,8 +120,7 @@ export default class Maps extends Component {
       
 
       this.setState({ City: json});
-      // console.log(this.state);
-
+     
     }.bind(this)).catch(error => {
       log(error)
     })
@@ -148,7 +147,7 @@ export default class Maps extends Component {
          
         
           this.setState({ family: json});
-          // console.log(this.state);
+          
     
         }.bind(this)).catch(error => {
           log(error)
@@ -168,7 +167,6 @@ export default class Maps extends Component {
           
     
           this.setState({ user: json});
-          // console.log(this.state);
     
         }.bind(this)).catch(error => {
           log(error)
@@ -214,7 +212,7 @@ export default class Maps extends Component {
             setTimeout(function(){
               this.setState({citystate:"",isalert:false})
             }.bind(this),1000)
-            //alert("Does not exist")
+  
           }
           
         }

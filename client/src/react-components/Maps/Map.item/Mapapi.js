@@ -62,7 +62,7 @@ export default class PublicMap extends Component {
       
 
       this.setState({ groceries: json.groceries });
-      // console.log(this.state);
+    
 
     }.bind(this)).catch(error => {
       log(error)
@@ -83,9 +83,8 @@ export default class PublicMap extends Component {
             )
          
             if (JSON.stringify(newtimearray) !== JSON.stringify(obj.timesubmitted)){
-              // console.log(newtimearray)
-              // console.log(obj.timesubmitted == newtimearray)
-               console.log(obj.timesubmitted)
+         
+              
               removedexpired(obj._id, newtimearray);
             }
             
@@ -111,7 +110,7 @@ export default class PublicMap extends Component {
       
 
       this.setState({ groceries: json.groceries });
-      // console.log(this.state);
+
 
     }.bind(this)).catch(error => {
       log(error)
@@ -119,9 +118,7 @@ export default class PublicMap extends Component {
   }
   }
 
-  // componentWillMount(){
-  //   clearInterval(this.intervalupdate);
-  // }
+
  
   render() {  
 
