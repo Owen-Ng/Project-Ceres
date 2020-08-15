@@ -292,7 +292,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /family
   Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as familyname and change its value to new value. ex ["familyname", "the Smiths"] will change the family's familyname to the Smiths.
+  Description: Providing an array composed of [property, new value] will find a property such 
+  as familyname and change its value to new value. ex ["familyname", "the Smiths"] will change 
+  the family's familyname to the Smiths.
   URL Parameters:
   Body:{
     familyID,
@@ -322,7 +324,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: post("/family/addtime/:fid", 
   Method: POST
-  Description: Pushing an object consisting of StoreId, date, timesubmitted,userId to be use for verifying the map.
+  Description: Pushing an object consisting of StoreId, date, timesubmitted,
+  userId to be use for verifying the map.
   URL Parameters: fid
   Body:     
    {
@@ -393,7 +396,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/tribe",
   Method: PATCH
-  Description: Given an array called change [property, new value] will change a tribes property to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, verification is performed.
+  Description: Given an array called change [property, new value] will change a tribes property 
+  to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, 
+  verification is performed.
   URL Parameters:
   Body:
   {
@@ -509,7 +514,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/item",
   Method: PATCH
-  Description: Used when editing an items name or quantity. All fields must be provided even if no change occurred.
+  Description: Used when editing an items name or quantity. All fields must be provided even if 
+  no change occurred.
   URL Parameters:None
   Body:
   {
@@ -525,7 +531,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: delete("/item",
   Method:DELETE
-  Description: Given an list name, a familyID and an item name, this route will find the family enter the specified list and delete the item.
+  Description: Given an list name, a familyID and an item name, this route will find the family 
+  enter the specified list and delete the item.
   URL Parameters: None
   Body:
   {
@@ -557,7 +564,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/MapList",
   Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as address and change its value to new value. ex ["address", "nowhere"] will change the stores's address to nowhere.
+  Description: Providing an array composed of [property, new value] will find a property such as 
+  address and change its value to new value. ex ["address", "nowhere"] will change the stores's 
+  address to nowhere.
   URL Parameters: None
   Body:
   {
@@ -646,7 +655,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: post("/admin/family",
   Method:
-  Description: Creates a new family with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
+  Description: Creates a new family with a given name. To be run by an admin only. Verification 
+  is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:None
   Body:
   {
@@ -658,7 +668,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: post("/admin/tribe",
   Method: POST
-  Description: Creates a new tribe with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
+  Description: Creates a new tribe with a given name. To be run by an admin only. Verification 
+  is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:None
   Body:
   {
