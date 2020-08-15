@@ -158,7 +158,7 @@ app.get("/users", (req, res) => {
             res.status(404).send("Insufficient privileges");
         } else {
             const data = {
-                id: user.id,
+                id: currentUser,
                 admin: user.admin,
                 tribeAdmin: user.tribeAdmin,
                 email: user.email,
