@@ -76,7 +76,7 @@ On accessing the website the user will be presented with the map view. This will
 
 #### Map
 
-This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (major cities in Ontario are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel). Only members of a family are allowed to submit a time and each member is able to submit once in a specific store every 24 hrs. 
+This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (major cities in Ontario are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel). Only members of a family are allowed to submit a time and each member is able to submit once in a specific store every 24 hrs. The time that was submitted will change after 2 hours.
 
 #### Tribe
 
