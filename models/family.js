@@ -4,6 +4,7 @@ const time = new mongoose.Schema({
     date: Date,
     StoreId: mongoose.Schema.Types.ObjectId,
     timesubmitted: Number,
+    userId: mongoose.Schema.Types.ObjectId,
 });
 
 const Family = mongoose.model("Family", {

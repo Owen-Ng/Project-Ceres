@@ -10,25 +10,27 @@ import {
 } from "../../actions/profile";
 
 export default class Profile extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            newFamilyName: "",
-            newTribeName: "",
-            pendingFamily: "",
-            pendingTribeID: [],
-            pendingTribes: [],
-            joinTribe: undefined,
-            user: undefined,
-            input: {
-                email: "",
-                password: "",
-            },
-            current: {
-                email: "email@email.ca",
-                password: "123456",
-            },
-        };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      newFamilyName: "",
+      newTribeName: "",
+      pendingFamily: "",
+      pendingTribeID: [],
+      pendingTribes: [],
+      joinTribe: undefined,
+      user: undefined,
+      input: {
+        email: "",
+        password: ""
+      },
+      current: {
+        email: this.props.user.email,
+        password: "123456"
+      }
+    }
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleJoinFamily = this.handleJoinFamily.bind(this);
@@ -41,6 +43,7 @@ export default class Profile extends Component {
         this.handleSubmitNewTribe = this.handleSubmitNewTribe.bind(this);
         this.handleChangeNewTribe = this.handleChangeNewTribe.bind(this);
         // this.handleChangepass = this.handleChangepass.bind(this);
+
     }
 
     async componentDidMount() {

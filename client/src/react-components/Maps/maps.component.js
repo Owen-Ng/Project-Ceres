@@ -24,6 +24,7 @@ export default class Maps extends Component {
         ,citystate:"",
         currentcity:"etobicoke",
         timesubmitted:null,
+        user: null,
         toggle: false,
         isalert:false,
         family: null,
@@ -60,15 +61,17 @@ export default class Maps extends Component {
     this.setState({citystate: value});
   }
   timesubmit(event){
-    const arrayid = [];
-    this.state.family.time.map((result)=> arrayid.push(result.StoreId))
+    const arrayid =  this.state.family.time.filter((result)=> result.StoreId === this.state.currentstate.id && result.userId === this.state.user.id)
+    
     const key = event.Keycode || event.which;
     if (key === 13){
-
-      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== "" && !arrayid.includes(this.state.currentstate.id)){
+      console.log(this.state.user)
+      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== "" && arrayid.length ===0){
+       
           this.setState({isnew: !this.state.isold});
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-          addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id)
+          log(this.state.user)
+          addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id, this.state.user.id)
         setTimeout(function () {
           this.setState({toggle:!this.state.toggle});
           this.setState({ timesubmitted: "" })
@@ -88,9 +91,9 @@ export default class Maps extends Component {
             }.bind(this), 1000)
           }
         
-         else if (arrayid.includes(this.state.currentstate.id)) {
+         else if (arrayid.length >0) {
 
-          this.setState({ timesubmitted: "Family already submitted a time" ,isalert:true});
+          this.setState({ timesubmitted: "Submission was made" ,isalert:true});
           setTimeout(function () {
             this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
@@ -122,13 +125,31 @@ export default class Maps extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
+    const furl = "/users";
+    fetch(furl, {
+      method: "GET"
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
 
+      } else {
+        log("Could not get data");
+      }
+    }).then(function (json) {
+      
+
+      this.setState({ user: json});
+      // console.log(this.state);
+
+    }.bind(this)).catch(error => {
+      log(error)
+    })
   
 
 
   }
   componentDidUpdate(){
-    
+
     if(this.props.user && this.props.user.familyID){
       if (this.state.isnew !== this.state.isold ){
         this.setState({isnew: this.state.isold})
@@ -225,7 +246,7 @@ export default class Maps extends Component {
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time }</strong> </p>
             </div>
-            {this.props.user?this.props.user.familyAdmin?<div className="bottomtext">
+            {this.props.user?this.props.user.familyID?<div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
                onKeyUp={this.timesubmit}  type= "text" className={!this.state.isalert?"waitTime":"waitTime text-danger"} placeholder="Enter time taken"></input>

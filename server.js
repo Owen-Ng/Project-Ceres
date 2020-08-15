@@ -158,7 +158,7 @@ app.get("/users", (req, res) => {
             res.status(404).send("Insufficient privileges");
         } else {
             const data = {
-                id: user.id,
+                id: currentUser,
                 admin: user.admin,
                 tribeAdmin: user.tribeAdmin,
                 email: user.email,
@@ -333,6 +333,7 @@ app.get("/family/:fid", (req, res) => {
         StoreId: ,
         date:  ,
         timesubmitted: ,
+        userId: ,
 
     }
 */
@@ -346,7 +347,8 @@ app.post("/family/addtime/:fid", (req, res)=>{
     const newtime = {   
         date: new Date(),
         StoreId: req.body.StoreId,
-        timesubmitted: req.body.timesubmitted
+        timesubmitted: req.body.timesubmitted,
+        userId: req.body.userId
     }
 
     Family.findById(fid).then((family) => {

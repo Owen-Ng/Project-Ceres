@@ -21,11 +21,11 @@ export const addtime = (time, id) =>{
         console.log(error);
     });
 }
-export const addfamilytime = (time, id, Storeid) =>{
+export const addfamilytime = (time, id, Storeid, userId) =>{
     const url = "/family/addtime/" + id;
     const request = new Request(url,{
         method:"post",
-        body: JSON.stringify({"StoreId": Storeid, "timesubmitted": time}),
+        body: JSON.stringify({"StoreId": Storeid, "timesubmitted": time, "userId": userId}),
         headers:{
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json"
