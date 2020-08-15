@@ -76,7 +76,7 @@ On accessing the website the user will be presented with the map view. This will
 
 #### Map
 
-This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (Toronto and Mississauga are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel).
+This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (major cities in Ontario are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel). Only members of a family are allowed to submit a time and each member is able to submit once in a specific store every 24 hrs. 
 
 #### Tribe
 
@@ -177,13 +177,6 @@ This page will only be available for admin users. The page will allow administra
   Body:
 ```
 ```
-  Route: get("/family/addtime/:id", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-```
-```
   Route: post("/family", 
   Method:
   Description:
@@ -220,10 +213,17 @@ This page will only be available for admin users. The page will allow administra
 ```
 ```
   Route: post("/family/addtime/:fid", 
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Method: POST
+  Description: Pushing an object consisting of StoreId, date, timesubmitted,userId to be use for verifying the map.
+  URL Parameters: fid
+  Body:     
+   {
+        StoreId: ,
+        date:  ,
+        timesubmitted: ,
+        userId: ,
+
+    }
 ```
 ```
   Route: get("/family/users/:fid", 
@@ -372,7 +372,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 ```
   Route: get("/MapList",
-  Method:
+  Method: GET
   Description:
   URL Parameters:
   Body:
