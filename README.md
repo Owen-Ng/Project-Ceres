@@ -192,8 +192,10 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: /users
-  Method:
-  Description: Providing an array composed of [property, new value] will find a property such as username or name and change its value to new value. ex ["username", "Karen"] will change the user's username to Karen.
+  Method: PATCH
+  Description: Providing an array composed of [property, new value] will find a property 
+  such as username or name and change its value to new value. ex ["username", "Karen"] 
+  will change the user's username to Karen.
   URL Parameters:
   Body:
   {
@@ -426,9 +428,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: /tribe
   Method: PATCH
-  Description: Given an array called change [property, new value] will change a tribes property 
-  to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin 
-  only, verification is performed.
+  Description: Given an array called change [property, new value] will change a tribes
+  property to new property. ex ["tribename", "Smiths"] will changes the tribes name to 
+  Smiths. Admin only, verification is performed.
   URL Parameters:
   Body:
   {
