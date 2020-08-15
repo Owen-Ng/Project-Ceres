@@ -100,7 +100,7 @@ This page will have various functionality dependent on the state of the user.
 
 5.  A regular user who is part of a family but not an admin will be shown none of these dialogs.
 
-The change Email and Password dialog is not functional as of version 1.0.
+All users will be presented with a change email and password dialog. The change Email and Password dialog is not functional as of version 1.0.
 
 #### Admin Settings
 
