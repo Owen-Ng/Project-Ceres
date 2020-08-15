@@ -114,11 +114,15 @@ This page will only be available for admin users. The page will allow administra
 ## Routes
 
 ```
-  Route: post("/users/login"
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /users/login
+  Method: POST
+  Description: Sets the current user session cookie.
+  URL Parameters: None
+  Body: 
+    {
+      username: "username",
+      password: "password"
+    }
 ```
 ```
   Route: get("/users/logout"
