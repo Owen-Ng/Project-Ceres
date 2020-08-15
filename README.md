@@ -66,7 +66,7 @@ The user login will allow users to access the Map, Tribe, Grocery List and Profi
 Admin credentials are admin/admin.  
 The admin login will allow users to access the Map, Tribe, Grocery List, Admin Settings and Profile pages of the app.
 
-### User
+### User#
 
 There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user# with the password user#.
 
@@ -113,12 +113,24 @@ This page will only be available for admin users. The page will allow administra
 ## Routes
 
 ```
-  Route: post("/users/login"
-  Method:
-  Description:
-  URL Parameters:
+  Route: /users/login
+  Method: POST
+  Description: Sets the current user session cookie.
+  URL Parameters: None
   Body:
+    {
+      username: "username",
+      password: "password"
+    }
   Returns:
+    {
+      currentUser: user.username,
+      name: user.name,
+      admin: user.admin,
+      tribeAdmin: user.tribeAdmin,
+      familyAdmin: user.familyAdmin,
+      familyID: user.familyID,
+    }
 ```
 
 ```
