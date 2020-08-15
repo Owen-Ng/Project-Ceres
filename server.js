@@ -173,6 +173,18 @@ app.get("/users", (req, res) => {
     });
 });
 
+app.get("/user/:uName", (req, res) => {
+    const uName = req.params.uName;
+
+    User.find({username: uName}).then((user) => {
+        if (!user) {
+            res.status(404).send("No such user")
+        } else {
+            res.send(user)
+        }
+    })
+})
+
 // get your family
 app.get("/family", (req, res) => {
     const currentUser = req.session.user;
@@ -661,7 +673,7 @@ app.patch("/tribe/invite/:uid", (req, res) => {
 
             Tribe.findOne({tribeName: tName}).then((tribe) => {
                 if (!tribe) {
-                    res.statusMessage(404).send("Resource not found");
+                    res.status(404).send("Resource not found");
                 } else {
                     Family.findById(currentFamily).then((family) => {
                         family.pending.push(tribe._id);
