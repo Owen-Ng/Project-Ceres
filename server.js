@@ -205,23 +205,7 @@ app.get("/family", (req, res) => {
         res.status(400).send("Invaid FamilyID");
     }
 });
-app.get("/family/addtime/:id", (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        log("Issue with mongoose connection");
-        res.status(500).send("Internal server error");
-        return;
-    }
 
-    const id = req.params.id;
-    Family.findById(id)
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((error) => {
-            log(error);
-            res.status(500).send("Internal Server Error");
-        });
-});
 // Create a new family
 app.post("/family", (req, res) => {
     const currentUser = req.session.user;
@@ -1024,44 +1008,7 @@ app.post("/MapList", (req, res) => {
             }
         });
 });
-app.patch("/MapList", (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        log("Issue with mongoose connection");
-        res.status(500).send("Internal server error");
-        return;
-    }
-    const storeID = req.body.storeID;
-    const changes = req.body.change;
-    MapList.findById(storeID)
-        .then((store) => {
-            store
-                .updateOne({ [changes[0]]: changes[1] })
-                .then(() => res.status(200).end())
-                .catch((err) => res.status(400).end());
-        })
-        .catch(() => res.status(400).end());
-});
 
-app.delete("/MapList", (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        log("Issue with mongoose connection");
-        res.status(500).send("Internal server error");
-        return;
-    }
-    const currentUser = req.session.user;
-    const storeID = req.body.storeID;
-    User.findById(currentUser)
-        .then((user) => {
-            if (!user) {
-                res.status(404).send("Insufficient privileges");
-            } else {
-                MapList.findByIdAndDelete(storeID)
-                    .then(() => res.status(200).end())
-                    .catch((err) => res.status(400).end());
-            }
-        })
-        .catch((err) => res.status(500).end);
-});
 // {
 //     timesubmitted: <Time submitted>
 //

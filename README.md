@@ -268,10 +268,10 @@ This page will only be available for admin users. The page will allow administra
   URL Parameters: fid
   Body:     
    {
-        StoreId: ,
-        date:  ,
-        timesubmitted: ,
-        userId: ,
+        StoreId: Objectid ,
+        date:  Date,
+        timesubmitted: Number,
+        userId: Objectid,
 
     }
 ```
@@ -481,80 +481,75 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: get("/MapList",
   Method: GET
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Description: A list of json objects which contains coordinates, name, timesubmitted
+  URL Parameters: NONE
+  Body: NONE
+  Returns: A list of json objects which contains coordinates, name, timesubmitted
 ```
 
 ```
   Route: post("/MapList",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
-```
-
-```
-  Route: patch("/MapList",
-  Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as address and change its value to new value. ex ["address", "nowhere"] will change the stores's address to nowhere.
-  URL Parameters: None
-  Body:
+  Method: POST
+  Description: Adding a new store in the database
+  URL Parameters: NONE
+  Body: 
   {
-    storeID,
-    change (this is an array of size 2)
-  }
+        name,
+        address,
+        open,
+        wait,
+        coordinates,
+    }
   Returns:
 ```
-
-```
-  Route: delete("/MapList",
-  Method: DELETE
-  Description: Deletes a store
-  URL Parameters: None
-  Body:
-  {
-    storeID
-  }
-  Returns:
-```
-
 ```
   Route: post("/MapList/:mid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Method: POST
+  Description: Adding objects to time array. So we can keep track of when it was added. The average is calculated here with the new time that has been submitted.
+  URL Parameters: mid
+  Body: 
+    {
+        timesubmitted: Number,
+    }
+  Returns: includes the new update of the specific map given the id
 ```
 
 ```
   Route: patch("/MapList/:mid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Method: PATCH
+  Description: With a given id, it will modify the specific map using the path and value
+  URL Parameters: mid
+  Body: 
+  [
+    {"path": "/name", "value": "hello"},
+    {  "path": "/decription", "value": "Good food" },
+    ...
+
+  ]
+
+  Returns: the modified map.
 ```
 
 ```
   Route: get("/City",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Method: GET
+  Description: List of all cities in the database
+  URL Parameters: NONE
+  Body: NONE
+  Returns: JSON List of all cities in the database
 ```
 
 ```
   Route: post("/City",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Method: POST
+  Description: Adding a new city to the database
+  URL Parameters: NONE
+  Body: 
+  {
+    "name" : String,
+    "coordinate" : [Number, Number]
+  }
+  Returns: the new added city
 ```
 
 ```
