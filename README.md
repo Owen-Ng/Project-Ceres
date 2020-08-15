@@ -113,103 +113,349 @@ This page will only be available for admin users. The page will allow administra
 
 ## Routes
 
-app.post("/users/login"
+```
+  Route: post("/users/login"
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/users/logout"
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/users/check-session",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/users", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/users",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/users", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/users", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/user/:uName", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/family", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/family/addtime/:id", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/family", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/family", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/family", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/family/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/family/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/family/addtime/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/family/users/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/family/join/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/family/decline/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/family/invite/:uid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/tribe",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/tribe", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/tribe", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/tribe/:tid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/tribe/families/:tid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/tribe/lists/:tName", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/tribe/join/:tid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/tribe/decline/:tid",  
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/tribe/invite/:uid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/list", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/list/:fid", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/list", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/item", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/item", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/item", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/MapList",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/MapList",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/MapList",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: delete("/MapList",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/MapList/:mid",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: patch("/MapList/:mid",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/City",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/City", 
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/all",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/all/tribe",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: get("/all/family",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/admin/family",
+  Method:
+  Description:
+  URL Parameters:
+  Body:
+```
+```
+  Route: post("/admin/tribe",
+  Method:
+  Description:
+  URL Parameters:
+    Route: Body:
+    Method:
+```
 
-app.get("/users/logout"
-
-app.get("/users/check-session",
-
-app.post("/users", 
-
-app.delete("/users",
-
-app.patch("/users", 
-
-app.get("/users", 
-
-app.get("/user/:uName", 
-
-app.get("/family", 
-
-app.get("/family/addtime/:id", 
-
-app.post("/family", 
-
-app.delete("/family", 
-
-app.patch("/family", 
-
-app.patch("/family/:fid", 
-
-app.get("/family/:fid", 
-
-app.post("/family/addtime/:fid", 
-
-app.get("/family/users/:fid", 
-
-app.patch("/family/join/:fid", 
-
-app.patch("/family/decline/:fid", 
-
-app.patch("/family/invite/:uid", 
-
-app.post("/tribe",
-
-app.delete("/tribe", 
-
-app.patch("/tribe", 
-
-app.get("/tribe/:tid", 
-
-app.get("/tribe/families/:tid", 
-
-app.get("/tribe/lists/:tName", 
-
-app.patch("/tribe/join/:tid", 
-
-app.patch("/tribe/decline/:tid",  
-
-app.patch("/tribe/invite/:uid", 
-
-app.post("/list", 
-
-app.get("/list/:fid", 
-
-app.delete("/list", 
-
-app.post("/item", 
-
-app.patch("/item", 
-
-app.delete("/item", 
-
-app.get("/MapList",
-
-app.post("/MapList",
-
-app.patch("/MapList",
-
-app.delete("/MapList",
-
-app.post("/MapList/:mid",
-
-app.patch("/MapList/:mid",
-
-app.get("/City",
-
-app.post("/City", 
-
-app.get("/all",
-
-app.get("/all/tribe",
-
-app.get("/all/family",
-
-app.post("/admin/family",
-
-app.post("/admin/tribe",
-
-[Back To The Top](#project-ceres)
+  Description:
+  URL Parameters:
+  Body:
+```ck To The Top](#project-cere```
+s)
 
 ---
 
