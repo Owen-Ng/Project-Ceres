@@ -61,6 +61,8 @@ app.post("/users/login", (req, res) => {
                 tribeAdmin: user.tribeAdmin,
                 familyAdmin: user.familyAdmin,
                 familyID: user.familyID,
+                email: user.email,
+                
             });
             req.session.save();
         })
