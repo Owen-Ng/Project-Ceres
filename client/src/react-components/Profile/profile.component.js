@@ -149,12 +149,14 @@ export default class Profile extends Component {
         e.preventDefault();
         joinFamily(this.state.user.pending);
         this.setState({ pendingFamily: "" });
+        this.props.getUser();
     }
 
     handleDeclineFamily(e) {
         e.preventDefault();
         declineFamily(this.state.user.pending);
         this.setState({ pendingFamily: "" });
+        this.props.getUser();
     }
 
     handleJoinTribe(e) {
@@ -163,6 +165,7 @@ export default class Profile extends Component {
         const tribe = this.state.pendingTribeID[index];
         joinTribe(tribe);
         this.setState({ joinTribe: undefined });
+        this.props.getUser();
     }
 
     handleDeclineTribe(e) {
@@ -171,6 +174,7 @@ export default class Profile extends Component {
         const tribe = this.state.pendingTribeID[index];
         declineTribe(tribe);
         this.setState({ joinTribe: undefined });
+        this.props.getUser();
     }
 
     handleJoinTribeChange(e) {
