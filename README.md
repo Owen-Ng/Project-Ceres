@@ -1,8 +1,10 @@
-## Project Ceres
+## [Project Ceres](https://projectceres.herokuapp.com)
 
 ![Project Image](client/public/logo192.png)
 
 Grocery List sharing web app.
+
+[https://projectceres.herokuapp.com](https://projectceres.herokuapp.com)
 
 ---
 
@@ -17,8 +19,9 @@ Grocery List sharing web app.
   3.2. [Tribe](#tribe)  
   3.3. [Grocery Lists](#grocery-list)  
   3.4. [Profile](#profile)  
-  3.5. [Admin Settings](#admin-settings)  
-4. [Author Info](#author-info)  
+  3.5. [Admin Settings](#admin-settings) 
+4. [Routes](#routes) 
+5. [Author Info](#author-info)  
 
 ---
 
@@ -28,10 +31,24 @@ The purpose of the web app is to enhance the experience of grocery shopping duri
 
 #### Technologies
 
+Front End
+
 - [React.js](https://reactjs.org)
 - [Bootstrap](https://getbootstrap.com)
 - [React Leaflet](https://react-leaflet.js.org)
 - [React Leaflet Search](https://www.npmjs.com/package/react-leaflet-search)
+- [JQuery](https://jquery.com)
+
+Back End
+
+- [Node.js](https://nodejs.org)
+- [Express](https://expressjs.com)
+- [MongoDB](https://www.mongodb.com)
+- [mongoose](https://mongoosejs.com)
+- [bcrypt](https://www.npmjs.com/package/bcryptjs)
+- [validator](https://www.npmjs.com/package/validator)
+- [body-parser](https://www.npmjs.com/package/body-parser)
+- [cors](https://www.npmjs.com/package/cors)
 
 [Back To The Top](#project-ceres)
 
@@ -49,6 +66,10 @@ The user login will allow users to access the Map, Tribe, Grocery List and Profi
 Admin credentials are admin/admin.  
 The admin login will allow users to access the Map, Tribe, Grocery List, Admin Settings and Profile pages of the app.
 
+### User#
+
+There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user# with the password user#.
+
 ## How to Use
 
 On accessing the website the user will be presented with the map view. This will allow for the general public to access the information on the map page, namely the wait times associated with grocery stores in their area. In order to access other areas of the site the user must log in by pressing the 'Login' button in the upper left hand corner of the website.
@@ -57,29 +78,136 @@ On accessing the website the user will be presented with the map view. This will
 
 This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (Toronto and Mississauga are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel).
 
-> :warning: The wait time functions have not been implemented pending the implementation of the backend server portion of the website.
-
 #### Tribe
 
-This page will allow the user to select which tribe's grocery lists they will see. The left had side of the page shows the name of their family as well as the members. The right hand side of the page lists the tribes that thier familiy belongs to as well as the other families who are members of that tribe. By clicking on the tribe button for the desired tribe they will be taken to the grocery list page with the first list from that tribe selected.
-_
-> :bangbang: The 'Change Family' button was added for testing purposes to allow the grocery lists of other families to be selected and will be removed once the backend server has been implemented.
+This page will allow the user to select which tribe's grocery lists they will see. The left had side of the page shows the name of their family as well as the members. The will also be a textbox which will allow family admins to invite users to their family. The right hand side of the page lists the tribes that thier familiy belongs to as well as the other families who are members of that tribe. By clicking on the tribe button for the desired tribe they will select the current tribe. This will allow the tribe admins to invite other users families to that tribe. For a regular user selecting the current tribe will allow them display a list of all of the grocery lists which belong to families in that tribe buy clicking the button at the bottom of the page.
+
 
 #### Grocery List
 
 This page is the allows the users to see all the grocery lists associated with the families in their tribe. To select a list the user must click the button which contains that lists name. The user is able to create and delete lists, add new items with varying quantities to the lists as well as edit and delete items from lists.
 
-> :warning: In the current iteration of the website the user can add and delete items to all of the lists as there is no association of lists to families yet. This will be implemented with the backend server as well.
-
 #### Profile
 
-This page will allow the user to change their email and password and will be the page that allows a non-admin user to join their family.
+This page will have various functionality dependent on the state of the user. 
 
-> :warning: These features have not yet been implemented.
+ 1. A user with no family will be shown a "Create Family" dialog where they will be able to create a family, and will automatically be assigned to the family admin position.
+
+ 2. A user who has been invited to a family will be shown a "Join Family" where they will be able to either join or decline the invitation. A user may only be invited to one family at a time.
+
+ 3. A user who is a family admin will be shown a "Create Tribe" dialog where they will be able to create a tribe, and will automatically be assigned to the tribe admin position.
+
+ 4. A user who is a family admin and whose family has be invited to join a/many tribe(s) will be shown a dialog with a dropdown menu to select the tribe they would like to join or decline.
+
+ 5. A regular user who is part of a family but not an admin will be shown none of these dialogs.
+
+ The change Email and Password dialog is not functional as of version 1.0. 
 
 #### Admin Settings
 
 This page will only be available for admin users. The page will allow administrators to search for tribes, families and stores as well as add and delete tribes, families and stores. The right hand panel is where the data is entered to add new information and the left hand panel allows for search functions. As you type the autosuggest will filter all data that starts with what you entered. Clicking on the different tribe/family/store will show information in the bottom panel and allow the admin user to delete the selected data. Click on the search type (Family, Store or Tribe) to reload any changes you may have made such as deleting and adding new entries.
+
+[Back To The Top](#project-ceres)
+
+---
+
+## Routes
+
+app.post("/users/login"
+
+app.get("/users/logout"
+
+app.get("/users/check-session",
+
+app.post("/users", 
+
+app.delete("/users",
+
+app.patch("/users", 
+
+app.get("/users", 
+
+app.get("/user/:uName", 
+
+app.get("/family", 
+
+app.get("/family/addtime/:id", 
+
+app.post("/family", 
+
+app.delete("/family", 
+
+app.patch("/family", 
+
+app.patch("/family/:fid", 
+
+app.get("/family/:fid", 
+
+app.post("/family/addtime/:fid", 
+
+app.get("/family/users/:fid", 
+
+app.patch("/family/join/:fid", 
+
+app.patch("/family/decline/:fid", 
+
+app.patch("/family/invite/:uid", 
+
+app.post("/tribe",
+
+app.delete("/tribe", 
+
+app.patch("/tribe", 
+
+app.get("/tribe/:tid", 
+
+app.get("/tribe/families/:tid", 
+
+app.get("/tribe/lists/:tName", 
+
+app.patch("/tribe/join/:tid", 
+
+app.patch("/tribe/decline/:tid",  
+
+app.patch("/tribe/invite/:uid", 
+
+app.post("/list", 
+
+app.get("/list/:fid", 
+
+app.delete("/list", 
+
+app.post("/item", 
+
+app.patch("/item", 
+
+app.delete("/item", 
+
+app.get("/MapList",
+
+app.post("/MapList",
+
+app.patch("/MapList",
+
+app.delete("/MapList",
+
+app.post("/MapList/:mid",
+
+app.patch("/MapList/:mid",
+
+app.get("/City",
+
+app.post("/City", 
+
+app.get("/all",
+
+app.get("/all/tribe",
+
+app.get("/all/family",
+
+app.post("/admin/family",
+
+app.post("/admin/tribe",
 
 [Back To The Top](#project-ceres)
 
