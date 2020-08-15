@@ -25,7 +25,9 @@ export default class App extends Component {
             loggedIn: false, // set to false when deployed
             username: "",
             user: null,
+            profilechange:false,
         };
+        this.haschange = this.haschange(this);
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
         this.logout = this.logout.bind(this);
@@ -33,6 +35,10 @@ export default class App extends Component {
     }
     async componentDidMount() {
         await this.getUser();
+    }
+    haschange(bl){
+        this.setState({profilechange: bl})
+
     }
     setPermissions(permissionString, username) {
         if (permissionString === "user") {
@@ -166,7 +172,7 @@ export default class App extends Component {
                 <Route
                     path="/map"
                     exact
-                    render={() => <Maps user={this.state.user} />}
+                    render={() => <Maps user={this.state.user} haschange={this.haschange}/>}
                 />
                 <Route
                     path="/tribe"

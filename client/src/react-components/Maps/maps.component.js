@@ -60,15 +60,14 @@ export default class Maps extends Component {
     this.setState({citystate: value});
   }
   timesubmit(event){
-    const arrayid = [];
-    this.state.family.time.map((result)=> arrayid.push(result.StoreId))
+    const arrayid =  this.state.family.time.filter((result)=> result.StoreId === this.state.currentstate.id && result.userId === this.props.user._id)
     const key = event.Keycode || event.which;
     if (key === 13){
 
       if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== "" && !arrayid.includes(this.state.currentstate.id)){
           this.setState({isnew: !this.state.isold});
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-          addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id)
+          addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id, this.props.user._id)
         setTimeout(function () {
           this.setState({toggle:!this.state.toggle});
           this.setState({ timesubmitted: "" })
@@ -90,7 +89,7 @@ export default class Maps extends Component {
         
          else if (arrayid.includes(this.state.currentstate.id)) {
 
-          this.setState({ timesubmitted: "Family already submitted a time" ,isalert:true});
+          this.setState({ timesubmitted: "You already submitted a time as a family member" ,isalert:true});
           setTimeout(function () {
             this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
@@ -225,7 +224,7 @@ export default class Maps extends Component {
             <p>Hours: <strong>{this.state.currentstate.Hours}</strong> </p>
             <p>Wait time: <strong>{this.state.currentstate.Wait_time }</strong> </p>
             </div>
-            {this.props.user?this.props.user.familyAdmin?<div className="bottomtext">
+            {this.props.user?this.props.user.familyID?<div className="bottomtext">
               <span> Report how long your visit took</span>
               <input name= "report" value = {this.state.timesubmitted} onChange={this.changetimesubmitted}
                onKeyUp={this.timesubmit}  type= "text" className={!this.state.isalert?"waitTime":"waitTime text-danger"} placeholder="Enter time taken"></input>

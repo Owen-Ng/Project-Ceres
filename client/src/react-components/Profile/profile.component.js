@@ -18,7 +18,7 @@ export default class Profile extends Component {
         password: ""
       },
       current: {
-        email: "email@email.ca",
+        email: this.props.user.email,
         password: "123456"
       }
     }
