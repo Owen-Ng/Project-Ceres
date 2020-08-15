@@ -66,7 +66,7 @@ The user login will allow users to access the Map, Tribe, Grocery List and Profi
 Admin credentials are admin/admin.  
 The admin login will allow users to access the Map, Tribe, Grocery List, Admin Settings and Profile pages of the app.
 
-### User
+### User#
 
 There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user# with the password user#.
 
@@ -76,7 +76,7 @@ On accessing the website the user will be presented with the map view. This will
 
 #### Map
 
-This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (Toronto and Mississauga are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel).
+This page can be accessed by clicking on either the Project Ceres title or 'Map' in the Navbar. This page will show a map with grocery cart icons indicating the different grocery stores. The user is able to search for their city, (major cities in Ontario are currently locateable) using the search bar in the right hand pane, and clicking on a store icon will populate the panel with the store information which includes the name, address, hours of operation and the wait time, (which will be entered by the logged in users of the app in the bottom of the panel). Only members of a family are allowed to submit a time and each member is able to submit once in a specific store every 24 hrs. 
 
 #### Tribe
 
@@ -113,25 +113,37 @@ This page will only be available for admin users. The page will allow administra
 ## Routes
 
 ```
-  Route: post("/users/login"
-  Method:
-  Description:
-  URL Parameters:
+  Route: /users/login
+  Method: POST
+  Description: Sets the current user session cookie.
+  URL Parameters: None
   Body:
+    {
+      username: "username",
+      password: "password"
+    }
   Returns:
+    {
+      currentUser: user.username,
+      name: user.name,
+      admin: user.admin,
+      tribeAdmin: user.tribeAdmin,
+      familyAdmin: user.familyAdmin,
+      familyID: user.familyID,
+    }
 ```
 
 ```
-  Route: get("/users/logout"
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Route: /users/logout
+  Method: GET
+  Description: Logs user out by destroying session cookie.
+  URL Parameters: None
+  Body: None
+  Returns: None
 ```
 
 ```
-  Route: get("/users/check-session",
+  Route: /users/check-session
   Method: GET
   Description: Responds with true if the session is valid and false otherwise.
   URL Parameters: None
@@ -140,16 +152,34 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/users",
-  Method:
-  Description:
-  URL Parameters:
+  Route: /users
+  Method: POST
+  Description: Creates a new user.
+  URL Parameters: None
   Body:
+    {
+      email: email,
+      username: username,
+      password: password,
+      name: name,
+    }
   Returns:
+    {
+      familyID: FamilyID,
+      admin: boolean,
+      familyAdmin: boolean,
+      tribeAdmin: [Array of tribes which the user is an admin for],
+      created: CreationDate,
+      _id: ObjectID,
+      email: email@mail.com,
+      username: username,
+      password: passwordHash,
+      name: Name
+    }
 ```
 
 ```
-  Route: delete("/users",
+  Route: /users
   Method: DELETE
   Description: Deletes a user to be used by admin, verification is performed.
   URL Parameters: None
@@ -161,7 +191,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/users",
+  Route: /users
   Method:
   Description: Providing an array composed of [property, new value] will find a property such as username or name and change its value to new value. ex ["username", "Karen"] will change the user's username to Karen.
   URL Parameters:
@@ -174,62 +204,81 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/users",
+  Route: /users
   Method: GET
   Description: Returns the current user signed in
   URL Parameters: None
   Body: None
   Returns: (most data except password) {
-    id,
-    admin (true or false),
-    tribeAdmin,
-    email,
-    familyID,
-    name,
-    familyAdmin,
-    username,
-    pending
+    familyID: FamilyID,
+      admin: boolean,
+      familyAdmin: boolean,
+      tribeAdmin: [Array of tribes which the user is an admin for],
+      created: CreationDate,
+      _id: ObjectID,
+      email: email@mail.com,
+      username: username,
+      name: Name
   }
 ```
 
 ```
-  Route: get("/user/:uName",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /user/:uName
+  Method: GET
+  Description: Finds a user by username and returns that user
+  URL Parameters: uName - username to search for
+  Body: None
   Returns:
+    {
+      familyID: null,
+      admin: false,
+      familyAdmin: false,
+      tribeAdmin: [Array of tribes which the user is an admin for],
+      created: CreationDate,
+      _id: ObjectID,
+      email: email@mail.com,
+      username: username,
+      password: passwordHash,
+      name: Name,
+      __v: 0
+    }
 ```
 
 ```
-  Route: get("/family",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Route: /family
+  Method: GET
+  Description: (Requires Login) Finds the Family of the currently logged in user.
+  URL Parameters: None
+  Body: None
+  Returns: 
+    {
+  tribes: [Array of tribes the family belongs to],
+  "offers": [Array of peding user invites to family],
+  "pending": [Array of pending tribe invites],
+  _id: FamilyID,
+  familyName: familyName,
+  "time": []
+}
 ```
 
 ```
-  Route: get("/family/addtime/:id",
-  Method:
-  Description:
-  URL Parameters:
+  Route: /family
+  Method: POST
+  Description: (Requires Login) Create a new Family
+  URL Parameters: None
   Body:
+    {
+      familyName: familyName
+    }
   Returns:
+    {
+      user,
+      family
+    }
 ```
 
 ```
-  Route: post("/family",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
-```
-
-```
-  Route: delete("/family",
+  Route: /family
   Method: DELETE
   Description: Deletes a family
   URL Parameters: None
@@ -241,9 +290,11 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/family",
+  Route: /family
   Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as familyname and change its value to new value. ex ["familyname", "the Smiths"] will change the family's familyname to the Smiths.
+  Description: Providing an array composed of [property, new value] will find a property such 
+  as familyname and change its value to new value. ex ["familyname", "the Smiths"] will change 
+  the family's familyname to the Smiths.
   URL Parameters:
   Body:{
     familyID,
@@ -253,12 +304,12 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/family/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Route: /family/:fid
+  Method: PATCH
+  Description: (Requires Login) Current user joins family fid
+  URL Parameters: fid - familyID of desired family
+  Body: None
+  Returns: 
 ```
 
 ```
@@ -271,12 +322,19 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/family/addtime/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
+  Route: post("/family/addtime/:fid", 
+  Method: POST
+  Description: Pushing an object consisting of StoreId, date, timesubmitted,
+  userId to be use for verifying the map.
+  URL Parameters: fid
+  Body:     
+   {
+        StoreId: ,
+        date:  ,
+        timesubmitted: ,
+        userId: ,
+
+    }
 ```
 
 ```
@@ -338,7 +396,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/tribe",
   Method: PATCH
-  Description: Given an array called change [property, new value] will change a tribes property to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, verification is performed.
+  Description: Given an array called change [property, new value] will change a tribes property 
+  to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, 
+  verification is performed.
   URL Parameters:
   Body:
   {
@@ -454,7 +514,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/item",
   Method: PATCH
-  Description: Used when editing an items name or quantity. All fields must be provided even if no change occurred.
+  Description: Used when editing an items name or quantity. All fields must be provided even if 
+  no change occurred.
   URL Parameters:None
   Body:
   {
@@ -470,7 +531,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: delete("/item",
   Method:DELETE
-  Description: Given an list name, a familyID and an item name, this route will find the family enter the specified list and delete the item.
+  Description: Given an list name, a familyID and an item name, this route will find the family 
+  enter the specified list and delete the item.
   URL Parameters: None
   Body:
   {
@@ -483,7 +545,7 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: get("/MapList",
-  Method:
+  Method: GET
   Description:
   URL Parameters:
   Body:
@@ -502,7 +564,9 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: patch("/MapList",
   Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as address and change its value to new value. ex ["address", "nowhere"] will change the stores's address to nowhere.
+  Description: Providing an array composed of [property, new value] will find a property such as 
+  address and change its value to new value. ex ["address", "nowhere"] will change the stores's 
+  address to nowhere.
   URL Parameters: None
   Body:
   {
@@ -591,7 +655,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: post("/admin/family",
   Method:
-  Description: Creates a new family with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
+  Description: Creates a new family with a given name. To be run by an admin only. Verification 
+  is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:None
   Body:
   {
@@ -603,7 +668,8 @@ This page will only be available for admin users. The page will allow administra
 ```
   Route: post("/admin/tribe",
   Method: POST
-  Description: Creates a new tribe with a given name. To be run by an admin only. Verification is performed. Intended for elevated presets that in case of future needs.
+  Description: Creates a new tribe with a given name. To be run by an admin only. Verification 
+  is performed. Intended for elevated presets that in case of future needs.
   URL Parameters:None
   Body:
   {
@@ -611,12 +677,7 @@ This page will only be available for admin users. The page will allow administra
   }
   Returns: None
 ```
-
-Description:
-URL Parameters:
-Body:
-`ck To The Top](#project-cere`
-s)
+[Back To The Top](#project-ceres)
 
 ---
 
