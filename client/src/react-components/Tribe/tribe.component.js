@@ -226,31 +226,41 @@ export default class Tribe extends Component {
           const response = await fetch(request, {});
           const json = await response.json()
           
+          json.map(async (family) => {
+            const familyHeader = document.createElement("h5");
+            const familyHeaderText = document.createTextNode(`${family.familyName}`);
 
-          json.map((family) => {
-            console.log(family)
+            familyHeader.appendChild(familyHeaderText)
 
-            const famHeader = document.createElement("h5")
-            const famHeaderText = document.createTextNode(`${family.familyName}`)
-            famHeader.appendChild(famHeaderText)
-            list.appendChild(famHeader)
+            const fid = family._id
+            const url = `/list/${fid}`
+            const request = new Request(url,{
+                method:"GET",
+                headers:{
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json"
+                }
+            });
+            const response = await fetch(request, {});
+            const json = await response.json()
+            list.appendChild(familyHeader)
+            
+            json.map((grocList) => {
+              
+              const entries = Object.entries(grocList.items)
+              const listNode = document.createElement("ul")
 
-            family.list.map((item) => {
-              const stuff = Object.entries(item.items)
+                entries.map(async (thing) => {
+                  
+                  const itemNode = document.createElement("li");
+                  const itemNodeText = document.createTextNode(`${thing[0]} ${thing[1]}`)
 
-              stuff.map((thing) => {
-                const listNode = document.createElement("p")
-                const itemText = document.createTextNode(`${thing[0]} ${thing[1]}`)
-                listNode.appendChild(itemText)
+                  itemNode.appendChild(itemNodeText)
+                  listNode.appendChild(itemNode)
+                })
                 list.appendChild(listNode)
-              })
             })
-
           })
-          // lists.map(async (list) => {
-          //   const keys = Object.keys(list.items)
-          //   console.log(keys)
-          // })
       }
     } catch (err) {
       console.log(err);
