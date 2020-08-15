@@ -192,7 +192,21 @@ app.get("/family", (req, res) => {
         res.status(400).send("Invaid FamilyID");
     }
 });
-
+app.get("/family/addtime/:id", (req,res)=>{
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+    } 
+  
+    const id = req.params.id;
+    Family.findById(id).then((result)=>{
+        res.send(result)
+    }).catch((error) =>{
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+})
 // Create a new family
 app.post("/family", (req, res) => {
     const currentUser = req.session.user;
@@ -253,7 +267,42 @@ app.patch("/family", (req, res) => {
         }
     });
 });
+/*
+["path": "/time", "value": [...]]
+*/
+app.patch("/family/:fid", (req,res)=>{
+    const id = req.params.fid;
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send();
+        return; // so that we don't run the rest of the handler.
+    }
 
+    // check mongoose connection established.
+    if (mongoose.connection.readyState != 1) {
+        log("Issue with mongoose connection");
+        res.status(500).send("Internal server error");
+        return;
+    }
+
+    // Find the fields to update and their values.
+    const fieldsToUpdate = {};
+    req.body.map((change) => {
+        const propertyToChange = change.path.substr(1);
+        // log(propertyToChange)
+        fieldsToUpdate[propertyToChange] = change.value;
+    });
+    Family.findByIdAndUpdate(
+        id,
+        { $set: fieldsToUpdate },
+        { new: true, useFindAndModify: false }
+    ).then((result) => {
+        if (!result) {
+            res.status(404).send("Resource not found");
+        } else {
+            res.send(result);
+        }
+    });
+})
 // Returns all users in an array belonging to family fid
 app.get("/family/:fid", (req, res) => {
     const fid = req.params.fid;
@@ -267,6 +316,48 @@ app.get("/family/:fid", (req, res) => {
         res.send(family);
     });
 });
+/*
+    {
+        StoreId: ,
+        date:  ,
+        timesubmitted: ,
+
+    }
+*/
+app.post("/family/addtime/:fid", (req, res)=>{
+    const fid = req.params.fid;
+
+    if (!ObjectID.isValid(fid)) {
+        res.status(404).send();
+        return;
+    }
+    const newtime = {   
+        date: new Date(),
+        StoreId: req.body.StoreId,
+        timesubmitted: req.body.timesubmitted
+    }
+
+    Family.findById(fid).then((family) => {
+        family.time.push(newtime);
+        family.save().then((result)=>{
+            res.send(result);
+        }).catch((error) => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the student.
+            }
+        });
+    }).catch((error) => {
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            log(error)
+            res.status(400).send('Bad Request') // bad request for changing the student.
+        }
+    });;
+})
 
 // Returns all users in an array belonging to family fid
 app.get("/family/users/:fid", (req, res) => {

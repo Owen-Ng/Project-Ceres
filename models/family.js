@@ -1,5 +1,10 @@
 /* Family mongoose model */
 const mongoose = require("mongoose");
+const time = new mongoose.Schema({
+    date: Date,
+    StoreId: mongoose.Schema.Types.ObjectId,
+    timesubmitted: Number,
+});
 
 const Family = mongoose.model("Family", {
     familyName: {
@@ -22,6 +27,8 @@ const Family = mongoose.model("Family", {
         ref: "Tribe",
         required: true,
     },
+    time:[time]
+
     
 });
 

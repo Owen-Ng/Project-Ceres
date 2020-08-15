@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./map.css";
 import Map from './Map.item/Mapapi'
-import { addtime } from '../../actions/maplist'
+import { addtime, familytimechanges, addfamilytime } from '../../actions/maplist'
 const log = console.log
+const datetime = require('date-and-time');
 export default class Maps extends Component {
   constructor(props) {
     super(props)
@@ -24,7 +25,11 @@ export default class Maps extends Component {
         currentcity:"etobicoke",
         timesubmitted:null,
         toggle: false,
-        isalert:false
+        isalert:false,
+        family: null,
+        isfirst: false,
+        isnew: true,
+        isold: false
 
       }
  
@@ -55,13 +60,15 @@ export default class Maps extends Component {
     this.setState({citystate: value});
   }
   timesubmit(event){
-    
+    const arrayid = [];
+    this.state.family.time.map((result)=> arrayid.push(result.StoreId))
     const key = event.Keycode || event.which;
     if (key === 13){
-      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== ""){
-        
+
+      if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== "" && !arrayid.includes(this.state.currentstate.id)){
+          this.setState({isnew: !this.state.isold});
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-          
+          addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id)
         setTimeout(function () {
           this.setState({toggle:!this.state.toggle});
           this.setState({ timesubmitted: "" })
@@ -73,13 +80,22 @@ export default class Maps extends Component {
           setTimeout(function () {
             this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
-        } else {
-          this.setState({ timesubmitted: "Input should be a number",isalert:true });
+        }
+          else if (isNaN(this.state.timesubmitted)){
+            this.setState({ timesubmitted: "Input should be a number",isalert:true });
+            setTimeout(function () {
+              this.setState({ timesubmitted: "",isalert:false })
+            }.bind(this), 1000)
+          }
+        
+         else if (arrayid.includes(this.state.currentstate.id)) {
+
+          this.setState({ timesubmitted: "Family already submitted a time" ,isalert:true});
           setTimeout(function () {
             this.setState({ timesubmitted: "",isalert:false })
           }.bind(this), 1000)
         }
-      
+
       //alert("Does not exist")
     }
     
@@ -106,6 +122,52 @@ export default class Maps extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
+
+  
+
+
+  }
+  componentDidUpdate(){
+    
+    if(this.props.user && this.props.user.familyID){
+      if (this.state.isnew !== this.state.isold ){
+        this.setState({isnew: this.state.isold})
+        const furl = "/family/" + this.props.user.familyID;
+        fetch(furl, {
+          method: "GET"
+        }).then(res => {
+          if (res.status === 200) {
+            return res.json();
+    
+          } else {
+            log("Could not get data");
+          }
+        }).then(function (json) {
+         
+        
+          this.setState({ family: json});
+          // console.log(this.state);
+    
+        }.bind(this)).catch(error => {
+          log(error)
+        })
+      }
+
+
+       if (!this.state.isfirst  ){
+             if (this.state.family !== null){
+          console.log(this.props.user);
+          this.setState({isfirst: true})
+          const newtime = new Date();
+          const newarray = this.state.family.time.filter((obj) => 
+                datetime.subtract(newtime, new Date(obj.date)).toHours() < 24
+            
+        )
+        familytimechanges(this.state.family._id,newarray )
+      }
+    }
+  }
+  
   }
   Keypress(event){
     const key = event.Keycode || event.which;
