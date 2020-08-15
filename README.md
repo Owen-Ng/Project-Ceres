@@ -123,20 +123,23 @@ This page will only be available for admin users. The page will allow administra
       username: "username",
       password: "password"
     }
+    Returns: 
 ```
 ```
-  Route: get("/users/logout"
-  Method:
+  Route: /users/logout
+  Method: GET
+  Description: Logs out a user by destroying the session cookie.
+  URL Parameters: None
+  Body: None
+  Returns: 
+```
+```
+  Route: /users/check-session
+  Method: GET
   Description:
   URL Parameters:
   Body:
-```
-```
-  Route: get("/users/check-session",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Returns: 
 ```
 ```
   Route: post("/users", 
@@ -144,6 +147,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/users",
@@ -151,6 +155,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/users", 
@@ -158,6 +163,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/users", 
@@ -165,6 +171,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/user/:uName", 
@@ -172,6 +179,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/family", 
@@ -179,6 +187,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/family/addtime/:id", 
@@ -186,6 +195,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/family", 
@@ -193,6 +203,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/family", 
@@ -200,6 +211,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/family", 
@@ -207,6 +219,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/family/:fid", 
@@ -214,6 +227,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/family/:fid", 
@@ -221,6 +235,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/family/addtime/:fid", 
@@ -228,6 +243,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/family/users/:fid", 
@@ -235,6 +251,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/family/join/:fid", 
@@ -242,6 +259,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/family/decline/:fid", 
@@ -249,6 +267,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/family/invite/:uid", 
@@ -256,6 +275,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/tribe",
@@ -263,6 +283,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/tribe", 
@@ -270,6 +291,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/tribe", 
@@ -277,6 +299,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/tribe/:tid", 
@@ -284,6 +307,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/tribe/families/:tid", 
@@ -291,6 +315,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/tribe/lists/:tName", 
@@ -298,6 +323,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/tribe/join/:tid", 
@@ -305,6 +331,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/tribe/decline/:tid",  
@@ -312,6 +339,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/tribe/invite/:uid", 
@@ -319,6 +347,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/list", 
@@ -326,6 +355,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/list/:fid", 
@@ -333,6 +363,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/list", 
@@ -340,6 +371,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/item", 
@@ -347,6 +379,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/item", 
@@ -354,6 +387,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/item", 
@@ -361,6 +395,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/MapList",
@@ -368,6 +403,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/MapList",
@@ -375,6 +411,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/MapList",
@@ -382,6 +419,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: delete("/MapList",
@@ -389,6 +427,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/MapList/:mid",
@@ -396,6 +435,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: patch("/MapList/:mid",
@@ -403,6 +443,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/City",
@@ -410,6 +451,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/City", 
@@ -417,6 +459,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/all",
@@ -424,6 +467,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/all/tribe",
@@ -431,6 +475,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: get("/all/family",
@@ -438,6 +483,7 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/admin/family",
@@ -445,21 +491,18 @@ This page will only be available for admin users. The page will allow administra
   Description:
   URL Parameters:
   Body:
+  Returns: 
 ```
 ```
   Route: post("/admin/tribe",
   Method:
   Description:
   URL Parameters:
-    Route: Body:
-    Method:
+  Body:
+  Returns: 
 ```
 
-  Description:
-  URL Parameters:
-  Body:
-```ck To The Top](#project-cere```
-s)
+[Back To The Top](#project-ceres)
 
 ---
 
