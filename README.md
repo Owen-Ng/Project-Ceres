@@ -301,6 +301,7 @@ This page will only be available for admin users. The page will allow administra
     change (this is an array of size 2)
   }
   Returns:
+    
 ```
 
 ```
@@ -310,19 +311,26 @@ This page will only be available for admin users. The page will allow administra
   URL Parameters: fid - familyID of desired family
   Body: None
   Returns: 
+    {
+      user,
+      family
+    }
 ```
 
 ```
-  Route: get("/family/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /family/:fid
+  Method: GET
+  Description: Returns family info for family fid
+  URL Parameters: fid - FamilyID of desired family
+  Body:None
   Returns:
+    {
+      family
+    }
 ```
 
 ```
-  Route: post("/family/addtime/:fid", 
+  Route: /family/addtime/:fid
   Method: POST
   Description: Pushing an object consisting of StoreId, date, timesubmitted,
   userId to be use for verifying the map.
@@ -338,52 +346,74 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/family/users/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /family/users/:fid
+  Method: GET
+  Description: Returns an array of users in family and the family name
+  URL Parameters: fid - FamilyID of desired family
+  Body: None
   Returns:
+    {
+      users: [Array of users in fid],
+      familyName: familyName
+    }
 ```
 
 ```
-  Route: patch("/family/join/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /family/join/:fid
+  Method: PATCH
+  Description: (Requires Login) Current user joins family fid.
+  URL Parameters: fid - FamilyID of desired family
+  Body: None
   Returns:
+    {
+      user,
+      family
+    }
 ```
 
 ```
-  Route: patch("/family/decline/:fid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /family/decline/:fid
+  Method: PATCH
+  Description: (Requires Login) Current user declines invite to family.
+  URL Parameters: None
+  Body: fid - FamilyID of desired family
   Returns:
+    {
+      user,
+      family
+    }
 ```
 
 ```
-  Route: patch("/family/invite/:uid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /family/invite/:uid
+  Method: PATCH
+  Description: (Requires Login) Invite user uid to join the current users family.
+  URL Parameters: uid - UserID of desired user
+  Body: None
   Returns:
+    {
+      family,
+      user
+    }
 ```
 
 ```
-  Route: post("/tribe",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe
+  Method: POST
+  Description: (Requires Login) Create a new tribe and adds the current users family to that tribe.
+  Current user becomes tribe admin.
+  URL Parameters: None
+  Body: None
   Returns:
+   {
+     user,
+     family,
+     tribe
+   }
 ```
 
 ```
-  Route: delete("/tribe",
+  Route: /tribe
   Method: DELETE
   Description: Finds a tribe and deletes it
   URL Parameters:
@@ -394,7 +424,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/tribe",
+  Route: /tribe
   Method: PATCH
   Description: Given an array called change [property, new value] will change a tribes property 
   to new property. ex ["tribename", "Smiths"] will changes the tribes name to Smiths. Admin only, 
@@ -409,61 +439,86 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/tribe/:tid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe/:tid
+  Method: GET
+  Description: Returns info for tribe tid.
+  URL Parameters: tid - TribeID of desired tribe
+  Body: None
   Returns:
+   {
+     tribe
+   }
 ```
 
 ```
-  Route: get("/tribe/families/:tid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe/families/:tid
+  Method: GET
+  Description: Returns the tribe name and a list of families belonging to the desired tribe, (serach by TribeID).
+  URL Parameters: tid - TribeID of desired tribe
+  Body: None
   Returns:
+    {
+      family: [Array of families belonging to tribe],
+      tribeName: nameOfTribe
+    }
 ```
 
 ```
-  Route: get("/tribe/lists/:tName",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe/lists/:tName
+  Method: GET
+  Description: Returns a list of families belonging to the desired tribe, (search by tirbe name).
+  URL Parameters: tName - name of desired tribe
+  Body: None
   Returns:
+    {
+      family: [Array of families belonging to tribe]
+    }
 ```
 
 ```
-  Route: patch("/tribe/join/:tid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe/join/:tid
+  Method: PATCH
+  Description: (Requires Login) Family of current user joins tribe tid.
+  URL Parameters: tid - TribeID of desired tribe
+  Body: None
   Returns:
+    {
+      family,
+      tribe
+    }
 ```
 
 ```
-  Route: patch("/tribe/decline/:tid",
-  Method:
-  Description:
-  URL Parameters:
-  Body:
+  Route: /tribe/decline/:tid
+  Method: PATCH
+  Description: (Requires Login) Family of current user declines invite to tribe tid.
+  URL Parameters: tid - TribeID of desired tribe
+  Body: None
   Returns:
+    {
+      family,
+      tribe
+    }
 ```
 
 ```
-  Route: patch("/tribe/invite/:uid",
-  Method:
-  Description:
-  URL Parameters:
+  Route: /tribe/invite/:uid
+  Method: PATCH
+  Description: Invite a users family to join a tribe by tribe name.
+  URL Parameters: uid - UserID of desired user
   Body:
+    {
+      tribeName
+    }
   Returns:
+    {
+      tribe,
+      family
+    }
 ```
 
 ```
-  Route: post("/list",
+  Route: /list
   Method: POST
   Description: Creates a new list
   URL Parameters:None
@@ -476,7 +531,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/list/:fid",
+  Route: /list/:fid
   Method: GET
   Description: Gets all lists belonging a to a family
   URL Parameters: a familyID
@@ -485,7 +540,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: delete("/list",
+  Route: /list
   Method: DELETE
   Description: Deletes a list from a families lists
   URL Parameters:None
@@ -498,7 +553,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/item",
+  Route: /item
   Method: POST
   Description: Adds a new item to a list
   URL Parameters:None
@@ -512,7 +567,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/item",
+  Route: /item
   Method: PATCH
   Description: Used when editing an items name or quantity. All fields must be provided even if 
   no change occurred.
@@ -529,7 +584,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: delete("/item",
+  Route: /item
   Method:DELETE
   Description: Given an list name, a familyID and an item name, this route will find the family 
   enter the specified list and delete the item.
@@ -544,7 +599,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/MapList",
+  Route: /MapList
   Method: GET
   Description: A list of json objects which contains coordinates, name, timesubmitted
   URL Parameters: NONE
@@ -553,7 +608,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/MapList",
+  Route: /MapList
   Method: POST
   Description: Adding a new store in the database
   URL Parameters: NONE
@@ -567,8 +622,9 @@ This page will only be available for admin users. The page will allow administra
     }
   Returns:
 ```
+
 ```
-  Route: post("/MapList/:mid",
+  Route: /MapList/:mid
   Method: POST
   Description: Adding objects to time array. So we can keep track of when it was added. The average is calculated here with the new time that has been submitted.
   URL Parameters: mid
@@ -580,7 +636,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: patch("/MapList/:mid",
+  Route: /MapList/:mid
   Method: PATCH
   Description: With a given id, it will modify the specific map using the path and value
   URL Parameters: mid
@@ -596,7 +652,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/City",
+  Route: /City
   Method: GET
   Description: List of all cities in the database
   URL Parameters: NONE
@@ -605,7 +661,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/City",
+  Route: /City
   Method: POST
   Description: Adding a new city to the database
   URL Parameters: NONE
@@ -618,7 +674,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/all",
+  Route: /all
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all users in the DB.
   URL Parameters:None
@@ -627,7 +683,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/all/tribe",
+  Route: /all/tribe
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all tribes in the DB.
   URL Parameters:None
@@ -636,7 +692,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: get("/all/family",
+  Route: all/family
   Method: GET
   Description: Admin only method, verification is performed. Retrieves all families in the DB.
   URL Parameters:None
@@ -646,7 +702,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/admin/family",
+  Route: /admin/family
   Method:
   Description: Creates a new family with a given name. To be run by an admin only. Verification 
   is performed. Intended for elevated presets that in case of future needs.
@@ -659,7 +715,7 @@ This page will only be available for admin users. The page will allow administra
 ```
 
 ```
-  Route: post("/admin/tribe",
+  Route: /admin/tribe
   Method: POST
   Description: Creates a new tribe with a given name. To be run by an admin only. Verification 
   is performed. Intended for elevated presets that in case of future needs.
