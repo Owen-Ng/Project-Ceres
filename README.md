@@ -230,11 +230,14 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: delete("/family",
-  Method:
-  Description:
-  URL Parameters:
+  Method: DELETE
+  Description: Deletes a family
+  URL Parameters: None
   Body:
-  Returns:
+  {
+    familyID
+  }
+  Returns: None
 ```
 
 ```
