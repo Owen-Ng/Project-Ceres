@@ -65,12 +65,12 @@ export default class Maps extends Component {
     
     const key = event.Keycode || event.which;
     if (key === 13){
-      console.log(this.state.user)
+     
       if(!isNaN(this.state.timesubmitted) && this.state.currentstate.id !== "" && arrayid.length ===0){
        
           this.setState({isnew: !this.state.isold});
           addtime(this.state.timesubmitted, this.state.currentstate.id);
-          log(this.state.user)
+        
           addfamilytime(this.state.timesubmitted,this.props.user.familyID, this.state.currentstate.id, this.state.user.id)
         setTimeout(function () {
           this.setState({toggle:!this.state.toggle});
@@ -125,26 +125,7 @@ export default class Maps extends Component {
     }.bind(this)).catch(error => {
       log(error)
     })
-    const furl = "/users";
-    fetch(furl, {
-      method: "GET"
-    }).then(res => {
-      if (res.status === 200) {
-        return res.json();
-
-      } else {
-        log("Could not get data");
-      }
-    }).then(function (json) {
-      
-
-      this.setState({ user: json});
-      // console.log(this.state);
-
-    }.bind(this)).catch(error => {
-      log(error)
-    })
-  
+    
 
 
   }
@@ -172,12 +153,34 @@ export default class Maps extends Component {
         }.bind(this)).catch(error => {
           log(error)
         })
+        const url = "/users";
+    
+        fetch(url, {
+          method: "GET"
+        }).then(res => {
+          if (res.status === 200) {
+            return res.json();
+    
+          } else {
+            log("Could not get data");
+          }
+        }).then(function (json) {
+          
+    
+          this.setState({ user: json});
+          // console.log(this.state);
+    
+        }.bind(this)).catch(error => {
+          log(error)
+        })
       }
+     
+  
 
 
        if (!this.state.isfirst  ){
              if (this.state.family !== null){
-          console.log(this.props.user);
+    
           this.setState({isfirst: true})
           const newtime = new Date();
           const newarray = this.state.family.time.filter((obj) => 
