@@ -554,41 +554,10 @@ This page will only be available for admin users. The page will allow administra
 
 ```
   Route: post("/MapList",
-<<<<<<< HEAD
   Method: POST
   Description: Adding a new store in the database
   URL Parameters: NONE
   Body: 
-=======
-  Method:
-  Description:
-  URL Parameters:
-  Body:
-  Returns:
-```
-
-```
-  Route: patch("/MapList",
-  Method: PATCH
-  Description: Providing an array composed of [property, new value] will find a property such as 
-  address and change its value to new value. ex ["address", "nowhere"] will change the stores's 
-  address to nowhere.
-  URL Parameters: None
-  Body:
-  {
-    storeID,
-    change (this is an array of size 2)
-  }
-  Returns:
-```
-
-```
-  Route: delete("/MapList",
-  Method: DELETE
-  Description: Deletes a store
-  URL Parameters: None
-  Body:
->>>>>>> 84e6fdab6f47fe81a64a4a98026f76d6b85d194e
   {
         name,
         address,
