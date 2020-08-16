@@ -99,7 +99,11 @@ This page will have various functionality dependent on the state of the user.
 
 5.  A regular user who is part of a family but not an admin will be shown none of these dialogs.
 
+<<<<<<< HEAD
 6. All users will be presented with a change email and password dialog. 
+=======
+All users will be presented with a change email and password dialog.
+>>>>>>> 2bed8a1d67790ec7910b2ce3a493852bc3adfc2d
 
 #### Admin Settings
 
