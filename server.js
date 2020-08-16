@@ -601,13 +601,17 @@ app.get("/tribe/families/:tid", (req, res) => {
     }
 
     Tribe.findById(tid).then((tribe) => {
-        Family.find({ tribes: tid }).then((family) => {
-            if (!family) {
-                res.status(404).send("Resource not found");
-            } else {
-                res.send({ family, tribeName: tribe.tribeName });
-            }
-        });
+        if (!tribe) {
+            res.status(404).send("Resource not found");
+        } else {
+            Family.find({ tribes: tid }).then((family) => {
+                if (!family) {
+                    res.status(404).send("Resource not found");
+                } else {
+                    res.send({ family, tribeName: tribe.tribeName });
+                }
+            });
+        }
     });
 });
 
