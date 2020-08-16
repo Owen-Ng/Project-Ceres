@@ -67,7 +67,7 @@ The admin login will allow users to access the Map, Tribe, Grocery List, Admin S
 
 ### User#
 
-There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user# with the password user#.
+There are other users who have been created with other levels admin privilege such as Family Admin and Tribe Admin to show how other features of the website will work. These users have be designated a user1 - user4 with the password user# where # corresponds to the user number.
 
 ## How to Use
 
@@ -99,11 +99,7 @@ This page will have various functionality dependent on the state of the user.
 
 5.  A regular user who is part of a family but not an admin will be shown none of these dialogs.
 
-<<<<<<< HEAD
 6. All users will be presented with a change email and password dialog. 
-=======
-All users will be presented with a change email and password dialog.
->>>>>>> 2bed8a1d67790ec7910b2ce3a493852bc3adfc2d
 
 #### Admin Settings
 
