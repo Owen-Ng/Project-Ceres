@@ -21,7 +21,28 @@ export const joinFamily = (family) => {
             console.log(error);
         });
 };
+export const resetpass = (id, email,password)=>{
+    const url = "/reset/" + id;
+   
+    const request = new Request(url,{
+        method:"POST",
+        body: JSON.stringify({"email":email,"password": password}),
+        headers:{
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+    fetch(request).then(function(res){
+        if(res.status===200){
+            log("Success");
+        }else{
+            log("failed")
+        }
+    }).catch(error => {
+        console.log(error);
+    });
 
+}
 export const declineFamily = (family) => {
     const url = `/family/decline/${family}`;
     const request = new Request(url, {

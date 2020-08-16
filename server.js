@@ -151,6 +151,40 @@ app.patch("/users", (req, res) => {
         }
     });
 });
+
+/*
+{
+    email: ,
+    password: ,
+}
+*/
+app.post("/reset/:id", (req,res)=>{
+    const currentUser = req.params.id;
+        
+      
+          User.findOne({ _id: currentUser}).then((user) => {
+            if (!user) {
+                res.status(404).send();
+             
+            }
+             user.email = req.body.email;
+            user.password = req.body.password;
+            user.save().then((result)=>{
+                res.send(result)
+            }).catch((error) => {
+                if (isMongoError(error)) {
+                    // check for if mongo server suddenly dissconnected before this request.
+                    res.status(500).send("Internal server error");
+                } else {
+                    log(error); // log server error to the console, not to the client.
+                    res.status(400).send("Bad Request"); // 400 for bad request gets sent to client.
+                }
+            });
+        }) .catch(() => res.status(400).end());
+        
+    
+   
+})
 // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;

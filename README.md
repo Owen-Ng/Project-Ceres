@@ -35,8 +35,7 @@ Front End
 
 -   [React.js](https://reactjs.org)
 -   [Bootstrap](https://getbootstrap.com)
--   [React Leaflet](https://react-leaflet.js.org)
--   [React Leaflet Search](https://www.npmjs.com/package/react-leaflet-search)
+-   [React Leaflet](https://react-leaflet.js.org)\
 -   [JQuery](https://jquery.com)
 
 Back End
@@ -100,7 +99,7 @@ This page will have various functionality dependent on the state of the user.
 
 5.  A regular user who is part of a family but not an admin will be shown none of these dialogs.
 
-All users will be presented with a change email and password dialog. The change Email and Password dialog is not functional as of version 1.0.
+6. All users will be presented with a change email and password dialog. 
 
 #### Admin Settings
 
@@ -569,6 +568,17 @@ This page will only be available for admin users. The page will allow administra
   }
   Returns: list
 ```
+```
+  Route: /reset/:id
+  Method: POST
+  Description: modify the password and email of the current user
+  URL Parameters: id
+  Body: {
+        "email": "String",
+       "password": "String"
+  }
+  Returns: The newly updated user
+```
 
 ```
   Route: /item
@@ -624,7 +634,7 @@ This page will only be available for admin users. The page will allow administra
         wait,
         coordinates,
     }
-  Returns:
+  Returns: the newly added object 
 ```
 
 ```

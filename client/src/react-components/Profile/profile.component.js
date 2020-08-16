@@ -8,6 +8,7 @@ import {
     declineFamily,
     joinTribe,
     declineTribe,
+    resetpass
 } from "../../actions/profile";
 
 export default class Profile extends Component {
@@ -136,10 +137,12 @@ export default class Profile extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.setState(({ input }) => ({
-            current: input,
-            input: { email: "", password: "" },
-        }));
+        resetpass(this.state.user.id,this.state.input.email,this.state.input.password);
+        this.setState({current:{email:this.state.input.email , password: "123456"}})
+        this.setState({input: { email: "", password: "" }})
+        
+       
+
     }
 
     handleChange(e) {
@@ -358,7 +361,7 @@ export default class Profile extends Component {
                             <li>
                                 {" "}
                                 <strong>Email:</strong>{" "}
-                                {this.props.user ? this.props.user.email : ""}
+                                {this.state.current ? this.state.current.email:  " "}
                             </li>
                             <li>
                                 <strong>Password:</strong>{" "}
