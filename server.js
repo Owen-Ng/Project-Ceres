@@ -139,7 +139,8 @@ app.patch("/users", (req, res) => {
         } else if (user.admin) {
             User.findById(userID)
                 .then((user) => {
-                    user.updateOne({ [changes[0]]: changes[1] })
+                    user.updateOne({
+                            [changes[0]]: changes[1] })
                         .then(() => res.status(200).end())
                         .catch((err) => res.status(400).end());
                 })
@@ -158,18 +159,18 @@ app.patch("/users", (req, res) => {
     password: ,
 }
 */
-app.post("/reset/:id", (req,res)=>{
-    const currentUser = req.params.id;
-        
-      
-          User.findOne({ _id: currentUser}).then((user) => {
+app.post("/reset/:id", (req, res) => {
+        const currentUser = req.params.id;
+
+
+        User.findOne({ _id: currentUser }).then((user) => {
             if (!user) {
                 res.status(404).send();
-             
+
             }
-             user.email = req.body.email;
+            user.email = req.body.email;
             user.password = req.body.password;
-            user.save().then((result)=>{
+            user.save().then((result) => {
                 res.send(result)
             }).catch((error) => {
                 if (isMongoError(error)) {
@@ -180,12 +181,12 @@ app.post("/reset/:id", (req,res)=>{
                     res.status(400).send("Bad Request"); // 400 for bad request gets sent to client.
                 }
             });
-        }) .catch(() => res.status(400).end());
-        
-    
-   
-})
-// Returns current user
+        }).catch(() => res.status(400).end());
+
+
+
+    })
+    // Returns current user
 app.get("/users", (req, res) => {
     const currentUser = req.session.user;
     User.findById(currentUser).then((user) => {
@@ -287,7 +288,8 @@ app.patch("/family", (req, res) => {
             Family.findById(familyID)
                 .then((family) => {
                     family
-                        .updateOne({ [changes[0]]: changes[1] })
+                        .updateOne({
+                            [changes[0]]: changes[1] })
                         .then(() => res.status(200).end())
                         .catch((err) => res.status(400).end());
                 })
@@ -324,9 +326,7 @@ app.patch("/family/:fid", (req, res) => {
         fieldsToUpdate[propertyToChange] = change.value;
     });
     Family.findByIdAndUpdate(
-        id,
-        { $set: fieldsToUpdate },
-        { new: true, useFindAndModify: false }
+        id, { $set: fieldsToUpdate }, { new: true, useFindAndModify: false }
     ).then((result) => {
         if (!result) {
             res.status(404).send("Resource not found");
@@ -594,7 +594,8 @@ app.patch("/tribe", (req, res) => {
             Tribe.findById(tribeID)
                 .then((tribe) => {
                     tribe
-                        .updateOne({ [changes[0]]: changes[1] })
+                        .updateOne({
+                            [changes[0]]: changes[1] })
                         .then(() => res.status(200).end())
                         .catch((err) => res.status(400).end());
                 })
@@ -1077,22 +1078,20 @@ app.post("/MapList/:mid", (req, res) => {
                 result
                     .save()
                     .then((result) => {
-                        const timesum = result.timesubmitted.reduce(function (
-                            sum,
-                            b
-                        ) {
-                            return sum + b.time;
-                        },
-                        0);
+                        const timesum = result.timesubmitted.reduce(function(
+                                sum,
+                                b
+                            ) {
+                                return sum + b.time;
+                            },
+                            0);
                         const timeav = timesum / result.timesubmitted.length;
                         const fieldstoupdate = {
                             wait: parseInt(timeav) + "min",
                         };
                         MapList.findByIdAndUpdate(
-                            id,
-                            { $set: fieldstoupdate },
-                            { new: true, useFindAndModify: false }
-                        )
+                                id, { $set: fieldstoupdate }, { new: true, useFindAndModify: false }
+                            )
                             .then((groceries) => {
                                 if (!groceries) {
                                     res.status(404).send();
@@ -1163,9 +1162,7 @@ app.patch("/MapList/:mid", (req, res) => {
         fieldsToUpdate[propertyToChange] = change.value;
     });
     MapList.findByIdAndUpdate(
-        id,
-        { $set: fieldsToUpdate },
-        { new: true, useFindAndModify: false }
+        id, { $set: fieldsToUpdate }, { new: true, useFindAndModify: false }
     ).then((result) => {
         if (!result) {
             res.status(404).send("Resource not found");
