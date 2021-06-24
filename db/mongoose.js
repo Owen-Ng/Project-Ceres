@@ -7,4 +7,4 @@ const connection = mongoose.connection;
 connection.once('open', ()=>{
     console.log("Success connection")
 })
-module.exports = { mongoose }
+module.exports = { mongoose } 
