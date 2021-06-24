@@ -390,6 +390,7 @@ export default class Profile extends Component {
                             <button
                                 className="buttonsubmit btn btn-primary btn-add"
                                 type="submit"
+                                disabled={this.props.isDemo}
                             >
                                 Change Password and Email
                             </button>
@@ -407,6 +408,7 @@ export default class Profile extends Component {
         return (
             <div className="box container-lg">
                 {this.isValidUser(profileHtml)}
+                {this.props.isDemo?'Currently in Demo mode, some functionality has been disabled':""}
             </div>
         );
     }

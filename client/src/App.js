@@ -26,17 +26,21 @@ export default class App extends Component {
             username: "",
             user: null,
             profilechange:false,
+            isDemo: false,
         };
     
         this.setPermissions = this.setPermissions.bind(this);
         this.determinePermissions = this.determinePermissions.bind(this);
         this.logout = this.logout.bind(this);
         this.getUser = this.getUser.bind(this);
+        this.setDemo = this.setDemo.bind(this);
     }
     async componentDidMount() {
         await this.getUser();
     }
-
+    setDemo(b){
+        this.setState({isDemo: b})
+    }
     setPermissions(permissionString, username) {
         if (permissionString === "user") {
             this.setState({
@@ -124,6 +128,7 @@ export default class App extends Component {
                         if (!user) {
                             return;
                         }
+                        console.log(user);
                         this.setState({ user });
                         this.determinePermissions(user);
                     }
@@ -156,6 +161,7 @@ export default class App extends Component {
                             determinePermissions={this.determinePermissions}
                             loggedIn={this.state.loggedIn}
                             user={this.state.user}
+                            setDemo={this.setDemo}
                         />
                     )}
                 />
@@ -197,6 +203,7 @@ export default class App extends Component {
                             user={this.state.user}
                             isAdmin={this.state.isAdmin}
                             getUser={this.getUser}
+                            isDemo={this.state.isDemo}
                         />
                     )}
                 />
@@ -207,6 +214,7 @@ export default class App extends Component {
                         <Profile
                             user={this.state.user}
                             getUser={this.getUser}
+                            isDemo={this.state.isDemo}
                         />
                     )}
                 />

@@ -368,6 +368,7 @@ export default class AdminSettings extends Component {
                             displayType={this.state.displayType}
                             deleteObj={this.deleteObj}
                             getAllData={this.getAllData}
+                            isDemo={this.props.isDemo}
                         />
                     </div>
                 </div>

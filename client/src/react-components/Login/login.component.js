@@ -40,6 +40,7 @@ export default class Login extends Component {
             if (response.status < 400) {
                 this.state.isError = false; // removes error message
                 const user = await response.json();
+                this.props.setDemo(true);
                 await this.props.determinePermissions(user); // Update the App()
             } else {
                 this.setState({ isError: true });
@@ -69,6 +70,7 @@ export default class Login extends Component {
             if (response.status < 400) {
                 this.state.isError = false; // removes error message
                 const user = await response.json();
+                this.props.setDemo(false);
                 await this.props.determinePermissions(user); // Update the App()
             } else {
                 this.setState({ isError: true });
@@ -138,7 +140,7 @@ export default class Login extends Component {
                             <button
                                 className="btn btn-success btn-login"
                                 type="button"
-                                onClick={()=>this.DemoSubmit('admin', 'admin')}
+                                onClick={()=>this.DemoSubmit('admindemo', 'admindemo')}
                             >
                                 Demo Admin
                             </button>

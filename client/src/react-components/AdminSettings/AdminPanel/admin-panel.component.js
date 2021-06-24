@@ -174,7 +174,7 @@ export default class AdminPanel extends Component {
 
     displayInfo() {
         const deleteButton = (
-            <button className="btn btn-danger" onClick={this.deleteObj}>
+            <button className="btn btn-danger" onClick={this.deleteObj} disabled={this.props.isDemo}>
                 Delete
             </button>
         );
@@ -202,7 +202,7 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button className="send-changes">
+                                        <button className="send-changes" disabled={this.props.isDemo}>
                                             Send Change
                                         </button>
                                     </form>
@@ -241,7 +241,7 @@ export default class AdminPanel extends Component {
                                                             : ""
                                                     }
                                                 />
-                                                <button className="send-changes">
+                                                <button className="send-changes" disabled={this.props.isDemo}>
                                                     Send Change
                                                 </button>
                                             </form>
@@ -281,7 +281,7 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button className="send-changes">
+                                        <button className="send-changes" disabled={this.props.isDemo}>
                                             Send Change
                                         </button>
                                     </form>
@@ -317,7 +317,7 @@ export default class AdminPanel extends Component {
                                                     : ""
                                             }
                                         />
-                                        <button className="send-changes">
+                                        <button className="send-changes" disabled={this.props.isDemo}>
                                             Send Change
                                         </button>
                                     </form>
@@ -335,7 +335,8 @@ export default class AdminPanel extends Component {
     render() {
         return (
             <div className="AdminPanel">
-                <p>If an input is blank then it is an array or object</p>
+                <p>If an input is blank then it is an array or object</p> 
+                {this.props.isDemo?'Currently in Demo mode, some functionality has been disabled':""}
                 {this.displayInfo()}
             </div>
         );
