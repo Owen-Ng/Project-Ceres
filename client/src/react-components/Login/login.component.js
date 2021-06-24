@@ -15,11 +15,39 @@ export default class Login extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.DemoSubmit = this.DemoSubmit.bind(this);
     }
     /*
     This function will have to contact the server to recieve information about the users credentials.
     Example: if passsword or username is incorrect and possibly to also recieve cookies.
     */
+    async DemoSubmit(username, password) {
+        try {
+            const response = await fetch("/users/login", {
+                method: "POST",
+                crossDomain: true,
+                credentials: "include",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+            if (response.status < 400) {
+                this.state.isError = false; // removes error message
+                const user = await response.json();
+                await this.props.determinePermissions(user); // Update the App()
+            } else {
+                this.setState({ isError: true });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     async handleSubmit(e) {
         e.preventDefault();
@@ -91,13 +119,30 @@ export default class Login extends Component {
                                 onChange={this.handleChange}
                                 required
                             />
+                            <div className="btn-container">
 
+                            
                             <button
                                 className="btn btn-success btn-login"
                                 type="submit"
                             >
                                 Login
                             </button>
+                            <button
+                                className="btn btn-success btn-login"
+                                type="button"
+                                onClick={()=>this.DemoSubmit('demouser', 'demouser')}
+                            >
+                                DEMO User
+                            </button>
+                            <button
+                                className="btn btn-success btn-login"
+                                type="button"
+                                onClick={()=>this.DemoSubmit('admin', 'admin')}
+                            >
+                                Demo Admin
+                            </button>
+                            </div>
                         </form>
                         <p className="Login-register">
                             Don't have an account?{" "}
