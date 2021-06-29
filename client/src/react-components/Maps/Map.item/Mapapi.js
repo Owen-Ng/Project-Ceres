@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Map, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import { Icon } from "leaflet";
-import './Mapapi.css'
-import { removedexpired} from '../../../actions/maplist'
+import './Mapapi.css';
+import { removedexpired} from '../../../actions/maplist';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import 'react-leaflet-markercluster/dist/styles.min.css';
 const someicon = new Icon({ iconUrl: "/cart.svg", iconSize: 25 });
 const active = new Icon({ iconUrl: "/logo192.png", iconSize: 20 })
 const datetime = require('date-and-time');
 const log = console.log
+// require('~leaflet/dist/leaflet.css'); // inside .js file
+// require('react-leaflet-markercluster/dist/styles.min.css');
 export default class PublicMap extends Component {
   constructor(props) {
     super(props)
@@ -130,7 +134,7 @@ export default class PublicMap extends Component {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
           />
-
+          <MarkerClusterGroup>
           {this.state.groceries.map(map => (
             <Marker key={map._id} position={[
               map.coordinates[1],
@@ -151,6 +155,7 @@ export default class PublicMap extends Component {
           )
           )
           }
+          </MarkerClusterGroup>
           {this.state.currentstate && (
             <Popup
               key={this.state.currentstate._id}
