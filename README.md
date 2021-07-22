@@ -4,7 +4,7 @@
 
 Grocery List sharing web app.
 
-[https://projectceres.herokuapp.com](https://projectceres.herokuapp.com)
+[https://projectceresv2.herokuapp.com/](https://projectceresv2.herokuapp.com/)
 
 ---
 
