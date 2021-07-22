@@ -1,4 +1,4 @@
-## [Project Ceres](https://projectceres.herokuapp.com)
+## [Project Ceres](https://projectceresv2.herokuapp.com/)
 
 ![Project Image](client/public/logo192.png)
 
